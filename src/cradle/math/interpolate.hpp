@@ -1,8 +1,10 @@
 #ifndef CRADLE_MATH_INTERPOLATE_HPP
 #define CRADLE_MATH_INTERPOLATE_HPP
 
-#include <cradle/math/common.hpp>
 #include <vector>
+
+#include <cradle/geometry/regular_grid.hpp>
+#include <cradle/math/common.hpp>
 
 namespace cradle {
 

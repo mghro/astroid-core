@@ -173,7 +173,7 @@ struct hash<cradle::flag_set<Tag>>
 
 namespace cradle {
 
-#define CRADLE_DEFINE_FLAG(type_prefix)                                       \
+#define CRADLE_DEFINE_FLAG_TYPE(type_prefix)                                  \
     struct type_prefix##_flag_tag                                             \
     {                                                                         \
     };                                                                        \
@@ -224,6 +224,15 @@ struct exception : std::exception
     add_context(string const& str)
     {
         *msg_ += "\n" + str;
+    }
+
+    // If this returns true, it indicates that the condition that caused the
+    // exception is transient, and thus retrying the same operation at a later
+    // time may solve the problem.
+    virtual bool
+    is_transient() const
+    {
+        return false;
     }
 
  private:
@@ -542,25 +551,6 @@ using std::uint8_t;
 // analysis on the original headers doesn't like them. This macro causes the
 // IDE to ignore them.
 #define api(x)
-
-struct exception : cradle::exception
-{
-    exception(string const& msg) : cradle::exception(msg)
-    {
-    }
-    ~exception() throw()
-    {
-    }
-
-    // If this returns true, it indicates that the condition that caused the
-    // exception is transient, and thus retrying the same operation at a later
-    // time may solve the problem.
-    virtual bool
-    is_transient() const
-    {
-        return false;
-    }
-};
 
 // A lot of CRADLE algorithms use callbacks to report progress or check in with
 // their callers (which can, for example, pause or terminate the algorithm).

@@ -27,8 +27,6 @@
 #include <istream>
 #include <vector>
 
-#include <clipper.hpp>
-
 namespace cradle {
 
 typedef vector<3, double> vertex3;

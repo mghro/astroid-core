@@ -391,6 +391,116 @@ get_edge_index(box<2, T> const& box, vector<2, T> const& point)
     return index;
 }
 
+api(struct preexisting(comparisons, iostream) with(N : 1, 2, 3, 4; T : double))
+template<unsigned N, class T>
+struct box
+{
+    // Vector of N dimensions, with N being 1 thru 4, that defines the lower
+    // left corner
+    vector<N, T> corner;
+    // Vector of N dimensions, with N being 1 thru 4, that defines the length,
+    // width, etc
+    vector<N, T> size;
+};
+
+// Get the area of a box.
+template<typename T>
+T
+area(box<2, T> const& box)
+{
+    return box.size[0] * box.size[1];
+}
+
+// Clamp the given point such that it lies within the given box.
+template<unsigned N, typename T>
+vector<N, T>
+clamp(vector<N, T> const& p, box<N, T> const& box)
+{
+    vector<N, T> result;
+    for (unsigned i = 0; i < N; i++)
+    {
+        result[i]
+            = cradle::clamp(p[i], box.corner[i], box.corner[i] + box.size[i]);
+    }
+    return result;
+}
+
+// check to see if the given point lies within the given box
+template<unsigned N, typename T>
+bool
+contains(box<N, T> const& box, vector<N, T> const& p)
+{
+    for (unsigned i = 0; i < N; ++i)
+    {
+        if ((p[i] < box.corner[i]) || (box.corner[i] + box.size[i] < p[i]))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+// Slice an axis off the given box.
+template<unsigned N, typename T>
+box<N - 1, T>
+slice(box<N, T> const& box, unsigned axis)
+{
+    assert(axis < N);
+    return cradle::box<N - 1, T>(
+        slice(box.corner, axis), slice(box.size, axis));
+}
+
+template<unsigned N, typename T>
+box<N + 1, T>
+unslice(box<N, T> const& b, unsigned axis, box<1, T> const& slice)
+{
+    assert(axis < N + 1);
+    return cradle::box<N + 1, T>(
+        unslice(b.corner, axis, slice.corner[0]),
+        unslice(b.size, axis, slice.size[0]));
+}
+
+template<unsigned N, typename T>
+box<N, T>
+scale(box<N, T> const& box, double factor)
+{
+    for (unsigned i = 0; i != N; ++i)
+    {
+        box.corner[i] *= factor;
+        box.size[i] *= factor;
+    }
+}
+
+template<unsigned N, typename T>
+box<N, T>
+bounding_box(box<N, T> const& b)
+{
+    return b;
+}
+
+template<unsigned N, typename T>
+void
+compute_bounding_box(optional<box<N, T>>& box, cradle::box<N, T> const& b)
+{
+    if (box)
+    {
+        for (unsigned i = 0; i < N; ++i)
+        {
+            if (b.corner[i] < box.get().corner[i])
+            {
+                box.get().corner[i] = b.corner[i];
+            }
+            if (get_high_corner(b)[i] > get_high_corner(box.get())[i])
+            {
+                box.get().size[i]
+                    = get_high_corner(b)[i] - box.get().corner[i];
+            }
+        }
+    }
+    else
+        box = b;
+}
+
 // MATRIX
 
 // M x N matrix class - T is the type of the scalar elements, M is the number
@@ -883,10 +993,6 @@ make_vector(T x, T y, T z, T w)
     return v;
 }
 
-} // namespace cradle
-
-namespace cradle {
-
 // Given a vector, this returns a corresponding vector with one less dimension
 // by removing the value at index i.
 template<unsigned N, class T>
@@ -997,134 +1103,7 @@ almost_equal(
     return true;
 }
 
-} // namespace cradle
-
-// BOX
-
-namespace cradle {
-
-// Implement the CRADLE regular type interface for boxes
-api(struct preexisting(comparisons, iostream) namespace(cradle)
-        with(N : 1, 2, 3, 4; T
-             : double))
-template<unsigned N, class T>
-struct box
-{
-    // Vector of N dimensions, with N being 1 thru 4, that defines the lower
-    // left corner
-    vector<N, T> corner;
-    // Vector of N dimensions, with N being 1 thru 4, that defines the length,
-    // width, etc
-    vector<N, T> size;
-};
-
-} // namespace cradle
-
-namespace cradle {
-
-// Get the area of a box.
-template<typename T>
-T
-area(box<2, T> const& box)
-{
-    return box.size[0] * box.size[1];
-}
-
-// Clamp the given point such that it lies within the given box.
-template<unsigned N, typename T>
-vector<N, T>
-clamp(vector<N, T> const& p, box<N, T> const& box)
-{
-    vector<N, T> result;
-    for (unsigned i = 0; i < N; i++)
-    {
-        result[i]
-            = cradle::clamp(p[i], box.corner[i], box.corner[i] + box.size[i]);
-    }
-    return result;
-}
-
-// check to see if the given point lies within the given box
-template<unsigned N, typename T>
-bool
-contains(box<N, T> const& box, vector<N, T> const& p)
-{
-    for (unsigned i = 0; i < N; ++i)
-    {
-        if ((p[i] < box.corner[i]) || (box.corner[i] + box.size[i] < p[i]))
-        {
-            return false;
-        }
-    }
-    return true;
-}
-
-// Slice an axis off the given box.
-template<unsigned N, typename T>
-box<N - 1, T>
-slice(box<N, T> const& box, unsigned axis)
-{
-    assert(axis < N);
-    return cradle::box<N - 1, T>(
-        slice(box.corner, axis), slice(box.size, axis));
-}
-
-template<unsigned N, typename T>
-box<N + 1, T>
-unslice(box<N, T> const& b, unsigned axis, box<1, T> const& slice)
-{
-    assert(axis < N + 1);
-    return cradle::box<N + 1, T>(
-        unslice(b.corner, axis, slice.corner[0]),
-        unslice(b.size, axis, slice.size[0]));
-}
-
-template<unsigned N, typename T>
-box<N, T>
-scale(box<N, T> const& box, double factor)
-{
-    for (unsigned i = 0; i != N; ++i)
-    {
-        box.corner[i] *= factor;
-        box.size[i] *= factor;
-    }
-}
-
-template<unsigned N, typename T>
-box<N, T>
-bounding_box(box<N, T> const& b)
-{
-    return b;
-}
-
-template<unsigned N, typename T>
-void
-compute_bounding_box(optional<box<N, T>>& box, cradle::box<N, T> const& b)
-{
-    if (box)
-    {
-        for (unsigned i = 0; i < N; ++i)
-        {
-            if (b.corner[i] < box.get().corner[i])
-            {
-                box.get().corner[i] = b.corner[i];
-            }
-            if (get_high_corner(b)[i] > get_high_corner(box.get())[i])
-            {
-                box.get().size[i]
-                    = get_high_corner(b)[i] - box.get().corner[i];
-            }
-        }
-    }
-    else
-        box = b;
-}
-
-} // namespace cradle
-
 // MATRIX
-
-namespace cradle {
 
 using cradle::identity_matrix;
 using cradle::make_matrix;
@@ -1132,10 +1111,6 @@ using cradle::matrix;
 
 typedef matrix<3, 3, double> transformation_matrix_2d;
 typedef matrix<4, 4, double> transformation_matrix_3d;
-
-} // namespace cradle
-
-namespace cradle {
 
 template<unsigned M, unsigned N, class T>
 cradle::raw_type_info get_type_info(matrix<M, N, T>)
@@ -1245,11 +1220,7 @@ slice(matrix<N, N, T> const& m, unsigned axis)
     }
 }
 
-} // namespace cradle
-
-// OTHER STUFF - Stuff that's not in cradle.
-
-namespace cradle {
+// OTHER STUFF
 
 // a circle
 api(struct with(T : double))
@@ -1458,11 +1429,7 @@ bounding_box(triangle<N, T> const& tri)
     return cradle::box<N, T>(min, max - min);
 }
 
-} // namespace cradle
-
 // API functions
-
-namespace cradle {
 
 // Expand or contract a box by adding a uniform margin around the edge.
 api(fun trivial with(N : 1, 2, 3, 4))

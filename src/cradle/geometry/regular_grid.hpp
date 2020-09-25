@@ -12,11 +12,11 @@ template<unsigned N, class T>
 struct regular_grid
 {
     // initial grid point (the one with the lowest coordinates)
-    alia::vector<N, T> p0;
+    vector<N, T> p0;
     // the spacing between adjacent points in each dimension
-    alia::vector<N, T> spacing;
+    vector<N, T> spacing;
     // the number of grid points in each dimension
-    alia::vector<N, unsigned> n_points;
+    vector<N, unsigned> n_points;
 };
 
 CRADLE_GEOMETRY_DEFINE_TYPEDEFS(regular_grid)
