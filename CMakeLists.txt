@@ -25,24 +25,28 @@ conan_cmake_run(
         boost_polygon/1.66.0@bincrafters/stable
         boost_uuid/1.66.0@bincrafters/stable
         clipper/6.4.2
+        jsoncpp/1.9.4
+        msgpack/3.3.0
     BASIC_SETUP
     BUILD missing)
 
+add_definitions(-DBOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE)
+
 # Download, extract, and setup Clipper.
-if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/clipper_ver6.4.2")
+if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/clipper_ver6.0.0")
     message(STATUS "Downloading Clipper")
-    file(DOWNLOAD "https://sourceforge.net/projects/polyclipping/files/clipper_ver6.4.2.zip/download"
-                  "${CMAKE_CURRENT_BINARY_DIR}/clipper_ver6.4.2.zip"
+    file(DOWNLOAD "https://sourceforge.net/projects/polyclipping/files/Older%20versions/clipper_ver6.0.0.zip/download"
+                  "${CMAKE_CURRENT_BINARY_DIR}/clipper_ver6.0.0.zip"
                   TLS_VERIFY ON)
     message(STATUS "Extracting Clipper")
     file(ARCHIVE_EXTRACT
-        INPUT "${CMAKE_CURRENT_BINARY_DIR}/clipper_ver6.4.2.zip"
-        DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/clipper_ver6.4.2")
+        INPUT "${CMAKE_CURRENT_BINARY_DIR}/clipper_ver6.0.0.zip"
+        DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/clipper_ver6.0.0")
 endif()
 set(CLIPPER_INCLUDE_DIR
-    "${CMAKE_CURRENT_BINARY_DIR}/clipper_ver6.4.2/cpp")
+    "${CMAKE_CURRENT_BINARY_DIR}/clipper_ver6.0.0/cpp")
 set(CLIPPER_SOURCE_FILES
-    "${CMAKE_CURRENT_BINARY_DIR}/clipper_ver6.4.2/cpp/clipper.cpp")
+    "${CMAKE_CURRENT_BINARY_DIR}/clipper_ver6.0.0/cpp/clipper.cpp")
 
 # C++ sources
 file(GLOB_RECURSE srcs CONFIGURE_DEPENDS

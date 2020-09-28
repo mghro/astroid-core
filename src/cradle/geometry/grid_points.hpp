@@ -269,7 +269,8 @@ struct regular_grid_iterator_advancer<N, T, 1>
 template<unsigned N, typename T>
 void
 regular_grid_iterator<N, T>::advance(
-    typename regular_grid_iterator<N, T>::difference_type n)
+    typename regular_grid_iterator<N, T>::regular_grid_iterator::
+        difference_type n)
 {
     impl::regular_grid_iterator_advancer<N, T, N>::apply(*grid, i, p, n);
 }

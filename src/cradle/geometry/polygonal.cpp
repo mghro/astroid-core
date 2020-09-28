@@ -3,9 +3,11 @@
 #ifdef _WIN32
 #pragma warning(push, 0)
 #include <boost/polygon/polygon.hpp>
+#include <boost/polygon/polygon_set_data.hpp>
 #pragma warning(pop)
 #else
 #include <boost/polygon/polygon.hpp>
+#include <boost/polygon/polygon_set_data.hpp>
 #endif
 
 #include <cradle/geometry/angle.hpp>
@@ -379,8 +381,6 @@ distance_to_polyset(vector<2, double> const& p, polyset const& set)
     return d2p;
 }
 
-namespace {
-
 typedef boost::polygon::point_data<int> boost_point;
 
 typedef boost::polygon::polygon_data<int> boost_polygon;
@@ -388,6 +388,8 @@ typedef boost::polygon::polygon_data<int> boost_polygon;
 typedef boost::polygon::polygon_with_holes_data<int> boost_polygon_with_holes;
 
 typedef boost::polygon::polygon_set_data<int> boost_polygon_set;
+
+namespace {
 
 void
 to_boost_polygon(boost_polygon& bp, polygon2 const& poly)
@@ -642,7 +644,8 @@ create_polyset_from_polygons(
     {
         boost_polygon bp;
         to_boost_polygon(bp, *i);
-        boost_set += bp;
+        throw "unimplemented!";
+        // boost_set = boost_set + bp;
     }
     from_boost_polygon(*set, boost_set);
 }

@@ -200,7 +200,7 @@ api(struct)
 struct irregularly_sampled_function
 {
     // the samples
-    std::vector<alia::vector<2, double>> samples;
+    std::vector<cradle::vector<2, double>> samples;
 
     // outside_domain_policy determines the behavior for the function when it's
     // evaluated for a value outside the sample domain.
