@@ -97,10 +97,6 @@ namespace cradle {
 double
 get_area(clipper_polyset const& set);
 
-clipper_polyset
-smooth_polyset(
-    clipper_polyset const& set, double smoothSize, double smoothWeight);
-
 } // namespace cradle
 
 #endif

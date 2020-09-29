@@ -297,8 +297,11 @@ value_to_json(string* json, value const& v)
 {
     Json::Value root;
     write_json_value(&root, v);
-    Json::StyledWriter writer;
-    *json = writer.write(root);
+    Json::StreamWriterBuilder builder;
+    builder["indentation"] = "  ";
+    builder["precision"] = 15;
+    builder["enableYAMLCompatibility"] = true;
+    *json = Json::writeString(builder, root);
 }
 
 blob

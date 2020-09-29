@@ -149,48 +149,6 @@ make_parallelepiped(
     // top face is equal in size and parallel to base)
     vector3d const& c);
 
-// Computes a triangle mesh from the structure
-api(fun disk_cached)
-// Triangulated mesh
-triangle_mesh
-compute_triangle_mesh_from_structure_with_options(
-    // Structure to compute into triangulated mesh
-    structure_geometry const& structure,
-    // Minimum grid spacing
-    double min_spacing,
-    // Maximum number of grid cells
-    int max_grid_count);
-
-// Computes a triangle mesh from the structure
-api(fun disk_cached)
-// Triangulated mesh
-triangle_mesh
-compute_triangle_mesh_from_structure(
-    // Structure to compute into triangulated mesh
-    structure_geometry const& structure);
-
-// Creates a surface mesh from the image data at the specified iso-level of
-// value Note: End planes (top/bottom) will be returned for external surfaces
-api(fun disk_cached)
-// Triangulated mesh
-triangle_mesh
-compute_triangle_mesh_from_image_double(
-    // Image to compute triangle mesh from
-    image<3, double, shared> const& img,
-    // Value of iso-level to create structure frmo image pixel values
-    double level);
-
-// Creates a surface mesh from the image data at the specified iso-level of
-// value Note: End planes (top/bottom) will be returned for external surfaces
-api(fun disk_cached)
-// Triangulated mesh
-triangle_mesh
-compute_triangle_mesh_from_image_float(
-    // Image to compute triangle mesh from
-    image<3, float, shared> const& img,
-    // Value of iso-level to create structure frmo image pixel values
-    double level);
-
 image<3, float, shared>
 set_data_for_structure(
     image<3, float, shared> const& img,
@@ -204,51 +162,6 @@ set_data_for_structure(
     structure_geometry const& structure,
     double threshold,
     bool set_data_inside);
-
-// Constructs a 3D image such that all pixels that are inside/outside of meshes
-// and have a value from img above threshold are given a value of 1.0, while
-// all other pixels are set to zero (inside/outside is set by argument
-// set_data_inside). Used for creating a clean image which can be used for
-// further processing.
-api(fun disk_cached)
-// Image of 1 and 0 values.
-image<3, float, shared>
-set_data_for_mesh_float(
-    // Image containing data to compare to threshold.
-    image<3, float, shared> const& img,
-    // Meshes to be used for checking contains
-    std::vector<optimized_triangle_mesh> const& meshes,
-    // Threshold value above which points are excluded from resulting image.
-    float threshold,
-    // Flag indicating if points inside or outside should be set to 1.
-    bool set_data_inside);
-
-// Constructs a 3D image such that all pixels that are inside/outside of meshes
-// and have a value from img above threshold are given a value of 1.0, while
-// all other pixels are set to zero (inside/outside is set by argument
-// set_data_inside). Used for creating a clean image which can be used for
-// further processing.
-api(fun disk_cached)
-// Image of 1 and 0 values.
-image<3, double, shared>
-set_data_for_mesh_double(
-    // Image containing data to compare to threshold.
-    image<3, double, shared> const& img,
-    // Meshes to be used for checking contains
-    std::vector<optimized_triangle_mesh> const& meshes,
-    // Threshold value above which points are excluded from resulting image.
-    double threshold,
-    // Flag indicating if points inside or outside should be set to 1.
-    bool set_data_inside);
-
-// Creates a triangle mesh and constructs a bin collection containing all
-// triangle faces for a given structure.
-api(fun disk_cached execution_class(cpu.x2))
-// The optimized triangle mesh of structure.
-optimized_triangle_mesh
-make_optimized_triangle_mesh_for_structure(
-    // The structure to convert into a mesh.
-    structure_geometry const& structure);
 
 // loading .OBJ files
 triangle_mesh_with_normals
@@ -312,15 +225,6 @@ get_deepest_intersection(
     std::vector<triangle_mesh> const& targets,
     vector3d& pt,
     double& uu);
-
-// Make a bin collection of the faces in a triangle mesh.
-face3_bin_collection
-make_bin_collection_from_mesh(
-    triangle_mesh const& mesh, unsigned resolution_multiplier = 1);
-
-// Does the given mesh contain the given point?
-bool
-mesh_contains(optimized_triangle_mesh const& mesh, vector3d const& point);
 
 double
 compute_solid_angle(triangle_mesh const& mesh, vector3d const& p);

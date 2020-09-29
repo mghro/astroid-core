@@ -206,7 +206,6 @@ struct exception : std::exception
 {
     exception(string const& msg) : msg_(new string(msg))
     {
-        std::cout << msg << std::endl;
     }
 
     ~exception() throw()
@@ -1406,7 +1405,7 @@ struct value
     // v must be one of the supported types or this will yield a compile-time
     // error.
     template<class T>
-    explicit value(T const& v)
+    value(T const& v)
     {
         set(v);
     }

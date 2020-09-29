@@ -348,60 +348,6 @@ polyset_expansion(
 void
 expand(polyset* dst, polyset const& src, double amount);
 
-// Smooths a polyset via a distance weighted blurring.
-api(fun trivial)
-// The smoothed polyset
-polyset
-smooth_polyset(
-    // The polyset to be smoothed.
-    polyset const& set,
-    // The size factor of the Gaussian blur for smoothing (larger values
-    // increase smoothing).
-    double smoothSize,
-    // The weight factor of the Gaussian blur for smoothing (smaller values
-    // increase smoothing). Note this value must be greater than 0.
-    double smoothWeight);
-
-// Smooths a polyset via an edge midpoint shift.
-api(fun)
-// The smoothed polyset
-polyset
-smooth_polyset_2(
-    // The polyset to be smoothed.
-    polyset const& set,
-    // The shift factor of the smoothing (ranges from 0.0 to 1.0).
-    double smoothSize,
-    // Number of smoothing iterations (larger values increase smoothing).
-    int iter);
-
-// Splits a polyset along the given ray.
-// Note that the function returns the portion of set that lies to the left side
-// of the ray. The ray must have a unit vector as its direction.
-api(fun)
-// Polyset of the portion of set on the left side of ray.
-polyset
-split_polyset(
-    // The polyset to split.
-    polyset const& set,
-    // Ray along which the polygon is to be split.
-    ray<2, double> r);
-
-// Slices a polyset along the given axis.
-api(fun)
-// List of points that intersect slice plane and polyset.
-std::vector<vector3d>
-slice_polyset(
-    // The polyset to be sliced.
-    polyset const& p,
-    // The axis the polyset lies on.
-    unsigned polyset_axis,
-    // The position of the polyset along the axis it lies on.
-    double polyset_position,
-    // The axis of the plane used to slice the polyset.
-    unsigned slice_axis,
-    // The position of the slice plane along its axis.
-    double slice_position);
-
 // Visual C++ seems to define DIFFERENCE somewhere in its standard headers.
 #ifdef DIFFERENCE
 #undef DIFFERENCE
@@ -609,33 +555,6 @@ structure_2d_expansion(
     return result;
 }
 
-void
-expand_in_3d(
-    structure_geometry* result,
-    structure_geometry const& structure,
-    double amount);
-
-// Compute the 3D expansion of a structure_geometry.
-// When computing the 3D expansion of a structure, the structure's slices are
-// allowed to expand into other slices. Because of this, you must ensure the
-// structures master_slice_list is the list of all slices in the structure's
-// space. Again, if the expansion amount is negative, this computes a
-// contraction.
-api(fun disk_cached)
-// Expanded 3D structure
-structure_geometry
-structure_3d_expansion(
-    // 3D structure to expand
-    structure_geometry const& structure,
-    // Expansion amount; Positive values will expand the polyset and negative
-    // numbers will contract the polyset
-    double amount)
-{
-    structure_geometry result;
-    expand_in_3d(&result, structure, amount);
-    return result;
-}
-
 // Get the bounding box of a structure.
 api(fun disk_cached name(structure_bounding_box))
 // Bounding 3d box of the specified structure
@@ -648,21 +567,6 @@ void
 compute_bounding_box(
     optional<box<3, double>>& box, structure_geometry const& structure);
 
-// Splits a structure by the given plane.
-// Note that the function returns the portion of the split structure that lies
-// to the negative side of the plane (i.e. removes portion of the structure in
-// the direction of the planes' normal). The structure slices are assumed to be
-// positioned along the z axis.
-api(fun disk_cached)
-// Resulting split structure.
-structure_geometry
-split_structure(
-    // Structure to be split.
-    structure_geometry const& structure,
-    // Normal of the plane which is to split the structure.
-    vector3d normal,
-    // Point of the plane which is to split the structure.
-    vector3d point);
 
 // Test if a box and structure are overlapping.
 bool
@@ -672,30 +576,6 @@ overlapping(
     unsigned structure_axis,
     optional<box3d> const& sg_bounds);
 
-// Slices a structure along the given axis.
-api(fun)
-// The polyset resulting from slicing the structure.
-polyset
-slice_structure(
-    // The structure to be sliced.
-    structure_geometry const& structure,
-    // The axis of the plane used to slice the structure.
-    unsigned slice_axis,
-    // The position of the slice plane along its axis.
-    double slice_position);
-
-// Returns a structure that is the input structure sliced along a different
-// axis
-api(fun)
-// The input structure sliced along a different axis
-structure_geometry
-slice_structure_along_different_axis(
-    // The structure to be sliced.
-    structure_geometry const& structure,
-    // The slice axis of the new structure.
-    unsigned new_axis,
-    // The list of slice positions for the new structure
-    std::vector<double> const& slice_positions);
 
 } // namespace cradle
 

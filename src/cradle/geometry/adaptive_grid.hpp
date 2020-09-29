@@ -66,45 +66,11 @@ struct adaptive_grid
     cradle::array<uint16_t> volumes;
 };
 
-// Constructs an adaptive grid from regions and bounds.
-api(fun disk_cached monitored execution_class(cpu.x16))
-// An adaptive grid.
-adaptive_grid
-compute_adaptive_grid(
-    // Extents to use for the grid.
-    box3d const& box,
-    // Bounds to use for the voxels. The bounds are resized according to the
-    // maximum spacing such that the voxel boxes are either completely inside
-    // or outside the bounds. Only the voxels that lie within the bounds will
-    // be added to the grid.
-    box3d const& bounds,
-    // Spacing for portion of box not covered by other regions.
-    double maximum_spacing,
-    // List of regions to adapt grid spacing within.
-    adaptive_grid_region_list const& regions);
-
 box3d
 get_octree_box(box3d const& extents, uint64_t index);
 
 int
 get_octree_depth(box3d const& extents, uint64_t index);
-
-// Get the regular grid that corresponds to the given adaptive grid divided
-// uniformly at its minimum spacing.
-api(fun disk_cached name(regularize_adaptive_grid) execution_class(cpu.x16))
-regular_grid<3, double>
-regularize(adaptive_grid const& grid);
-
-// Takes an existing adaptive grid and removes all the voxels outside of the
-// specified structure
-api(fun execution_class(cpu.x4))
-// Final adaptive grid
-adaptive_grid
-limit_adaptive_grid_by_structure(
-    // Initial adaptive grid
-    adaptive_grid const& grid,
-    // Structure to limit the adaptive grid by
-    structure_geometry const& structure);
 
 template<class Pixel>
 image3
@@ -177,53 +143,6 @@ to_image(
     // Return image
     return as_variant(share(img));
 }
-
-// Translate an adaptive grid into an image_3d using a vector of
-// double values
-api(fun disk_cached execution_class(cpu.x16))
-// Image of adaptive grid values
-image3
-adaptive_grid_doubles_to_image(
-    // Adaptive grid to translate into an image
-    adaptive_grid const& grid,
-    // Vector of doubles that correspond to the value in each voxel
-    std::vector<double> const& field);
-
-// Translate an adaptive grid into an image_3d using a vector of
-// float values
-api(fun disk_cached execution_class(cpu.x16))
-// Image of adaptive grid values
-image3
-adaptive_grid_floats_to_image(
-    // Adaptive grid to translate into an image
-    adaptive_grid const& grid,
-    // Vector of floats that correspond to the value in each voxel
-    std::vector<float> const& field);
-
-// Translate an adaptive grid into an image_3d using an array of
-// double values
-api(fun disk_cached execution_class(cpu.x16))
-// Image of adaptive grid values
-image3
-adaptive_grid_array_to_image(
-    // Adaptive grid to translate into an image
-    adaptive_grid const& grid,
-    // Array of double values that correspond to the value in each voxel
-    array<float> const& field);
-
-// Returns a list of vector3d points that correspond to the points on an
-// adaptive grid
-api(fun disk_cached monitored execution_class(cpu.x16))
-// The vector of vector3d points from the adaptive grid
-std::vector<vector3d>
-get_points_on_adaptive_grid(
-    // Adaptive grid to translate into a point list
-    adaptive_grid const& grid);
-
-// Get a list of boxes representing the voxels in an adaptive grid.
-api(fun disk_cached monitored execution_class(cpu.x16))
-std::vector<box3d>
-adaptive_grid_voxel_boxes(adaptive_grid const& grid);
 
 } // namespace cradle
 

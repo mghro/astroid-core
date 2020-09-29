@@ -171,13 +171,4 @@ get_area(clipper_polyset const& set)
     return area * clipper_integer_precision * clipper_integer_precision;
 }
 
-clipper_polyset
-smooth_polyset(
-    clipper_polyset const& set, double smoothSize, double smoothWeight)
-{
-    polyset p_out
-        = smooth_polyset(from_clipper(set), smoothSize, smoothWeight);
-    return to_clipper(p_out);
-}
-
 } // namespace cradle

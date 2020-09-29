@@ -543,14 +543,14 @@ cast_pointer(variant_const_view_pointer& dst, unique_pointer<Pixel> const& src)
 
 // simple pointers
 template<class Pixel1, class Pixel2>
-void
+std::enable_if_t<!std::is_same<Pixel1, Pixel2>::value>
 cast_pointer(Pixel1*& dst, Pixel2* src)
 {
     dst = (Pixel1*) src;
 }
 // simple pointers (const)
 template<class Pixel1, class Pixel2>
-void
+std::enable_if_t<!std::is_same<Pixel1, Pixel2>::value>
 cast_pointer(Pixel1 const*& dst, Pixel2 const* src)
 {
     dst = (Pixel1 const*) src;

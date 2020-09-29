@@ -1,7 +1,32 @@
 cmake_minimum_required(VERSION 3.14)
 project(cradle)
 
+# Detect the compiler.
+if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    set(IS_CLANG true)
+else()
+    set(IS_CLANG false)
+endif()
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    set(IS_GCC true)
+else()
+    set(IS_GCC false)
+endif()
+if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    set(IS_MSVC true)
+else()
+    set(IS_MSVC false)
+endif()
+
 include(FetchContent)
+
+# Include Catch.
+FetchContent_Declare(
+  catch
+  GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+  GIT_TAG        v2.13.0
+)
+FetchContent_MakeAvailable(catch)
 
 # Download/include CMake/Conan integration.
 if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/conan.cmake")
@@ -20,6 +45,7 @@ conan_add_remote(
     VERIFY_SSL True)
 conan_cmake_run(
     REQUIRES
+        boost_assign/1.66.0@bincrafters/stable
         boost_date_time/1.66.0@bincrafters/stable
         boost_format/1.66.0@bincrafters/stable
         boost_polygon/1.66.0@bincrafters/stable
@@ -84,13 +110,68 @@ list(APPEND srcs ${generated_srcs})
 list(APPEND headers ${generated_headers}
     "${CMAKE_CURRENT_BINARY_DIR}/generated/src/cradle/api_index.hpp")
 
+# Set build options for instrumenting test coverage.
+enable_testing()
+if(IS_CLANG AND CMAKE_BUILD_TYPE STREQUAL "Debug")
+    message(STATUS "Enabling gcov support")
+    add_compile_options(-DLLVM_USE_LINKER=gold -fprofile-instr-generate
+                        -fcoverage-mapping)
+    string(APPEND CMAKE_EXE_LINKER_FLAGS
+           " -fprofile-instr-generate -fcoverage-mapping")
+endif()
+
 add_library(cradle STATIC ${srcs} ${headers} ${impls} ${CLIPPER_SOURCE_FILES})
 target_include_directories(cradle PUBLIC
     ${CONAN_INCLUDE_DIRS}
     ${CLIPPER_INCLUDE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}/generated/src
     ${CMAKE_CURRENT_SOURCE_DIR}/src)
-target_link_libraries(cradle ${CONAN_LIBS})
+target_link_libraries(cradle ${CONAN_LIBS} Catch2::Catch2)
+
+# Add the unit test runner.
+file(GLOB_RECURSE UNIT_TEST_FILES CONFIGURE_DEPENDS "unit_tests/*.cpp")
+add_executable(unit_test_runner ${UNIT_TEST_FILES})
+target_link_libraries(unit_test_runner cradle)
+target_include_directories(unit_test_runner
+    PRIVATE ${PROJECT_SOURCE_DIR}/unit_tests)
+
+# Add a target for running the unit tests.
+add_custom_target(
+    unit_tests
+    # Create a fresh 'unit-testing' directory within the build dir and run the
+    # tests with that.
+    COMMAND ${CMAKE_COMMAND} -E remove_directory unit-testing
+    COMMAND ${CMAKE_COMMAND} -E make_directory unit-testing
+    COMMAND ${CMAKE_COMMAND} -E chdir unit-testing ${CMAKE_COMMAND}
+                             -E env CRADLE_DEPLOY_DIR=${PROJECT_BINARY_DIR}
+                             $<TARGET_FILE:unit_test_runner>
+    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+    DEPENDS unit_test_runner)
+
+# On Linux debug builds, the proper CMake test associated with the unit tests
+# includes test coverage reporting.
+if(IS_CLANG AND CMAKE_BUILD_TYPE STREQUAL "Debug")
+    string(REPLACE clang llvm-profdata LLVM_PROFDATA $ENV{CC})
+    string(REPLACE clang llvm-cov LLVM_COV $ENV{CC})
+    add_custom_target(
+        unit_test_coverage
+        COMMAND ${CMAKE_COMMAND} --build . --target unit_tests
+        COMMAND ${LLVM_PROFDATA} merge -sparse unit-testing/default.profraw
+                -o default.profdata
+        COMMAND ${LLVM_COV} show -instr-profile=default.profdata
+                $<TARGET_FILE:unit_test_runner>
+                >${PROJECT_SOURCE_DIR}/coverage.txt
+        WORKING_DIRECTORY ${PROJECT_BINARY_DIR})
+    add_test(
+        NAME unit_test_coverage
+        COMMAND ${CMAKE_COMMAND} --build . --target unit_test_coverage
+        WORKING_DIRECTORY ${PROJECT_BINARY_DIR})
+else()
+    add_test(
+        NAME unit_tests
+        COMMAND ${CMAKE_COMMAND} --build . --target unit_tests
+        WORKING_DIRECTORY ${PROJECT_BINARY_DIR})
+endif()
 
 # add_executable(generate_api generate_api.cpp)
 # target_link_libraries(generate_api cradle ${MY_LIBRARIES})
