@@ -51,7 +51,6 @@ conan_cmake_run(
         boost_format/1.66.0@bincrafters/stable
         boost_polygon/1.66.0@bincrafters/stable
         boost_uuid/1.66.0@bincrafters/stable
-        clipper/6.4.2
         jsoncpp/1.9.4
         msgpack/3.3.0
     BASIC_SETUP
