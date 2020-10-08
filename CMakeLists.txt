@@ -126,7 +126,7 @@ target_include_directories(cradle PUBLIC
     ${CLIPPER_INCLUDE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}/generated/src
     ${CMAKE_CURRENT_SOURCE_DIR}/src)
-target_link_libraries(cradle ${CONAN_LIBS} Catch2::Catch2)
+target_link_libraries(cradle PUBLIC ${CONAN_LIBS} Catch2::Catch2)
 
 # Add the unit test runner.
 file(GLOB_RECURSE UNIT_TEST_FILES CONFIGURE_DEPENDS "unit_tests/*.cpp")
