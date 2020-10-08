@@ -126,6 +126,8 @@ target_include_directories(cradle PUBLIC
     ${CLIPPER_INCLUDE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}/generated/src
     ${CMAKE_CURRENT_SOURCE_DIR}/src)
+target_compile_definitions(
+    cradle PUBLIC ${CONAN_DEFINES} ${CONAN_COMPILE_DEFINITIONS})
 target_link_directories(cradle PUBLIC ${CONAN_LIB_DIRS})
 target_link_libraries(cradle PUBLIC ${CONAN_LIBS} Catch2::Catch2)
 
