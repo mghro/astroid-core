@@ -45,6 +45,7 @@ conan_add_remote(
     VERIFY_SSL True)
 conan_cmake_run(
     REQUIRES
+        boost_asio/1.66.0@bincrafters/stable
         boost_assign/1.66.0@bincrafters/stable
         boost_date_time/1.66.0@bincrafters/stable
         boost_format/1.66.0@bincrafters/stable
@@ -172,6 +173,3 @@ else()
         COMMAND ${CMAKE_COMMAND} --build . --target unit_tests
         WORKING_DIRECTORY ${PROJECT_BINARY_DIR})
 endif()
-
-# add_executable(generate_api generate_api.cpp)
-# target_link_libraries(generate_api cradle ${MY_LIBRARIES})
