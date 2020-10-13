@@ -1405,7 +1405,7 @@ struct value
     // v must be one of the supported types or this will yield a compile-time
     // error.
     template<class T>
-    value(T const& v)
+    explicit value(T const& v)
     {
         set(v);
     }

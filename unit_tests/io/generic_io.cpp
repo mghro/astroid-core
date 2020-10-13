@@ -96,11 +96,11 @@ TEST_CASE("generic_io_test")
 
     value_map r;
     test_value_io(value(r));
-    r["b"] = b;
+    r[value("b")] = b;
     test_value_io(value(r));
-    r["x"] = x;
+    r[value("x")] = x;
     test_value_io(value(r));
-    r["y"] = y;
+    r[value("y")] = y;
     test_value_io(value(r));
 
     value_list l;

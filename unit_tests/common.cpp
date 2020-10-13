@@ -102,25 +102,25 @@ TEST_CASE("value_equality_tests")
     REQUIRE(b1 != b3);
 
     value_map r;
-    r["x"] = x;
+    r[value("x")] = x;
     REQUIRE(get_field(r, "x") == x);
 
     value_map q;
-    q["r"] = value(r);
+    q[value("r")] = value(r);
     REQUIRE(get_field(q, "r") == value(r));
     REQUIRE(get_field(q, "r") != value(q));
     REQUIRE(get_field(q, "r") != x);
 
     q.clear();
-    q["y"] = x;
+    q[value("y")] = x;
     REQUIRE(q != r);
 
     q.clear();
-    q["x"] = x;
+    q[value("x")] = x;
     REQUIRE(q == r);
 
     q.clear();
-    q["x"] = y;
+    q[value("x")] = y;
     REQUIRE(q != r);
 
     value_list l;
