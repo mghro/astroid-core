@@ -567,7 +567,6 @@ void
 compute_bounding_box(
     optional<box<3, double>>& box, structure_geometry const& structure);
 
-
 // Test if a box and structure are overlapping.
 bool
 overlapping(
@@ -575,7 +574,6 @@ overlapping(
     structure_geometry const& sg,
     unsigned structure_axis,
     optional<box3d> const& sg_bounds);
-
 
 } // namespace cradle
 

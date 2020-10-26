@@ -4,16 +4,18 @@
 #include <boost/version.hpp>
 
 #if BOOST_VERSION >= 105100
-    #define CRADLE_IO_BOOST_FILESYSTEM_NAMESPACE filesystem
+#define CRADLE_IO_BOOST_FILESYSTEM_NAMESPACE filesystem
 #else
-    #define CRADLE_IO_BOOST_FILESYSTEM_NAMESPACE filesystem3
+#define CRADLE_IO_BOOST_FILESYSTEM_NAMESPACE filesystem3
 #endif
 
-namespace boost { namespace CRADLE_IO_BOOST_FILESYSTEM_NAMESPACE {
+namespace boost {
+namespace CRADLE_IO_BOOST_FILESYSTEM_NAMESPACE {
 
 class path;
 
-}}
+}
+} // namespace boost
 
 namespace cradle {
 
@@ -21,11 +23,13 @@ typedef boost::CRADLE_IO_BOOST_FILESYSTEM_NAMESPACE::path file_path;
 
 struct c_file;
 
-namespace impl { namespace config {
-    class structure;
-    template<typename T>
-    class list;
-}}
+namespace impl {
+namespace config {
+class structure;
+template<typename T>
+class list;
+} // namespace config
+} // namespace impl
 
 struct file_error;
 
@@ -36,6 +40,6 @@ struct filesystem_item_contents;
 
 struct text_parser;
 
-}
+} // namespace cradle
 
 #endif

@@ -5,7 +5,8 @@
 
 namespace cradle {
 
-uint32_t compute_crc32(uint32_t crc, void const* data, size_t size);
+uint32_t
+compute_crc32(uint32_t crc, void const* data, size_t size);
 
 }
 

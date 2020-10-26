@@ -1,14 +1,19 @@
-#include <cradle/io/text_parser.hpp>
-#include <cctype>
 #include <boost/format.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/numeric/conversion/cast.hpp>
+#include <cctype>
 #include <cradle/io/file.hpp>
+#include <cradle/io/text_parser.hpp>
 
 namespace cradle {
 
-void initialize(text_parser& p, string const& label, char const* text,
-    size_t text_size, ownership_holder const& ownership)
+void
+initialize(
+    text_parser& p,
+    string const& label,
+    char const* text,
+    size_t text_size,
+    ownership_holder const& ownership)
 {
     p = text_parser();
     p.text = text;
@@ -20,13 +25,15 @@ void initialize(text_parser& p, string const& label, char const* text,
     p.line_start = text;
 }
 
-void initialize_parser_with_string(
+void
+initialize_parser_with_string(
     text_parser& p, string const& label, string const& text)
 {
     initialize(p, label, text.c_str(), text.size());
 }
 
-void initialize_parser_with_file(text_parser& p, file_path const& path)
+void
+initialize_parser_with_file(text_parser& p, file_path const& path)
 {
     p = text_parser();
     c_file f(path, "rb");
@@ -37,18 +44,19 @@ void initialize_parser_with_file(text_parser& p, file_path const& path)
     size_t array_length = boost::numeric_cast<size_t>(file_length);
     f.read(text.get(), boost::numeric_cast<size_t>(array_length));
     text.get()[array_length] = '\0';
-    initialize(p, path.string(), text.get(), array_length,
-        ownership_holder(text));
+    initialize(
+        p, path.string(), text.get(), array_length, ownership_holder(text));
 }
 
-void initialize_parser_with_blob(
-    text_parser& p, string const& label, blob const& b)
+void
+initialize_parser_with_blob(text_parser& p, string const& label, blob const& b)
 {
-    initialize(p, label, reinterpret_cast<char const*>(b.data), b.size,
-        b.ownership);
+    initialize(
+        p, label, reinterpret_cast<char const*>(b.data), b.size, b.ownership);
 }
 
-void advance(text_parser& p)
+void
+advance(text_parser& p)
 {
     if (*p.p == '\n')
     {
@@ -58,38 +66,44 @@ void advance(text_parser& p)
     ++p.p;
 }
 
-void check_char(text_parser& p, char expected)
+void
+check_char(text_parser& p, char expected)
 {
     if (peek(p) != expected)
         throw_unexpected(p);
     advance(p);
 }
 
-bool is_eol(text_parser& p)
+bool
+is_eol(text_parser& p)
 {
     char c = peek(p);
     return c == '\n' || c == '\r' || c == '\0';
 }
 
-void check_eol(text_parser& p)
+void
+check_eol(text_parser& p)
 {
     if (!is_eol(p))
         throw_unexpected(p);
 }
 
-bool is_line_empty(text_parser& p)
+bool
+is_line_empty(text_parser& p)
 {
     skip_space(p);
     return is_eol(p);
 }
 
-void check_line_empty(text_parser& p)
+void
+check_line_empty(text_parser& p)
 {
     skip_space(p);
     check_eol(p);
 }
 
-void advance_line(text_parser& p)
+void
+advance_line(text_parser& p)
 {
     while (!is_eol(p))
         advance(p);
@@ -99,14 +113,16 @@ void advance_line(text_parser& p)
         advance(p);
 }
 
-void check_eof(text_parser& p)
+void
+check_eof(text_parser& p)
 {
     if (!is_eof(p))
         throw_unexpected(p);
 }
 
 template<class T>
-void read_unsigned_integer(text_parser& p, T& x)
+void
+read_unsigned_integer(text_parser& p, T& x)
 {
     std::stringstream s;
     skip_space(p);
@@ -125,7 +141,8 @@ void read_unsigned_integer(text_parser& p, T& x)
     }
 }
 template<class T>
-void read_signed_integer(text_parser& p, T& x)
+void
+read_signed_integer(text_parser& p, T& x)
 {
     skip_space(p);
     std::stringstream s;
@@ -149,37 +166,45 @@ void read_signed_integer(text_parser& p, T& x)
     }
 }
 
-void read(text_parser& p, int64_t& x)
+void
+read(text_parser& p, int64_t& x)
 {
     read_signed_integer(p, x);
 }
-void read(text_parser& p, uint64_t& x)
+void
+read(text_parser& p, uint64_t& x)
 {
     read_unsigned_integer(p, x);
 }
-void read(text_parser& p, int32_t& x)
+void
+read(text_parser& p, int32_t& x)
 {
     read_signed_integer(p, x);
 }
-void read(text_parser& p, uint32_t& x)
+void
+read(text_parser& p, uint32_t& x)
 {
     read_unsigned_integer(p, x);
 }
-void read(text_parser& p, int16_t& x)
+void
+read(text_parser& p, int16_t& x)
 {
     read_signed_integer(p, x);
 }
-void read(text_parser& p, uint16_t& x)
+void
+read(text_parser& p, uint16_t& x)
 {
     read_unsigned_integer(p, x);
 }
-void read(text_parser& p, int8_t& x)
+void
+read(text_parser& p, int8_t& x)
 {
     int32_t i;
     read(p, i);
     x = boost::numeric_cast<int8_t>(i);
 }
-void read(text_parser& p, uint8_t& x)
+void
+read(text_parser& p, uint8_t& x)
 {
     uint32_t i;
     read(p, i);
@@ -197,7 +222,8 @@ void read(text_parser& p, uint8_t& x)
 //        read_unsigned_integer(p, x);
 //    }
 //#endif
-void read(text_parser& p, double& x)
+void
+read(text_parser& p, double& x)
 {
     skip_space(p);
     if (is_eol(p))
@@ -209,14 +235,16 @@ void read(text_parser& p, double& x)
     p.p = end;
     x = d;
 }
-void read(text_parser& p, float& x)
+void
+read(text_parser& p, float& x)
 {
     double d;
     read(p, d);
     x = float(d);
 }
 
-void read_string(text_parser& p, string& x)
+void
+read_string(text_parser& p, string& x)
 {
     std::stringstream s;
     skip_space(p);
@@ -228,7 +256,8 @@ void read_string(text_parser& p, string& x)
     x = s.str();
 }
 
-void read_quoted_string(text_parser& p, string& x)
+void
+read_quoted_string(text_parser& p, string& x)
 {
     std::stringstream s;
     skip_space(p);
@@ -243,7 +272,8 @@ void read_quoted_string(text_parser& p, string& x)
     x = s.str();
 }
 
-void read_rest_of_line(text_parser& p, string& x)
+void
+read_rest_of_line(text_parser& p, string& x)
 {
     std::stringstream s;
     while (!is_eol(p))
@@ -254,24 +284,29 @@ void read_rest_of_line(text_parser& p, string& x)
     x = s.str();
 }
 
-void throw_error(text_parser& p, string const& message)
+void
+throw_error(text_parser& p, string const& message)
 {
-    throw parse_error(p.label, p.line_number, int(p.p - p.line_start) + 1,
-        message);
+    throw parse_error(
+        p.label, p.line_number, int(p.p - p.line_start) + 1, message);
 }
 
-void throw_unexpected(text_parser& p)
+void
+throw_unexpected(text_parser& p)
 {
     if (peek(p) == '\0')
         throw_error(p, "unexpected end-of-string\n");
-    throw_error(p, str(boost::format("unexpected character: %c (0x%02x).") %
-        peek(p) % int(peek(p))));
+    throw_error(
+        p,
+        str(boost::format("unexpected character: %c (0x%02x).") % peek(p)
+            % int(peek(p))));
 }
 
-void skip_space(text_parser& p)
+void
+skip_space(text_parser& p)
 {
     while (peek(p) == ' ' || peek(p) == '\t')
         advance(p);
 }
 
-}
+} // namespace cradle
