@@ -248,7 +248,7 @@ struct vector
     static const unsigned dimensionality = N;
 
     // element accessors
-    T
+    T const&
     operator[](unsigned i) const
     {
         assert(i < N);
