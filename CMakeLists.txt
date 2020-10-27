@@ -101,8 +101,9 @@ FetchContent_MakeAvailable(preprocessor)
 preprocess_header_files(
     generated_srcs generated_headers
     ACCOUNT_ID mgh
-    TYPE_APP_ID cradle
-    FUNCTION_APP_ID cradle
+    # TODO: Make this its own actual app...
+    TYPE_APP_ID dosimetry
+    FUNCTION_APP_ID dosimetry
     NAMESPACE cradle
     INDEX_FILE "${CMAKE_CURRENT_BINARY_DIR}/generated/src/cradle/api_index.hpp"
     INPUT_FILES ${preprocessed_files})
