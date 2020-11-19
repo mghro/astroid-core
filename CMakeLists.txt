@@ -61,7 +61,7 @@ add_definitions(-DBOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE)
 # Download, extract, and setup Clipper.
 if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/clipper_ver6.0.0")
     message(STATUS "Downloading Clipper")
-    file(DOWNLOAD "https://sourceforge.net/projects/polyclipping/files/Older%20versions/clipper_ver6.0.0.zip/download"
+    file(DOWNLOAD "https://sourceforge.net/projects/polyclipping/files/Older%20versions/clipper_ver6.0.0.zip"
                   "${CMAKE_CURRENT_BINARY_DIR}/clipper_ver6.0.0.zip"
                   TLS_VERIFY ON)
     message(STATUS "Extracting Clipper")
