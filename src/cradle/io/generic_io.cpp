@@ -199,9 +199,12 @@ void
 parse_json_value(value* v, char const* json, size_t length)
 {
     Json::Value root;
-    Json::Reader reader;
-    if (!reader.parse(json, json + length, root))
-        throw json_parse_error(reader.getFormatedErrorMessages());
+    Json::CharReaderBuilder builder;
+    std::unique_ptr<Json::CharReader> const reader(builder.newCharReader());
+    std::string errs;
+    bool ok = reader->parse(json, json + length, &root, &errs);
+    if (!ok)
+        throw json_parse_error(errs);
     null_check_in check_in;
     read_json_value(v, check_in, root);
 }

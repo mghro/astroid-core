@@ -73,21 +73,24 @@ make_blob(size_t size)
 TEST_CASE("generic_io_test")
 {
     value t(true);
-    test_value_io(t);
     value f(false);
-    test_value_io(f);
 
     value x(0.1);
-    test_value_io(x);
     value y(0.2);
-    test_value_io(y);
 
-    value s("foo");
-    test_value_io(s);
-    set(s, "bar");
-    test_value_io(s);
-    set(s, "");
-    test_value_io(s);
+    value foo("foo");
+    value bar("bar");
+    value empty_string("");
+
+    value_list primitives;
+    primitives.push_back(t);
+    primitives.push_back(f);
+    primitives.push_back(x);
+    primitives.push_back(y);
+    primitives.push_back(foo);
+    primitives.push_back(bar);
+    primitives.push_back(empty_string);
+    test_value_io(value(primitives));
 
     value b(make_blob(1000));
     test_value_io(b);
