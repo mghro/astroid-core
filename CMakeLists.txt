@@ -94,7 +94,7 @@ file(GLOB_RECURSE impls CONFIGURE_DEPENDS
 # Fetch the Astroid preprocessor.
 FetchContent_Declare(preprocessor
     GIT_REPOSITORY https://github.com/mghro/astroid-preprocessor
-    GIT_TAG master)
+    GIT_TAG 0.2.0)
 FetchContent_MakeAvailable(preprocessor)
 
 # Preprocess the API headers.
