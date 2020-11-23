@@ -135,7 +135,7 @@ class image_integral_computer
 
  private:
     image<N, Pixel, Storage> const& img_;
-    ray<N, double> const& ray_;
+    ray<N, double> const ray_;
 
     // the intersection between the ray and the image volume
     ray_box_intersection<N, double> intersection_;
