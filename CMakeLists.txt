@@ -18,6 +18,8 @@ else()
     set(IS_MSVC false)
 endif()
 
+set(CMAKE_CXX_STANDARD 17)
+
 include(FetchContent)
 
 # Include Catch.
