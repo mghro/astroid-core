@@ -937,6 +937,46 @@ get_first_last_intersection(
 }
 
 bool
+get_first_last_intersection(
+    vector3d const& s1,
+    vector3d const& s2,
+    triangle_mesh const& mesh,
+    vector3d& pt1,
+    vector3d& pt2,
+    double& uu1,
+    double& uu2)
+{
+    double u1 = 1.0e100;
+    double u2 = -1.0e100;
+    for (size_t j = 0; j < mesh.faces.size(); ++j)
+    {
+        double temp_u = 0.0;
+        bool isIntersected = triangle_segment_intersection(
+            s1, s2, get_triangle(mesh, j), temp_u);
+        if (isIntersected)
+        {
+            if (temp_u < u1)
+            {
+                u1 = temp_u;
+            }
+            if (temp_u > u2)
+            {
+                u2 = temp_u;
+            }
+        }
+    }
+    if (u2 > 0.0)
+    {
+        pt1 = point_along(s1, s2, u1);
+        pt2 = point_along(s1, s2, u2);
+        uu1 = u1;
+        uu2 = u2;
+        return true;
+    }
+    return false;
+}
+
+bool
 get_deepest_intersection(
     vector3d const& s1,
     vector3d const& s2,

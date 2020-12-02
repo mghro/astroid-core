@@ -214,6 +214,26 @@ get_first_last_intersection(
     double& uu1,
     double& uu2);
 
+// Compute the first and last intersections of a segment defined by s1 & s2
+// with a single structure in the form of a triangle mesh.
+//
+// pt1 & pt2 are returned points of intersection, first and last respectively
+//
+// uu1 & uu2 are returned segment u values at point of intersection, first and
+// last respectively
+//
+// returns bool indicating whether or not an intersection was found
+//
+bool
+get_first_last_intersection(
+    vector3d const& s1,
+    vector3d const& s2,
+    triangle_mesh const& mesh,
+    vector3d& pt1,
+    vector3d& pt2,
+    double& uu1,
+    double& uu2);
+
 // computes the last intersection of a segment defined by s1 & s2 with a list
 // of targets in the form of triangle meshes pt is returned point of
 // intersection uu is returned segment u value at point of intersection returns
