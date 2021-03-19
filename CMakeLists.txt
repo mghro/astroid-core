@@ -20,6 +20,13 @@ endif()
 
 set(CMAKE_CXX_STANDARD 17)
 
+# Determine if we're being built through FetchContent.
+if (${CMAKE_SOURCE_DIR} STREQUAL ${PROJECT_SOURCE_DIR})
+    set(is_fetched FALSE)
+else()
+    set(is_fetched TRUE)
+endif()
+
 include(FetchContent)
 
 # Include Catch.
@@ -76,21 +83,28 @@ set(CLIPPER_INCLUDE_DIR
 set(CLIPPER_SOURCE_FILES
     "${CMAKE_CURRENT_BINARY_DIR}/clipper_ver6.0.0/cpp/clipper.cpp")
 
+# Don't use CONFIGURE_DEPENDS if we're being built as a dependency.
+if (is_fetched)
+    set(glob_options )
+else()
+    set(glob_options CONFIGURE_DEPENDS)
+endif()
+
 # C++ sources
-file(GLOB_RECURSE srcs CONFIGURE_DEPENDS
+file(GLOB_RECURSE srcs ${glob_options}
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
-file(GLOB_RECURSE c_srcs CONFIGURE_DEPENDS
+file(GLOB_RECURSE c_srcs ${glob_options}
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.c")
 list(APPEND srcs ${c_srcs})
 
 # C++ headers
-file(GLOB_RECURSE headers CONFIGURE_DEPENDS
+file(GLOB_RECURSE headers ${glob_options}
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp")
 set(preprocessed_files ${headers})
-file(GLOB_RECURSE c_headers CONFIGURE_DEPENDS
+file(GLOB_RECURSE c_headers ${glob_options}
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.h")
 list(APPEND headers ${c_headers})
-file(GLOB_RECURSE impls CONFIGURE_DEPENDS
+file(GLOB_RECURSE impls ${glob_options}
     "${CMAKE_CURRENT_SOURCE_DIR}/src/*.ipp")
 
 # Fetch the Astroid preprocessor.
@@ -112,6 +126,12 @@ preprocess_header_files(
 list(APPEND srcs ${generated_srcs})
 list(APPEND headers ${generated_headers}
     "${CMAKE_CURRENT_BINARY_DIR}/generated/src/cradle/api_index.hpp")
+
+# The rest of this is concerned with testing, which we don't want to do if
+# we're just building as a dependency.
+if (is_fetched)
+    return()
+endif()
 
 # Set build options for instrumenting test coverage.
 enable_testing()
