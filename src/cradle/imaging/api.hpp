@@ -1,6 +1,7 @@
 #ifndef CRADLE_IMAGING_API_HPP
 #define CRADLE_IMAGING_API_HPP
 
+#include <cradle/imaging/binary_ops.hpp>
 #include <cradle/imaging/discretize.hpp>
 #include <cradle/imaging/geometry.hpp>
 #include <cradle/imaging/histogram.hpp>
@@ -289,6 +290,18 @@ string
 image_value_units(image<N, Pixel, Storage> const& image)
 {
     return get_name(image.units);
+}
+
+api(fun with(N : 1, 2, 3))
+template<unsigned N>
+image<N, variant, shared>
+image_division(
+    image<N, variant, shared> const& dividend,
+    image<N, variant, shared> const& divisor)
+{
+    auto division = [](double a, double b) { return a / b; };
+    auto result = compute_binary_op(dividend, divisor, division);
+    return as_variant(result);
 }
 
 } // namespace cradle
