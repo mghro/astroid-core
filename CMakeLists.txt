@@ -127,6 +127,17 @@ list(APPEND srcs ${generated_srcs})
 list(APPEND headers ${generated_headers}
     "${CMAKE_CURRENT_BINARY_DIR}/generated/src/cradle/api_index.hpp")
 
+add_library(cradle STATIC ${srcs} ${headers} ${impls} ${CLIPPER_SOURCE_FILES})
+target_include_directories(cradle PUBLIC
+    ${CONAN_INCLUDE_DIRS}
+    ${CLIPPER_INCLUDE_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}/generated/src
+    ${CMAKE_CURRENT_SOURCE_DIR}/src)
+target_compile_definitions(
+    cradle PUBLIC ${CONAN_DEFINES} ${CONAN_COMPILE_DEFINITIONS})
+target_link_directories(cradle PUBLIC ${CONAN_LIB_DIRS})
+target_link_libraries(cradle PUBLIC ${CONAN_LIBS} Catch2::Catch2)
+
 # The rest of this is concerned with testing, which we don't want to do if
 # we're just building as a dependency.
 if (is_fetched)
@@ -142,17 +153,6 @@ if(IS_CLANG AND CMAKE_BUILD_TYPE STREQUAL "Debug")
     string(APPEND CMAKE_EXE_LINKER_FLAGS
            " -fprofile-instr-generate -fcoverage-mapping")
 endif()
-
-add_library(cradle STATIC ${srcs} ${headers} ${impls} ${CLIPPER_SOURCE_FILES})
-target_include_directories(cradle PUBLIC
-    ${CONAN_INCLUDE_DIRS}
-    ${CLIPPER_INCLUDE_DIR}
-    ${CMAKE_CURRENT_BINARY_DIR}/generated/src
-    ${CMAKE_CURRENT_SOURCE_DIR}/src)
-target_compile_definitions(
-    cradle PUBLIC ${CONAN_DEFINES} ${CONAN_COMPILE_DEFINITIONS})
-target_link_directories(cradle PUBLIC ${CONAN_LIB_DIRS})
-target_link_libraries(cradle PUBLIC ${CONAN_LIBS} Catch2::Catch2)
 
 # Add the unit test runner.
 file(GLOB_RECURSE UNIT_TEST_FILES CONFIGURE_DEPENDS "unit_tests/*.cpp")
