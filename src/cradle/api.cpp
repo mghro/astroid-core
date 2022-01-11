@@ -1,13 +1,15 @@
-#include <boost/uuid/sha1.hpp>
 #include <cradle/api.hpp>
-#include <cradle/api_index.hpp>
-#include <cradle/encoding.hpp>
-#include <cradle/io/generic_io.hpp>
 
 #include <boost/algorithm/string/regex.hpp>
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/algorithm/string/split.hpp>
 #include <boost/regex.hpp>
+#include <boost/uuid/name_generator_sha1.hpp>
+#include <boost/uuid/uuid.hpp>
+
+#include <cradle/api_index.hpp>
+#include <cradle/encoding.hpp>
+#include <cradle/io/generic_io.hpp>
 
 namespace cradle {
 
@@ -20,16 +22,15 @@ generate_function_uid(
     api_function_uid_contents uid(name, parameters, revision);
     auto json = value_to_json(to_value(uid));
 
-    boost::uuids::detail::sha1 sha1;
-    sha1.process_bytes(json.c_str(), json.size());
-    unsigned int digest[5];
-    sha1.get_digest(digest);
+    static constexpr boost::uuids::uuid ns_id{};
+    auto uuid
+        = boost::uuids::name_generator_sha1{ns_id}(json.data(), json.size());
 
     return base64_encode(
-        reinterpret_cast<uint8_t*>(digest),
-        20,
+        reinterpret_cast<uint8_t*>(&uuid),
+        uuid.size(),
         get_mime_base64_character_set());
-}
+} // namespace cradle
 
 api_structure_info static make_api_structure_info(
     raw_structure_info const& raw)
