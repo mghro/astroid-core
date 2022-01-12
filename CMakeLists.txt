@@ -54,8 +54,6 @@ conan_cmake_run(
         msgpack/3.3.0
         zlib/1.2.11
     OPTIONS
-        boost:without_chrono=True
-        boost:without_container=True
         boost:without_context=True
         boost:without_contract=True
         boost:without_coroutine=True
@@ -71,7 +69,6 @@ conan_cmake_run(
         boost:without_serialization=True
         boost:without_stacktrace=True
         boost:without_test=True
-        boost:without_thread=True
         boost:without_timer=True
         boost:without_type_erasure=True
         boost:without_wave=True
