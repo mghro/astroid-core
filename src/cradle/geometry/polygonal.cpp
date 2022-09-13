@@ -519,8 +519,8 @@ do_set_operation(
     polyset const& set2)
 {
     ClipperLib::Clipper clipper;
-    clipper.AddPolygons(to_clipper(set1), ClipperLib::ptSubject);
-    clipper.AddPolygons(to_clipper(set2), ClipperLib::ptClip);
+    clipper.AddPaths(to_clipper(set1), ClipperLib::ptSubject, true);
+    clipper.AddPaths(to_clipper(set2), ClipperLib::ptClip, true);
     ClipperLib::ClipType clipper_op;
     switch (op)
     {
@@ -539,7 +539,7 @@ do_set_operation(
         default:
             throw exception("set operation undefined");
     }
-    ClipperLib::Polygons solution;
+    ClipperLib::Paths solution;
     clipper.Execute(clipper_op, solution);
     from_clipper(result, solution);
 }
@@ -612,15 +612,15 @@ triangulate_polyset(polyset const& set)
 void
 expand(polyset* dst, polyset const& src, double amount)
 {
-    using namespace boost::polygon::operators;
+    ClipperLib::ClipperOffset offset;
+
     auto clipper_in = to_clipper(src);
-    ClipperLib::Polygons clipper_out;
-    OffsetPaths(
-        clipper_in,
-        clipper_out,
-        amount / clipper_integer_precision,
-        ClipperLib::jtRound,
-        ClipperLib::etClosed);
+    offset.AddPaths(
+        clipper_in, ClipperLib::jtRound, ClipperLib::etClosedPolygon);
+
+    ClipperLib::Paths clipper_out;
+    offset.Execute(clipper_out, amount / clipper_integer_precision);
+
     from_clipper(dst, clipper_out);
 }
 

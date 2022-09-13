@@ -26,34 +26,34 @@ to_clipper(vector<2, double> const& p);
 vector<2, double>
 from_clipper(clipper_point const& p);
 
-typedef ClipperLib::Polygon clipper_polygon2;
+typedef ClipperLib::Path clipper_polygon2;
 
-ClipperLib::Polygon
+ClipperLib::Path
 to_clipper(polygon2 const& poly);
 
 void
-to_clipper(ClipperLib::Polygon* cp, polygon2 const& poly);
+to_clipper(ClipperLib::Path* cp, polygon2 const& poly);
 
 polygon2
-from_clipper(ClipperLib::Polygon const& cp);
+from_clipper(ClipperLib::Path const& cp);
 
 void
-from_clipper(polygon2* poly, ClipperLib::Polygon const& cp);
+from_clipper(polygon2* poly, ClipperLib::Path const& cp);
 
-typedef ClipperLib::Polygon clipper_poly;
-typedef ClipperLib::Polygons clipper_polyset;
+typedef ClipperLib::Path clipper_poly;
+typedef ClipperLib::Paths clipper_polyset;
 
-ClipperLib::Polygons
+ClipperLib::Paths
 to_clipper(polyset const& cradle_set);
 
 void
-to_clipper(ClipperLib::Polygons* clipper_set, polyset const& cradle_set);
+to_clipper(ClipperLib::Paths* clipper_set, polyset const& cradle_set);
 
 polyset
-from_clipper(ClipperLib::Polygons const& clipper_set);
+from_clipper(ClipperLib::Paths const& clipper_set);
 
 void
-from_clipper(polyset* cradle_set, ClipperLib::Polygons const& clipper_set);
+from_clipper(polyset* cradle_set, ClipperLib::Paths const& clipper_set);
 
 // The following provides the interface to make a Clipper polyset a regular
 // CRADLE type. This allows Clipper polysets to be used directly as part of

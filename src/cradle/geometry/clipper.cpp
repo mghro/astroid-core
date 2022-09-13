@@ -17,16 +17,16 @@ from_clipper(clipper_point const& p)
         p.X * clipper_integer_precision, p.Y * clipper_integer_precision);
 }
 
-ClipperLib::Polygon
+ClipperLib::Path
 to_clipper(polygon2 const& poly)
 {
-    ClipperLib::Polygon cp;
+    ClipperLib::Path cp;
     to_clipper(&cp, poly);
     return cp;
 }
 
 void
-to_clipper(ClipperLib::Polygon* cp, polygon2 const& poly)
+to_clipper(ClipperLib::Path* cp, polygon2 const& poly)
 {
     size_t n_points = poly.vertices.size();
     cp->resize(n_points);
@@ -35,7 +35,7 @@ to_clipper(ClipperLib::Polygon* cp, polygon2 const& poly)
 }
 
 polygon2
-from_clipper(ClipperLib::Polygon const& cp)
+from_clipper(ClipperLib::Path const& cp)
 {
     polygon2 poly;
     from_clipper(&poly, cp);
@@ -43,7 +43,7 @@ from_clipper(ClipperLib::Polygon const& cp)
 }
 
 void
-from_clipper(polygon2* poly, ClipperLib::Polygon const& cp)
+from_clipper(polygon2* poly, ClipperLib::Path const& cp)
 {
     size_t n_points = cp.size();
     vertex2* vertices = allocate(&poly->vertices, n_points);
@@ -51,28 +51,28 @@ from_clipper(polygon2* poly, ClipperLib::Polygon const& cp)
         vertices[i] = from_clipper(cp[i]);
 }
 
-ClipperLib::Polygons
+ClipperLib::Paths
 to_clipper(polyset const& cradle_set)
 {
-    ClipperLib::Polygons clipper_set;
+    ClipperLib::Paths clipper_set;
     to_clipper(&clipper_set, cradle_set);
     return clipper_set;
 }
 
 void
-to_clipper(ClipperLib::Polygons* clipper_set, polyset const& cradle_set)
+to_clipper(ClipperLib::Paths* clipper_set, polyset const& cradle_set)
 {
     clipper_set->clear();
     for (auto const& i : cradle_set.polygons)
     {
-        ClipperLib::Polygon cp = to_clipper(i);
+        ClipperLib::Path cp = to_clipper(i);
         if (!Orientation(cp))
             ReversePath(cp);
         clipper_set->push_back(cp);
     }
     for (auto const& i : cradle_set.holes)
     {
-        ClipperLib::Polygon cp = to_clipper(i);
+        ClipperLib::Path cp = to_clipper(i);
         if (Orientation(cp))
             ReversePath(cp);
         clipper_set->push_back(cp);
@@ -80,7 +80,7 @@ to_clipper(ClipperLib::Polygons* clipper_set, polyset const& cradle_set)
 }
 
 polyset
-from_clipper(ClipperLib::Polygons const& clipper_set)
+from_clipper(ClipperLib::Paths const& clipper_set)
 {
     polyset cradle_set;
     from_clipper(&cradle_set, clipper_set);
@@ -88,7 +88,7 @@ from_clipper(ClipperLib::Polygons const& clipper_set)
 }
 
 void
-from_clipper(polyset* cradle_set, ClipperLib::Polygons const& clipper_set)
+from_clipper(polyset* cradle_set, ClipperLib::Paths const& clipper_set)
 {
     cradle_set->polygons.clear();
     cradle_set->holes.clear();
@@ -103,7 +103,8 @@ from_clipper(polyset* cradle_set, ClipperLib::Polygons const& clipper_set)
     }
 }
 
-raw_type_info get_type_info(clipper_polyset)
+raw_type_info
+get_type_info(clipper_polyset)
 {
     return get_type_info(polygon2());
 }

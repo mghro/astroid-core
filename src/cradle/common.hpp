@@ -386,7 +386,8 @@ struct optional
         valid_ = true;
         return *this;
     }
-    optional& operator=(none_type)
+    optional&
+    operator=(none_type)
     {
         valid_ = false;
         return *this;
@@ -1288,11 +1289,13 @@ operator<<(std::ostream& s, nil_type x)
 {
     return s << "nil";
 }
-static inline raw_type_info get_type_info(nil_type)
+static inline raw_type_info
+get_type_info(nil_type)
 {
     return raw_type_info(raw_kind::SIMPLE, any(raw_simple_type::NIL));
 }
-static inline size_t deep_sizeof(nil_type)
+static inline size_t
+deep_sizeof(nil_type)
 {
     return 0;
 }
@@ -1897,7 +1900,7 @@ namespace cradle {
 
 // forward declaring here so that compiler won't have the vector version
 // trump the polyset version way over in geometry/clipper.hpp/.cpp
-typedef ClipperLib::Polygons clipper_polyset;
+typedef ClipperLib::Paths clipper_polyset;
 raw_type_info get_type_info(clipper_polyset);
 
 template<class T>
@@ -2107,7 +2110,8 @@ struct hash<cradle::optional<T>>
 namespace cradle {
 
 template<unsigned N, class T>
-cradle::raw_type_info get_type_info(vector<N, T>)
+cradle::raw_type_info
+get_type_info(vector<N, T>)
 {
     using cradle::get_type_info;
     return cradle::raw_type_info(
@@ -2177,7 +2181,8 @@ struct omissible
         valid_ = true;
         return *this;
     }
-    omissible& operator=(none_type)
+    omissible&
+    operator=(none_type)
     {
         valid_ = false;
         return *this;
@@ -2604,7 +2609,8 @@ initialize(array<T>* array, std::vector<T> const& vector)
 }
 
 template<class T>
-raw_type_info get_type_info(array<T>)
+raw_type_info
+get_type_info(array<T>)
 {
     return raw_type_info(raw_kind::SIMPLE, any(raw_simple_type::BLOB));
 }
@@ -2859,7 +2865,8 @@ get(immutable<T> const& x)
 }
 
 template<class T>
-raw_type_info get_type_info(immutable<T>)
+raw_type_info
+get_type_info(immutable<T>)
 {
     return get_type_info(T());
 }
@@ -3045,7 +3052,8 @@ make_object_reference(string const& uid)
 }
 
 template<class T>
-raw_type_info get_type_info(object_reference<T>)
+raw_type_info
+get_type_info(object_reference<T>)
 {
     return raw_type_info(raw_kind::DATA_REFERENCE, any(get_type_info(T())));
 }
@@ -3144,7 +3152,8 @@ make_immutable_reference(string const& uid)
 }
 
 template<class T>
-raw_type_info get_type_info(immutable_reference<T>)
+raw_type_info
+get_type_info(immutable_reference<T>)
 {
     return raw_type_info(raw_kind::DATA_REFERENCE, any(get_type_info(T())));
 }
@@ -4112,21 +4121,21 @@ rq_structure(std::map<string, untyped_request> const& field_requests)
 
 // Make a PROPERTY request.
 #define rq_property(record, field)                                            \
-    make_typed_request<decltype(typename remove_const_reference<decltype(     \
-                                    record)>::type::result_type()             \
+    make_typed_request<decltype(typename remove_const_reference<              \
+                                    decltype(record)>::type::result_type()    \
                                     .field)>(                                 \
         request_type::PROPERTY,                                               \
         property_request_info(                                                \
             record.untyped,                                                   \
             #field,                                                           \
             cradle::get_field_extractor<                                      \
-                typename remove_const_reference<decltype(                     \
-                    record)>::type::result_type,                              \
-                decltype(typename remove_const_reference<decltype(            \
-                             record)>::type::result_type()                    \
+                typename remove_const_reference<                              \
+                    decltype(record)>::type::result_type,                     \
+                decltype(typename remove_const_reference<                     \
+                             decltype(record)>::type::result_type()           \
                              .field),                                         \
-                &remove_const_reference<decltype(                             \
-                    record)>::type::result_type::field>()))
+                &remove_const_reference<                                      \
+                    decltype(record)>::type::result_type::field>()))
 
 // Make a UNION request.
 #define rq_union(union_namespace, union_type, member_name, member_request)    \
@@ -4138,8 +4147,8 @@ rq_structure(std::map<string, untyped_request> const& field_requests)
             std::shared_ptr<union_constructor_interface>(                     \
                 new cradle::union_constructor<                                \
                     union_namespace::union_type,                              \
-                    typename remove_const_reference<decltype(                 \
-                        member_request)>::type::result_type>(                 \
+                    typename remove_const_reference<                          \
+                        decltype(member_request)>::type::result_type>(        \
                     union_namespace::                                         \
                         make_##union_type##_with_##member_name))))
 
