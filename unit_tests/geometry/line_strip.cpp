@@ -1,12 +1,12 @@
+#include <astroid/geometry/line_strip.hpp>
 #include <boost/assign/std/vector.hpp>
-#include <cradle/geometry/line_strip.hpp>
 
-#include <cradle/test.hpp>
+#include <astroid/test.hpp>
 
 double const tolerance = 0.00001;
 
 using namespace boost::assign;
-using namespace cradle;
+using namespace astroid;
 
 TEST_CASE("actual_poly_test")
 {
@@ -30,7 +30,7 @@ TEST_CASE("actual_poly_test")
     optional<polygon2> poly;
     as_polygon(&poly, strips, tolerance);
     REQUIRE(poly);
-    REQUIRE(almost_equal(original, poly.get()));
+    REQUIRE(almost_equal(original, poly.value()));
 }
 
 TEST_CASE("not_connected_test")

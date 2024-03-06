@@ -1,10 +1,10 @@
-#include <cradle/imaging/foreach.hpp>
-#include <cradle/imaging/geometry.hpp>
-#include <cradle/imaging/integral.hpp>
+#include <astroid/imaging/foreach.hpp>
+#include <astroid/imaging/geometry.hpp>
+#include <astroid/imaging/integral.hpp>
 
-#include <cradle/test.hpp>
+#include <astroid/test.hpp>
 
-using namespace cradle;
+using namespace astroid;
 
 template<unsigned N, class View>
 void
@@ -16,12 +16,12 @@ check_segment_integral(
     double tolerance = std::numeric_limits<double>::epsilon() * 100,
     bool test_inverse = true)
 {
-    CRADLE_CHECK_WITHIN_TOLERANCE(
+    ASTROID_CHECK_WITHIN_TOLERANCE(
         compute_image_integral_over_line_segment(
             view, line_segment<N, double>(p1, p2)),
         correct_value,
         tolerance);
-    CRADLE_CHECK_WITHIN_TOLERANCE(
+    ASTROID_CHECK_WITHIN_TOLERANCE(
         compute_image_integral_over_line_segment(
             view, line_segment<N, double>(p2, p1)),
         correct_value,
@@ -29,12 +29,12 @@ check_segment_integral(
 
     if (test_inverse)
     {
-        CRADLE_CHECK_WITHIN_TOLERANCE(
+        ASTROID_CHECK_WITHIN_TOLERANCE(
             compute_inverse_image_integral_over_ray(
                 view, ray<N, double>(p1, unit(p2 - p1)), correct_value),
             length(p2 - p1),
             tolerance);
-        CRADLE_CHECK_WITHIN_TOLERANCE(
+        ASTROID_CHECK_WITHIN_TOLERANCE(
             compute_inverse_image_integral_over_ray(
                 view, ray<N, double>(p2, unit(p1 - p2)), correct_value),
             length(p1 - p2),
@@ -49,7 +49,7 @@ struct filler_fn
     }
     int n;
     void
-    operator()(cradle::uint8_t& x)
+    operator()(astroid::uint8_t& x)
     {
         x = n++ / 10;
     }
@@ -58,7 +58,7 @@ struct filler_fn
 TEST_CASE("over_line_segment_test")
 {
     unsigned const s = 10;
-    image<2, cradle::uint8_t, unique> img;
+    image<2, astroid::uint8_t, unique> img;
     create_image(img, make_vector(s, s));
     set_spatial_mapping(
         img, make_vector<double>(-2, -6), make_vector<double>(1, 2));
@@ -171,7 +171,7 @@ check_ray_integral(
     double correct_value,
     double tolerance = std::numeric_limits<double>::epsilon() * 100)
 {
-    CRADLE_CHECK_WITHIN_TOLERANCE(
+    ASTROID_CHECK_WITHIN_TOLERANCE(
         compute_image_integral_over_ray(
             view, ray<N, double>(origin, unit(direction))),
         correct_value,
@@ -181,7 +181,7 @@ check_ray_integral(
 TEST_CASE("over_ray_test")
 {
     unsigned const s = 10;
-    image<2, cradle::uint8_t, unique> img;
+    image<2, astroid::uint8_t, unique> img;
     create_image(img, make_vector(s, s));
     set_spatial_mapping(
         img, make_vector<double>(-2, -6), make_vector<double>(1, 2));
@@ -238,7 +238,7 @@ TEST_CASE("over_ray_test")
 TEST_CASE("computer_test")
 {
     unsigned const s = 10;
-    image<2, cradle::uint8_t, unique> img;
+    image<2, astroid::uint8_t, unique> img;
     create_image(img, make_vector(s, s));
     set_spatial_mapping(
         img, make_vector<double>(-2, -6), make_vector<double>(1, 2));
@@ -249,38 +249,38 @@ TEST_CASE("computer_test")
 
     double const tolerance = 0.001;
 
-    image_integral_computer<2, cradle::uint8_t, unique> computer(
+    image_integral_computer<2, astroid::uint8_t, unique> computer(
         img, ray2d(make_vector<double>(-3, -1), make_vector<double>(1, 0)));
 
-    CRADLE_CHECK_WITHIN_TOLERANCE(
+    ASTROID_CHECK_WITHIN_TOLERANCE(
         computer.compute_integral_to(9), 40., tolerance);
-    CRADLE_CHECK_WITHIN_TOLERANCE(
+    ASTROID_CHECK_WITHIN_TOLERANCE(
         computer.compute_integral_to(9), 40., tolerance);
-    CRADLE_CHECK_WITHIN_TOLERANCE(
+    ASTROID_CHECK_WITHIN_TOLERANCE(
         computer.compute_integral_to(20), 50., tolerance);
-    CRADLE_CHECK_WITHIN_TOLERANCE(
+    ASTROID_CHECK_WITHIN_TOLERANCE(
         computer.compute_integral_to(20), 50., tolerance);
-    CRADLE_CHECK_WITHIN_TOLERANCE(
+    ASTROID_CHECK_WITHIN_TOLERANCE(
         computer.compute_integral_to(7), 30., tolerance);
-    CRADLE_CHECK_WITHIN_TOLERANCE(
+    ASTROID_CHECK_WITHIN_TOLERANCE(
         computer.compute_integral_to(make_vector<double>(7, -1)),
         45.,
         tolerance);
-    CRADLE_CHECK_WITHIN_TOLERANCE(
+    ASTROID_CHECK_WITHIN_TOLERANCE(
         computer.compute_integral_to(1), 0., tolerance);
 
-    CRADLE_CHECK_WITHIN_TOLERANCE(
+    ASTROID_CHECK_WITHIN_TOLERANCE(
         computer.compute_distance_to(40), 9., tolerance);
-    CRADLE_CHECK_WITHIN_TOLERANCE(
+    ASTROID_CHECK_WITHIN_TOLERANCE(
         computer.compute_distance_to(40), 9., tolerance);
-    CRADLE_CHECK_WITHIN_TOLERANCE(
+    ASTROID_CHECK_WITHIN_TOLERANCE(
         computer.compute_distance_to(45), 10., tolerance);
-    CRADLE_CHECK_WITHIN_TOLERANCE(
+    ASTROID_CHECK_WITHIN_TOLERANCE(
         computer.compute_distance_to(45), 10., tolerance);
-    CRADLE_CHECK_WITHIN_TOLERANCE(
+    ASTROID_CHECK_WITHIN_TOLERANCE(
         computer.compute_distance_to(40), 9., tolerance);
-    CRADLE_CHECK_WITHIN_TOLERANCE(
+    ASTROID_CHECK_WITHIN_TOLERANCE(
         computer.compute_distance_to(45), 10., tolerance);
-    CRADLE_CHECK_WITHIN_TOLERANCE(
+    ASTROID_CHECK_WITHIN_TOLERANCE(
         computer.compute_distance_to(30), 7., tolerance);
 }

@@ -1,9 +1,9 @@
-#include <cradle/common.hpp>
-#include <cradle/imaging/weighting.hpp>
+#include <astroid/common.hpp>
+#include <astroid/imaging/weighting.hpp>
 
-#include <cradle/imaging/test.hpp>
+#include <astroid/imaging/test.hpp>
 
-using namespace cradle;
+using namespace astroid;
 
 TEST_CASE("weighted_combination_test")
 {
@@ -55,7 +55,7 @@ TEST_CASE("weighted_combination_test")
             0,
             4,
         };
-        CRADLE_CHECK_IMAGE(combo, results, results + s * s);
+        ASTROID_CHECK_IMAGE(combo, results, results + s * s);
     }
 
     double data3[s * s] = {
@@ -90,7 +90,7 @@ TEST_CASE("weighted_combination_test")
             1,
             4.25,
         };
-        CRADLE_CHECK_IMAGE(combo, results, results + s * s);
+        ASTROID_CHECK_IMAGE(combo, results, results + s * s);
     }
 }
 
@@ -142,6 +142,6 @@ TEST_CASE("integer_test")
             0,
             4,
         };
-        CRADLE_CHECK_IMAGE(combo, results, results + s * s);
+        ASTROID_CHECK_IMAGE(combo, results, results + s * s);
     }
 }

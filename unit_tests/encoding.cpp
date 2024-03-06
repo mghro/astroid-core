@@ -1,20 +1,20 @@
+#include <astroid/encoding.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/scoped_array.hpp>
-#include <cradle/encoding.hpp>
 #include <cstdlib>
 #include <set>
 
-#include <cradle/test.hpp>
+#include <astroid/test.hpp>
 
-using namespace cradle;
+using namespace astroid;
 
 static void
 check_mime_encoding(char const* original, char const* encoded)
 {
-    using namespace cradle;
+    using namespace astroid;
     REQUIRE(
         base64_encode(
-            reinterpret_cast<cradle::uint8_t const*>(original),
+            reinterpret_cast<astroid::uint8_t const*>(original),
             strlen(original),
             get_mime_base64_character_set())
         == encoded);
@@ -22,11 +22,11 @@ check_mime_encoding(char const* original, char const* encoded)
 
 static void
 check_base64_round_trip(
-    std::vector<cradle::uint8_t> const& src,
+    std::vector<astroid::uint8_t> const& src,
     base64_character_set const& character_set)
 {
     string encoded = base64_encode(&src[0], src.size(), character_set);
-    std::vector<cradle::uint8_t> decoded(
+    std::vector<astroid::uint8_t> decoded(
         get_base64_decoded_length(encoded.length()));
     size_t decoded_length;
     base64_decode(
@@ -36,7 +36,7 @@ check_base64_round_trip(
         encoded.length(),
         character_set);
     decoded.resize(decoded_length);
-    CRADLE_CHECK_RANGES_EQUAL(src, decoded);
+    ASTROID_CHECK_RANGES_EQUAL(src, decoded);
 }
 
 static void
@@ -45,9 +45,9 @@ test_random_base64_encoding(base64_character_set const& character_set)
     for (int i = 0; i != 100; ++i)
     {
         size_t length = rand() & 0xfff;
-        std::vector<cradle::uint8_t> data(length);
+        std::vector<astroid::uint8_t> data(length);
         for (size_t j = 0; j != length; ++j)
-            data[j] = cradle::uint8_t(rand() & 0xff);
+            data[j] = astroid::uint8_t(rand() & 0xff);
         check_base64_round_trip(data, character_set);
     }
 }

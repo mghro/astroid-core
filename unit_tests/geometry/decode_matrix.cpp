@@ -1,9 +1,9 @@
-#include <cradle/geometry/decode_matrix.hpp>
-#include <cradle/geometry/transformations.hpp>
+#include <astroid/geometry/decode_matrix.hpp>
+#include <astroid/geometry/transformations.hpp>
 
-#include <cradle/test.hpp>
+#include <astroid/test.hpp>
 
-using namespace cradle;
+using namespace astroid;
 
 TEST_CASE("has_rotation_2d_test")
 {

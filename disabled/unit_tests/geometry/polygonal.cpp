@@ -1,10 +1,10 @@
+#include <astroid/anonymous.hpp>
+#include <astroid/geometry/polygonal.hpp>
 #include <boost/assign/std/vector.hpp>
-#include <cradle/anonymous.hpp>
-#include <cradle/geometry/polygonal.hpp>
 
-#include <cradle/test.hpp>
+#include <astroid/test.hpp>
 
-using namespace cradle;
+using namespace astroid;
 using namespace boost::assign;
 
 // polygon2
@@ -18,7 +18,7 @@ TEST_CASE("simple_ccw_poly_test")
             make_vector<double>(2, 2), make_vector<double>(0, 2);
         initialize(&poly.vertices, vertices);
     }
-    CRADLE_CHECK_ALMOST_EQUAL(get_area(poly), 7.);
+    ASTROID_CHECK_ALMOST_EQUAL(get_area(poly), 7.);
     REQUIRE(!is_inside(poly, make_vector<double>(-1, 1)));
     REQUIRE(is_inside(poly, make_vector<double>(1, 1)));
 }
@@ -32,7 +32,7 @@ TEST_CASE("simple_cw_poly_test")
             make_vector<double>(2, 2), make_vector<double>(5, 0);
         initialize(&poly.vertices, vertices);
     }
-    CRADLE_CHECK_ALMOST_EQUAL(get_area(poly), 7.);
+    ASTROID_CHECK_ALMOST_EQUAL(get_area(poly), 7.);
     REQUIRE(!is_inside(poly, make_vector<double>(-1, 1)));
     REQUIRE(is_inside(poly, make_vector<double>(1, 1)));
 }
@@ -44,7 +44,7 @@ TEST_CASE("triangle_test")
         make_vector<double>(0, 0, 2),
         make_vector<double>(0, 1, 0));
 
-    CRADLE_CHECK_ALMOST_EQUAL(get_normal(tri), make_vector<double>(-1, 0, 0));
+    ASTROID_CHECK_ALMOST_EQUAL(get_normal(tri), make_vector<double>(-1, 0, 0));
 }
 
 TEST_CASE("square_test")
@@ -56,7 +56,7 @@ TEST_CASE("square_test")
             make_vector<double>(2, 2), make_vector<double>(2, -2);
         initialize(&poly.vertices, vertices);
     }
-    CRADLE_CHECK_ALMOST_EQUAL(get_area(poly), 16.);
+    ASTROID_CHECK_ALMOST_EQUAL(get_area(poly), 16.);
     REQUIRE(!is_inside(poly, make_vector<double>(-3, 3)));
     REQUIRE(is_inside(poly, make_vector<double>(-1, 1)));
 }
@@ -71,7 +71,7 @@ TEST_CASE("concave_poly_test")
             make_vector<double>(2, -2);
         initialize(&poly.vertices, vertices);
     }
-    CRADLE_CHECK_ALMOST_EQUAL(get_area(poly), 12.);
+    ASTROID_CHECK_ALMOST_EQUAL(get_area(poly), 12.);
     REQUIRE(!is_inside(poly, make_vector<double>(-3, 3)));
     REQUIRE(!is_inside(poly, make_vector<double>(1, 0)));
     REQUIRE(is_inside(poly, make_vector<double>(-1, 1)));
@@ -110,7 +110,7 @@ TEST_CASE("circle_test")
         make_vector<double>(-srt, -srt), make_vector<double>(0, -2),
         make_vector<double>(srt, -srt);
 
-    CRADLE_CHECK_RANGES_ALMOST_EQUAL(poly.vertices, correct_vertices);
+    ASTROID_CHECK_RANGES_ALMOST_EQUAL(poly.vertices, correct_vertices);
 }
 
 TEST_CASE("box_test")
@@ -122,7 +122,7 @@ TEST_CASE("box_test")
     correct_vertices += make_vector<double>(0, 0), make_vector<double>(2, 0),
         make_vector<double>(2, 2), make_vector<double>(0, 2);
 
-    CRADLE_CHECK_RANGES_ALMOST_EQUAL(poly.vertices, correct_vertices);
+    ASTROID_CHECK_RANGES_ALMOST_EQUAL(poly.vertices, correct_vertices);
 }
 
 // polyset
@@ -149,7 +149,7 @@ TEST_CASE("two_polygons_test")
     add_polygon(region, poly0);
     add_polygon(region, poly1);
 
-    CRADLE_CHECK_WITHIN_TOLERANCE(get_area(region), 17., tolerance);
+    ASTROID_CHECK_WITHIN_TOLERANCE(get_area(region), 17., tolerance);
 
     REQUIRE(!is_inside(region, make_vector<double>(-3, 3)));
     REQUIRE(!is_inside(region, make_vector<double>(3, 3)));
@@ -178,7 +178,7 @@ TEST_CASE("polygon_with_hole_test")
     add_polygon(frame, poly);
     add_hole(frame, hole);
 
-    CRADLE_CHECK_WITHIN_TOLERANCE(get_area(frame), 12., tolerance);
+    ASTROID_CHECK_WITHIN_TOLERANCE(get_area(frame), 12., tolerance);
 
     REQUIRE(!is_inside(frame, make_vector<double>(-3, 3)));
     REQUIRE(!is_inside(frame, make_vector<double>(0, 0)));
@@ -214,13 +214,13 @@ TEST_CASE("polyset_as_polygon_list_test")
 
     std::vector<polygon2> polys = as_polygon_list(frame);
     REQUIRE(polys.size() == 2);
-    CRADLE_CHECK_WITHIN_TOLERANCE(
+    ASTROID_CHECK_WITHIN_TOLERANCE(
         get_area(polys[0]) + get_area(polys[1]), get_area(frame), tolerance);
 
     polyset reconstructed;
     add_polygon(reconstructed, polys[0]);
     add_polygon(reconstructed, polys[1]);
-    CRADLE_CHECK_WITHIN_TOLERANCE(
+    ASTROID_CHECK_WITHIN_TOLERANCE(
         get_area(reconstructed), get_area(frame), tolerance);
 }
 
@@ -235,7 +235,7 @@ TEST_CASE("polyset_set_operations_test")
     }
     polyset wide_rect;
     create_polyset(&wide_rect, p);
-    CRADLE_CHECK_WITHIN_TOLERANCE(get_area(wide_rect), 72., tolerance);
+    ASTROID_CHECK_WITHIN_TOLERANCE(get_area(wide_rect), 72., tolerance);
 
     {
         std::vector<vertex2> vertices;
@@ -245,14 +245,14 @@ TEST_CASE("polyset_set_operations_test")
     }
     polyset tall_rect;
     create_polyset(&tall_rect, p);
-    CRADLE_CHECK_WITHIN_TOLERANCE(get_area(tall_rect), 72., tolerance);
+    ASTROID_CHECK_WITHIN_TOLERANCE(get_area(tall_rect), 72., tolerance);
 
     polyset cross, square;
     do_set_operation(&cross, set_operation::UNION, wide_rect, tall_rect);
     do_set_operation(
         &square, set_operation::INTERSECTION, wide_rect, tall_rect);
-    CRADLE_CHECK_WITHIN_TOLERANCE(get_area(cross), 108., tolerance);
-    CRADLE_CHECK_WITHIN_TOLERANCE(get_area(square), 36., tolerance);
+    ASTROID_CHECK_WITHIN_TOLERANCE(get_area(cross), 108., tolerance);
+    ASTROID_CHECK_WITHIN_TOLERANCE(get_area(square), 36., tolerance);
 
     {
         std::vector<vertex2> vertices;
@@ -264,7 +264,7 @@ TEST_CASE("polyset_set_operations_test")
     create_polyset(&small_square, p);
     do_set_operation(&cross, set_operation::DIFFERENCE, cross, small_square);
 
-    CRADLE_CHECK_WITHIN_TOLERANCE(get_area(cross), 104., tolerance);
+    ASTROID_CHECK_WITHIN_TOLERANCE(get_area(cross), 104., tolerance);
     REQUIRE(!is_inside(cross, make_vector<double>(0, 0)));
     REQUIRE(is_inside(cross, make_vector<double>(2, 0)));
     REQUIRE(!is_inside(cross, make_vector<double>(8, 0)));
@@ -366,7 +366,7 @@ TEST_CASE("structure_geometry_test0")
     REQUIRE(get_slice(volume, 2.5)->position == 3);
     REQUIRE(get_slice(volume, 2.5)->region.polygons.size() == 3);
 
-    CRADLE_CHECK_WITHIN_TOLERANCE(get_volume(volume), 17.25, tolerance);
+    ASTROID_CHECK_WITHIN_TOLERANCE(get_volume(volume), 17.25, tolerance);
 }
 
 TEST_CASE("structure_geometry_test1")
@@ -424,7 +424,7 @@ TEST_CASE("structure_geometry_test1")
         structure_geometry_slice(2.0, 1, area2),
         structure_geometry_slice(2.5, 1, area3);
 
-    CRADLE_CHECK_WITHIN_TOLERANCE(get_volume(volume2), 11.125, tolerance);
+    ASTROID_CHECK_WITHIN_TOLERANCE(get_volume(volume2), 11.125, tolerance);
 
     REQUIRE(almost_equal(volume2, volume2, tolerance));
     REQUIRE(!almost_equal(volume1, volume2, tolerance));
@@ -484,33 +484,33 @@ TEST_CASE("set_operation_test")
             structure_geometry_slice(3.0, 2, area1),
             structure_geometry_slice(4.5, 1, area2),
             structure_geometry_slice(6.0, 2, polyset());
-        CRADLE_CHECK_WITHIN_TOLERANCE(get_volume(volume1), 100., tolerance);
+        ASTROID_CHECK_WITHIN_TOLERANCE(get_volume(volume1), 100., tolerance);
 
         structure_geometry volume2;
         volume2.slices += structure_geometry_slice(1.0, 2, polyset()),
             structure_geometry_slice(3.0, 2, area3),
             structure_geometry_slice(4.5, 1, area4),
             structure_geometry_slice(6.0, 2, area5);
-        CRADLE_CHECK_WITHIN_TOLERANCE(get_volume(volume2), 100., tolerance);
+        ASTROID_CHECK_WITHIN_TOLERANCE(get_volume(volume2), 100., tolerance);
 
         structure_geometry union_;
         do_set_operation(&union_, set_operation::UNION, volume1, volume2);
-        CRADLE_CHECK_WITHIN_TOLERANCE(get_volume(union_), 190., tolerance);
+        ASTROID_CHECK_WITHIN_TOLERANCE(get_volume(union_), 190., tolerance);
 
         structure_geometry intersection;
         do_set_operation(
             &intersection, set_operation::INTERSECTION, volume1, volume2);
-        CRADLE_CHECK_WITHIN_TOLERANCE(
+        ASTROID_CHECK_WITHIN_TOLERANCE(
             get_volume(intersection), 10., tolerance);
 
         structure_geometry xor_;
         do_set_operation(&xor_, set_operation::XOR, volume1, volume2);
-        CRADLE_CHECK_WITHIN_TOLERANCE(get_volume(xor_), 180., tolerance);
+        ASTROID_CHECK_WITHIN_TOLERANCE(get_volume(xor_), 180., tolerance);
 
         structure_geometry difference;
         do_set_operation(
             &difference, set_operation::DIFFERENCE, volume1, volume2);
-        CRADLE_CHECK_WITHIN_TOLERANCE(get_volume(difference), 90., tolerance);
+        ASTROID_CHECK_WITHIN_TOLERANCE(get_volume(difference), 90., tolerance);
     }
 
     {
@@ -561,33 +561,33 @@ TEST_CASE("set_operation_test")
             structure_geometry_slice(3.0, 2, area0),
             structure_geometry_slice(4.5, 1, area1),
             structure_geometry_slice(6.0, 2, area2);
-        CRADLE_CHECK_WITHIN_TOLERANCE(get_volume(volume1), 100., tolerance);
+        ASTROID_CHECK_WITHIN_TOLERANCE(get_volume(volume1), 100., tolerance);
 
         structure_geometry volume2;
         volume2.slices += structure_geometry_slice(1.0, 2, area3),
             structure_geometry_slice(3.0, 2, area4),
             structure_geometry_slice(4.5, 1, area5),
             structure_geometry_slice(6.0, 2, polyset());
-        CRADLE_CHECK_WITHIN_TOLERANCE(get_volume(volume2), 100., tolerance);
+        ASTROID_CHECK_WITHIN_TOLERANCE(get_volume(volume2), 100., tolerance);
 
         structure_geometry union_;
         do_set_operation(&union_, set_operation::UNION, volume1, volume2);
-        CRADLE_CHECK_WITHIN_TOLERANCE(get_volume(union_), 160., tolerance);
+        ASTROID_CHECK_WITHIN_TOLERANCE(get_volume(union_), 160., tolerance);
 
         structure_geometry intersection;
         do_set_operation(
             &intersection, set_operation::INTERSECTION, volume1, volume2);
-        CRADLE_CHECK_WITHIN_TOLERANCE(
+        ASTROID_CHECK_WITHIN_TOLERANCE(
             get_volume(intersection), 40., tolerance);
 
         structure_geometry xor_;
         do_set_operation(&xor_, set_operation::XOR, volume1, volume2);
-        CRADLE_CHECK_WITHIN_TOLERANCE(get_volume(xor_), 120., tolerance);
+        ASTROID_CHECK_WITHIN_TOLERANCE(get_volume(xor_), 120., tolerance);
 
         structure_geometry difference;
         do_set_operation(
             &difference, set_operation::DIFFERENCE, volume1, volume2);
-        CRADLE_CHECK_WITHIN_TOLERANCE(get_volume(difference), 60., tolerance);
+        ASTROID_CHECK_WITHIN_TOLERANCE(get_volume(difference), 60., tolerance);
     }
 
     {
@@ -596,33 +596,33 @@ TEST_CASE("set_operation_test")
             structure_geometry_slice(3.0, 2, area0),
             structure_geometry_slice(4.5, 1, area1),
             structure_geometry_slice(6.0, 2, area2);
-        CRADLE_CHECK_WITHIN_TOLERANCE(get_volume(volume1), 100., tolerance);
+        ASTROID_CHECK_WITHIN_TOLERANCE(get_volume(volume1), 100., tolerance);
 
         structure_geometry volume2;
         volume2.slices += structure_geometry_slice(1.0, 2, area3),
             structure_geometry_slice(3.0, 2, area4),
             structure_geometry_slice(4.5, 1, area5),
             structure_geometry_slice(6.0, 2, polyset());
-        CRADLE_CHECK_WITHIN_TOLERANCE(get_volume(volume2), 100., tolerance);
+        ASTROID_CHECK_WITHIN_TOLERANCE(get_volume(volume2), 100., tolerance);
 
         structure_geometry union_;
         do_set_operation(&union_, set_operation::UNION, volume1, volume2);
-        CRADLE_CHECK_WITHIN_TOLERANCE(get_volume(union_), 160., tolerance);
+        ASTROID_CHECK_WITHIN_TOLERANCE(get_volume(union_), 160., tolerance);
 
         structure_geometry intersection;
         do_set_operation(
             &intersection, set_operation::INTERSECTION, volume1, volume2);
-        CRADLE_CHECK_WITHIN_TOLERANCE(
+        ASTROID_CHECK_WITHIN_TOLERANCE(
             get_volume(intersection), 40., tolerance);
 
         structure_geometry xor_;
         do_set_operation(&xor_, set_operation::XOR, volume1, volume2);
-        CRADLE_CHECK_WITHIN_TOLERANCE(get_volume(xor_), 120., tolerance);
+        ASTROID_CHECK_WITHIN_TOLERANCE(get_volume(xor_), 120., tolerance);
 
         structure_geometry difference;
         do_set_operation(
             &difference, set_operation::DIFFERENCE, volume1, volume2);
-        CRADLE_CHECK_WITHIN_TOLERANCE(get_volume(difference), 60., tolerance);
+        ASTROID_CHECK_WITHIN_TOLERANCE(get_volume(difference), 60., tolerance);
     }
 
     {
@@ -631,33 +631,33 @@ TEST_CASE("set_operation_test")
             structure_geometry_slice(3.0, 2, polyset()),
             structure_geometry_slice(4.5, 1, area1),
             structure_geometry_slice(6.0, 2, area2);
-        CRADLE_CHECK_WITHIN_TOLERANCE(get_volume(volume1), 100., tolerance);
+        ASTROID_CHECK_WITHIN_TOLERANCE(get_volume(volume1), 100., tolerance);
 
         structure_geometry volume2;
         volume2.slices += structure_geometry_slice(1.0, 2, area3),
             structure_geometry_slice(3.0, 2, area4),
             structure_geometry_slice(4.5, 1, area5),
             structure_geometry_slice(6.0, 2, polyset());
-        CRADLE_CHECK_WITHIN_TOLERANCE(get_volume(volume2), 100., tolerance);
+        ASTROID_CHECK_WITHIN_TOLERANCE(get_volume(volume2), 100., tolerance);
 
         structure_geometry union_;
         do_set_operation(&union_, set_operation::UNION, volume1, volume2);
-        CRADLE_CHECK_WITHIN_TOLERANCE(get_volume(union_), 180., tolerance);
+        ASTROID_CHECK_WITHIN_TOLERANCE(get_volume(union_), 180., tolerance);
 
         structure_geometry intersection;
         do_set_operation(
             &intersection, set_operation::INTERSECTION, volume1, volume2);
-        CRADLE_CHECK_WITHIN_TOLERANCE(
+        ASTROID_CHECK_WITHIN_TOLERANCE(
             get_volume(intersection), 20., tolerance);
 
         structure_geometry xor_;
         do_set_operation(&xor_, set_operation::XOR, volume1, volume2);
-        CRADLE_CHECK_WITHIN_TOLERANCE(get_volume(xor_), 160., tolerance);
+        ASTROID_CHECK_WITHIN_TOLERANCE(get_volume(xor_), 160., tolerance);
 
         structure_geometry difference;
         do_set_operation(
             &difference, set_operation::DIFFERENCE, volume1, volume2);
-        CRADLE_CHECK_WITHIN_TOLERANCE(get_volume(difference), 80., tolerance);
+        ASTROID_CHECK_WITHIN_TOLERANCE(get_volume(difference), 80., tolerance);
     }
 
     {
@@ -666,33 +666,33 @@ TEST_CASE("set_operation_test")
             structure_geometry_slice(3.0, 2, area1),
             structure_geometry_slice(4.5, 1, area2),
             structure_geometry_slice(6.0, 2, polyset());
-        CRADLE_CHECK_WITHIN_TOLERANCE(get_volume(volume1), 100., tolerance);
+        ASTROID_CHECK_WITHIN_TOLERANCE(get_volume(volume1), 100., tolerance);
 
         structure_geometry volume2;
         volume2.slices += structure_geometry_slice(1.0, 2, area3),
             structure_geometry_slice(3.0, 2, polyset()),
             structure_geometry_slice(4.5, 1, area4),
             structure_geometry_slice(6.0, 2, area5);
-        CRADLE_CHECK_WITHIN_TOLERANCE(get_volume(volume2), 100., tolerance);
+        ASTROID_CHECK_WITHIN_TOLERANCE(get_volume(volume2), 100., tolerance);
 
         structure_geometry union_;
         do_set_operation(&union_, set_operation::UNION, volume1, volume2);
-        CRADLE_CHECK_WITHIN_TOLERANCE(get_volume(union_), 190., tolerance);
+        ASTROID_CHECK_WITHIN_TOLERANCE(get_volume(union_), 190., tolerance);
 
         structure_geometry intersection;
         do_set_operation(
             &intersection, set_operation::INTERSECTION, volume1, volume2);
-        CRADLE_CHECK_WITHIN_TOLERANCE(
+        ASTROID_CHECK_WITHIN_TOLERANCE(
             get_volume(intersection), 10., tolerance);
 
         structure_geometry xor_;
         do_set_operation(&xor_, set_operation::XOR, volume1, volume2);
-        CRADLE_CHECK_WITHIN_TOLERANCE(get_volume(xor_), 180., tolerance);
+        ASTROID_CHECK_WITHIN_TOLERANCE(get_volume(xor_), 180., tolerance);
 
         structure_geometry difference;
         do_set_operation(
             &difference, set_operation::DIFFERENCE, volume1, volume2);
-        CRADLE_CHECK_WITHIN_TOLERANCE(get_volume(difference), 90., tolerance);
+        ASTROID_CHECK_WITHIN_TOLERANCE(get_volume(difference), 90., tolerance);
     }
 }
 
@@ -720,7 +720,7 @@ TEST_CASE("expansion_2d")
     original.slices += structure_geometry_slice(1, 1, area1),
         structure_geometry_slice(2, 1, area2);
 
-    CRADLE_CHECK_WITHIN_TOLERANCE(get_volume(original), 37., tolerance);
+    ASTROID_CHECK_WITHIN_TOLERANCE(get_volume(original), 37., tolerance);
 
     structure_geometry expanded;
     expand_in_2d(&expanded, original, 1.);
@@ -764,7 +764,7 @@ TEST_CASE("expansion_3d")
         structure_geometry_slice(2, 1, polyset()),
         structure_geometry_slice(3, 1, polyset());
 
-    CRADLE_CHECK_WITHIN_TOLERANCE(get_volume(original), 36., tolerance);
+    ASTROID_CHECK_WITHIN_TOLERANCE(get_volume(original), 36., tolerance);
 
     structure_geometry expanded;
     expand_in_3d(&expanded, original, 1.);
@@ -790,7 +790,7 @@ TEST_CASE("expansion_3d")
 
     structure_geometry contracted;
     expand_in_3d(&contracted, original, -1.);
-    CRADLE_CHECK_WITHIN_TOLERANCE(get_volume(contracted), 0., tolerance);
+    ASTROID_CHECK_WITHIN_TOLERANCE(get_volume(contracted), 0., tolerance);
 }
 
 TEST_CASE("polygon_bounding_box_test")

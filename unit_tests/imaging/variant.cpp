@@ -1,9 +1,9 @@
-#include <cradle/imaging/utilities.hpp>
-#include <cradle/imaging/variant.hpp>
+#include <astroid/imaging/utilities.hpp>
+#include <astroid/imaging/variant.hpp>
 
-#include <cradle/imaging/test.hpp>
+#include <astroid/imaging/test.hpp>
 
-using namespace cradle;
+using namespace astroid;
 
 struct size_fn
 {
@@ -56,11 +56,11 @@ test_gray_dispatch()
 
 TEST_CASE("gray_dispatch")
 {
-    test_gray_dispatch<cradle::int8_t>();
-    test_gray_dispatch<cradle::uint8_t>();
+    test_gray_dispatch<astroid::int8_t>();
+    test_gray_dispatch<astroid::uint8_t>();
     test_gray_dispatch<double>();
-    test_gray_dispatch<cradle::int16_t>();
-    test_gray_dispatch<cradle::uint16_t>();
+    test_gray_dispatch<astroid::int16_t>();
+    test_gray_dispatch<astroid::uint16_t>();
 }
 
 TEST_CASE("copying")

@@ -1,11 +1,11 @@
-#include <cradle/common.hpp>
-#include <cradle/imaging/discretize.hpp>
-#include <cradle/imaging/geometry.hpp>
-#include <cradle/imaging/image.hpp>
+#include <astroid/common.hpp>
+#include <astroid/imaging/discretize.hpp>
+#include <astroid/imaging/geometry.hpp>
+#include <astroid/imaging/image.hpp>
 
-#include <cradle/imaging/test.hpp>
+#include <astroid/imaging/test.hpp>
 
-using namespace cradle;
+using namespace astroid;
 
 TEST_CASE("discretize_test")
 {
@@ -28,9 +28,9 @@ TEST_CASE("discretize_test")
     set_spatial_mapping(
         source, make_vector<double>(4, 0), make_vector<double>(3, 2));
 
-    image<2, cradle::uint8_t, shared> result;
+    image<2, astroid::uint8_t, shared> result;
     discretize(result, source, 255);
 
-    cradle::uint8_t correct_result[] = {255, 223, 128, 64, 0, 64, 21, 21, 96};
-    CRADLE_CHECK_IMAGE(result, &correct_result[0], correct_result + s * s);
+    astroid::uint8_t correct_result[] = {255, 223, 128, 64, 0, 64, 21, 21, 96};
+    ASTROID_CHECK_IMAGE(result, &correct_result[0], correct_result + s * s);
 }

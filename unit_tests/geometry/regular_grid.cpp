@@ -1,11 +1,11 @@
-#include <cradle/geometry/grid_points.hpp>
-#include <cradle/geometry/regular_grid.hpp>
+#include <astroid/geometry/grid_points.hpp>
+#include <astroid/geometry/regular_grid.hpp>
 
 #include <boost/assign/std/vector.hpp>
 
-#include <cradle/test.hpp>
+#include <astroid/test.hpp>
 
-using namespace cradle;
+using namespace astroid;
 using namespace boost::assign;
 
 TEST_CASE("regular_grid_test")
@@ -25,7 +25,7 @@ TEST_CASE("regular_grid_test")
     correct_points += make_vector<double>(0, 0), make_vector<double>(1, 0),
         make_vector<double>(0, 0.5), make_vector<double>(1, 0.5),
         make_vector<double>(0, 1), make_vector<double>(1, 1);
-    CRADLE_CHECK_RANGES_ALMOST_EQUAL(
+    ASTROID_CHECK_RANGES_ALMOST_EQUAL(
         make_grid_point_list(grid), correct_points);
 }
 

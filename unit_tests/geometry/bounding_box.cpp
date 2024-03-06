@@ -1,9 +1,9 @@
+#include <astroid/geometry/common.hpp>
 #include <boost/assign/std/vector.hpp>
-#include <cradle/geometry/common.hpp>
 
-#include <cradle/test.hpp>
+#include <astroid/test.hpp>
 
-using namespace cradle;
+using namespace astroid;
 using namespace boost::assign;
 
 TEST_CASE("vector_of_points_test")

@@ -1,15 +1,15 @@
 #include <algorithm>
-#include <cradle/geometry/polygonal.hpp>
-#include <cradle/imaging/geometry.hpp>
-#include <cradle/imaging/image.hpp>
-#include <cradle/imaging/isobands.hpp>
-#include <cradle/imaging/isolines.hpp>
+#include <astroid/geometry/polygonal.hpp>
+#include <astroid/imaging/geometry.hpp>
+#include <astroid/imaging/image.hpp>
+#include <astroid/imaging/isobands.hpp>
+#include <astroid/imaging/isolines.hpp>
 
-#include <cradle/imaging/test.hpp>
+#include <astroid/imaging/test.hpp>
 
 static double const tolerance = 0.001;
 
-using namespace cradle;
+using namespace astroid;
 
 double
 total_area(std::vector<triangle<2, double>> const& tris)
@@ -155,11 +155,11 @@ TEST_CASE("isobands_test")
     // The total area of the triangles in each region should equal the area of
     // the region itself.
     // Allow a little more tolerance here because the error accumulates.
-    CRADLE_CHECK_WITHIN_TOLERANCE(
+    ASTROID_CHECK_WITHIN_TOLERANCE(
         total_area(low_tris), get_area(low_region), 0.1);
-    CRADLE_CHECK_WITHIN_TOLERANCE(
+    ASTROID_CHECK_WITHIN_TOLERANCE(
         total_area(middle_tris), get_area(middle_region), 0.1);
-    CRADLE_CHECK_WITHIN_TOLERANCE(
+    ASTROID_CHECK_WITHIN_TOLERANCE(
         total_area(high_tris), get_area(high_region), 0.1);
 
     // There should be no overlap between any of the regions.

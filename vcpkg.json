@@ -1,0 +1,42 @@
+{
+    "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg.schema.json",
+    "name": "astroid-core",
+    "version": "0.1.0",
+    "builtin-baseline": "7ba0ba7334c3346e7eee1e049ba85da193a8d821",
+    "dependencies": [
+        "cradle",
+        "catch2",
+        "msgpack",
+        "boost-algorithm",
+        "boost-assign",
+        "boost-date-time",
+        "boost-format",
+        "boost-preprocessor",
+        "boost-polygon"
+    ],
+    "overrides": [
+        {
+            "name": "msgpack",
+            "version": "3.3.0"
+        },
+        {
+            "name": "openssl",
+            "version-string": "1.1.1n"
+        }
+    ],
+    "vcpkg-configuration": {
+        "registries": [
+            {
+                "kind": "git",
+                "repository": "https://github.com/open-cradle/vcpkg-registry",
+                "baseline": "c5685e8719443ecbb4e43ca47508a88456b2da6a",
+                "packages": [
+                    "cradle"
+                ]
+            }
+        ],
+        "overlay-triplets": [
+            "vcpkg/triplets/"
+        ]
+    }
+}

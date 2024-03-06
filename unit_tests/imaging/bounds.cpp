@@ -1,20 +1,20 @@
-#include <cradle/common.hpp>
-#include <cradle/imaging/bounds.hpp>
-#include <cradle/imaging/view_transforms.hpp>
+#include <astroid/common.hpp>
+#include <astroid/imaging/bounds.hpp>
+#include <astroid/imaging/view_transforms.hpp>
 
-#include <cradle/imaging/test.hpp>
+#include <astroid/imaging/test.hpp>
 
-using namespace cradle;
+using namespace astroid;
 
 TEST_CASE("get_memory_bounds_test")
 {
     unsigned const s = 10;
-    image<2, cradle::uint8_t, unique> img;
+    image<2, astroid::uint8_t, unique> img;
     create_image(img, make_vector(s, s));
 
-    auto view = cast_storage_type<cradle::view>(img);
+    auto view = cast_storage_type<astroid::view>(img);
 
-    memory_bounds<cradle::uint8_t> bounds;
+    memory_bounds<astroid::uint8_t> bounds;
 
     bounds = get_quick_bounds(img);
     REQUIRE(bounds.begin == img.pixels.ptr);

@@ -1,13 +1,13 @@
+#include <astroid/common.hpp>
+#include <astroid/geometry/common.hpp>
+#include <astroid/geometry/transformations.hpp>
+#include <astroid/math/common.hpp>
 #include <boost/assign/std/vector.hpp>
-#include <cradle/common.hpp>
-#include <cradle/geometry/common.hpp>
-#include <cradle/geometry/transformations.hpp>
-#include <cradle/math/common.hpp>
 #include <vector>
 
-#include <cradle/test.hpp>
+#include <astroid/test.hpp>
 
-using namespace cradle;
+using namespace astroid;
 
 TEST_CASE("sizeof_vector")
 {
@@ -197,9 +197,9 @@ TEST_CASE("perpendicular_vector")
                 if (x != 0 || y != 0 || z != 0)
                 {
                     vector<3, double> v = make_vector<double>(x, y, z);
-                    CRADLE_CHECK_ALMOST_EQUAL(
+                    ASTROID_CHECK_ALMOST_EQUAL(
                         dot(v, get_perpendicular(v)), 0.);
-                    CRADLE_CHECK_ALMOST_EQUAL(
+                    ASTROID_CHECK_ALMOST_EQUAL(
                         length(get_perpendicular(v)), 1.);
                 }
             }
@@ -282,9 +282,9 @@ TEST_CASE("simple_box1d_test")
 {
     box1d b(make_vector<double>(-1), make_vector<double>(3));
 
-    CRADLE_CHECK_ALMOST_EQUAL(get_center(b), make_vector<double>(0.5));
-    CRADLE_CHECK_ALMOST_EQUAL(b.corner, make_vector<double>(-1));
-    CRADLE_CHECK_ALMOST_EQUAL(b.size, make_vector<double>(3));
+    ASTROID_CHECK_ALMOST_EQUAL(get_center(b), make_vector<double>(0.5));
+    ASTROID_CHECK_ALMOST_EQUAL(b.corner, make_vector<double>(-1));
+    ASTROID_CHECK_ALMOST_EQUAL(b.size, make_vector<double>(3));
 
     REQUIRE(!is_inside(b, make_vector<double>(-2)));
     REQUIRE(is_inside(b, make_vector<double>(-1)));
@@ -300,11 +300,11 @@ TEST_CASE("simple_box2d_test")
 {
     box2d b(make_vector<double>(-1, -1), make_vector<double>(3, 3));
 
-    CRADLE_CHECK_ALMOST_EQUAL(area(b), 9.);
+    ASTROID_CHECK_ALMOST_EQUAL(area(b), 9.);
 
-    CRADLE_CHECK_ALMOST_EQUAL(get_center(b), make_vector<double>(0.5, 0.5));
-    CRADLE_CHECK_ALMOST_EQUAL(b.corner, make_vector<double>(-1, -1));
-    CRADLE_CHECK_ALMOST_EQUAL(b.size, make_vector<double>(3, 3));
+    ASTROID_CHECK_ALMOST_EQUAL(get_center(b), make_vector<double>(0.5, 0.5));
+    ASTROID_CHECK_ALMOST_EQUAL(b.corner, make_vector<double>(-1, -1));
+    ASTROID_CHECK_ALMOST_EQUAL(b.size, make_vector<double>(3, 3));
 
     REQUIRE(!is_inside(b, make_vector<double>(-2, -2)));
     REQUIRE(!is_inside(b, make_vector<double>(-2, 0)));
@@ -360,7 +360,7 @@ TEST_CASE("add_box_border_test")
 TEST_CASE("simple_vector_test")
 {
     circle<double> c(make_vector<double>(0, 0), 1);
-    CRADLE_CHECK_ALMOST_EQUAL(area(c), pi);
+    ASTROID_CHECK_ALMOST_EQUAL(area(c), pi);
     REQUIRE(!is_inside(c, make_vector<double>(0, 2)));
     REQUIRE(!is_inside(c, make_vector<double>(2, 0)));
     REQUIRE(!is_inside(c, make_vector<double>(1.1, 0)));
@@ -376,7 +376,7 @@ TEST_CASE("simple_vector_test")
 TEST_CASE("off_center_test")
 {
     circle<double> c(make_vector<double>(4, 1), 2);
-    CRADLE_CHECK_ALMOST_EQUAL(area(c), 4 * pi);
+    ASTROID_CHECK_ALMOST_EQUAL(area(c), 4 * pi);
     REQUIRE(!is_inside(c, make_vector<double>(0, 0)));
     REQUIRE(!is_inside(c, make_vector<double>(1.9, 1)));
     REQUIRE(!is_inside(c, make_vector<double>(6.1, 1)));
@@ -393,7 +393,7 @@ TEST_CASE("by_value_test")
 
     REQUIRE(segment[0] == p0);
     REQUIRE(segment[1] == p1);
-    CRADLE_CHECK_ALMOST_EQUAL(length(segment), 5.);
+    ASTROID_CHECK_ALMOST_EQUAL(length(segment), 5.);
 }
 
 TEST_CASE("identity_matrix_test")
@@ -446,15 +446,15 @@ TEST_CASE("matrix_inverse3_test")
 
     matrix<4, 4, double> inv_m = inverse(m);
 
-    CRADLE_CHECK_ALMOST_EQUAL(
+    ASTROID_CHECK_ALMOST_EQUAL(
         transform_point(
             inv_m, transform_point(m, make_vector<double>(0, 0, 0))),
         make_vector<double>(0, 0, 0));
-    CRADLE_CHECK_ALMOST_EQUAL(
+    ASTROID_CHECK_ALMOST_EQUAL(
         transform_point(
             inv_m, transform_point(m, make_vector<double>(2, 1, 7))),
         make_vector<double>(2, 1, 7));
-    CRADLE_CHECK_ALMOST_EQUAL(
+    ASTROID_CHECK_ALMOST_EQUAL(
         transform_point(
             inv_m, transform_point(m, make_vector<double>(1, 0, 17))),
         make_vector<double>(1, 0, 17));
@@ -469,13 +469,13 @@ TEST_CASE("matrix_inverse2_test")
 
     matrix<3, 3, double> inv_m = inverse(m);
 
-    CRADLE_CHECK_ALMOST_EQUAL(
+    ASTROID_CHECK_ALMOST_EQUAL(
         transform_point(inv_m, transform_point(m, make_vector<double>(0, 0))),
         make_vector<double>(0, 0));
-    CRADLE_CHECK_ALMOST_EQUAL(
+    ASTROID_CHECK_ALMOST_EQUAL(
         transform_point(inv_m, transform_point(m, make_vector<double>(1, 7))),
         make_vector<double>(1, 7));
-    CRADLE_CHECK_ALMOST_EQUAL(
+    ASTROID_CHECK_ALMOST_EQUAL(
         transform_point(inv_m, transform_point(m, make_vector<double>(0, 17))),
         make_vector<double>(0, 17));
 }
@@ -487,16 +487,16 @@ TEST_CASE("matrix_inverse1_test")
 
     matrix<2, 2, double> inv_m = inverse(m);
 
-    CRADLE_CHECK_ALMOST_EQUAL(
+    ASTROID_CHECK_ALMOST_EQUAL(
         transform_point(inv_m, transform_point(m, make_vector<double>(0))),
         make_vector<double>(0));
-    CRADLE_CHECK_ALMOST_EQUAL(
+    ASTROID_CHECK_ALMOST_EQUAL(
         transform_point(inv_m, transform_point(m, make_vector<double>(7))),
         make_vector<double>(7));
-    CRADLE_CHECK_ALMOST_EQUAL(
+    ASTROID_CHECK_ALMOST_EQUAL(
         transform_point(inv_m, transform_point(m, make_vector<double>(17))),
         make_vector<double>(17));
-    CRADLE_CHECK_ALMOST_EQUAL(
+    ASTROID_CHECK_ALMOST_EQUAL(
         transform_point(inv_m, transform_point(m, make_vector<double>(1))),
         make_vector<double>(1));
 }

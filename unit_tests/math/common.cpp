@@ -1,9 +1,9 @@
-#include <cradle/anonymous.hpp>
-#include <cradle/math/common.hpp>
+#include <astroid/anonymous.hpp>
+#include <astroid/math/common.hpp>
 
-#include <cradle/test.hpp>
+#include <astroid/test.hpp>
 
-using namespace cradle;
+using namespace astroid;
 
 TEST_CASE("compute_mean_integer_test")
 {
@@ -20,9 +20,9 @@ TEST_CASE("compute_mean_float_test")
 
 TEST_CASE("clamp_test")
 {
-    REQUIRE(cradle::clamp(-0.5, 0., 1.) == 0);
-    REQUIRE(cradle::clamp(0.5, 0., 1.) == 0.5);
-    REQUIRE(cradle::clamp(1.5, 0., 1.) == 1);
+    REQUIRE(astroid::clamp(-0.5, 0., 1.) == 0);
+    REQUIRE(astroid::clamp(0.5, 0., 1.) == 0.5);
+    REQUIRE(astroid::clamp(1.5, 0., 1.) == 1);
 }
 
 TEST_CASE("equality_test")
@@ -74,10 +74,10 @@ TEST_CASE("mod_test")
 TEST_CASE("quadratic_function_test")
 {
     quadratic_function<double> f(1, 3, 2);
-    CRADLE_CHECK_ALMOST_EQUAL(apply(f, -2), 0.);
-    CRADLE_CHECK_ALMOST_EQUAL(apply(f, 1.5), 8.75);
-    CRADLE_CHECK_ALMOST_EQUAL(apply(f, 0), 2.);
-    CRADLE_CHECK_ALMOST_EQUAL(apply(f, 4), 30.);
+    ASTROID_CHECK_ALMOST_EQUAL(apply(f, -2), 0.);
+    ASTROID_CHECK_ALMOST_EQUAL(apply(f, 1.5), 8.75);
+    ASTROID_CHECK_ALMOST_EQUAL(apply(f, 0), 2.);
+    ASTROID_CHECK_ALMOST_EQUAL(apply(f, 4), 30.);
 
     quadratic_function<double> g(2, 3, 0);
     REQUIRE(f != g);
@@ -85,21 +85,21 @@ TEST_CASE("quadratic_function_test")
     REQUIRE(f == f);
 
     // This is disabled because the prettier output was disabled when all
-    // CRADLE types got automatically generated ostream operators.
+    // ASTROID types got automatically generated ostream operators.
     // REQUIRE(to_string(g) ==  "f(x) = 2x^2 + 3x + 0");
 }
 
 TEST_CASE("linear_function_test")
 {
     linear_function<double> f(1, 3);
-    CRADLE_CHECK_ALMOST_EQUAL(apply(f, -2), -5.);
-    CRADLE_CHECK_ALMOST_EQUAL(apply(f, 1.5), 5.5);
-    CRADLE_CHECK_ALMOST_EQUAL(apply(f, 2), 7.);
+    ASTROID_CHECK_ALMOST_EQUAL(apply(f, -2), -5.);
+    ASTROID_CHECK_ALMOST_EQUAL(apply(f, 1.5), 5.5);
+    ASTROID_CHECK_ALMOST_EQUAL(apply(f, 2), 7.);
 
     f = inverse(f);
-    CRADLE_CHECK_ALMOST_EQUAL(apply(f, -5), -2.);
-    CRADLE_CHECK_ALMOST_EQUAL(apply(f, 5.5), 1.5);
-    CRADLE_CHECK_ALMOST_EQUAL(apply(f, 7), 2.);
+    ASTROID_CHECK_ALMOST_EQUAL(apply(f, -5), -2.);
+    ASTROID_CHECK_ALMOST_EQUAL(apply(f, 5.5), 1.5);
+    ASTROID_CHECK_ALMOST_EQUAL(apply(f, 7), 2.);
 
     linear_function<double> g(2, 3);
     REQUIRE(f != g);
@@ -107,6 +107,6 @@ TEST_CASE("linear_function_test")
     REQUIRE(f == f);
 
     // This is disabled because the prettier output was disabled when all
-    // CRADLE types got automatically generated ostream operators.
+    // ASTROID types got automatically generated ostream operators.
     // REQUIRE(to_string(g) ==  "f(x) = 3x + 2");
 }

@@ -1,5 +1,16 @@
-cmake_minimum_required(VERSION 3.14)
-project(cradle)
+cmake_minimum_required(VERSION 3.16)
+
+# Set VCPKG target triplet to use our mixed-linkage build.
+if (WIN32)
+    # This assumes we're doing a 64-bit build. It seems impossible to verify
+    # that at this point in the CMake execution - it's possible after the call
+    # to `project()`, but we need to set these variables before that - but we
+    # could add an option to support 32-bit builds.
+    set(VCPKG_TARGET_TRIPLET x64-windows-mixed)
+    set(VCPKG_HOST_TRIPLET x64-windows-mixed)
+endif()
+
+project(astroid)
 
 # Detect the compiler.
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
@@ -18,7 +29,7 @@ else()
     set(IS_MSVC false)
 endif()
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 # Determine if we're being built through FetchContent.
 if (${CMAKE_SOURCE_DIR} STREQUAL ${PROJECT_SOURCE_DIR})
@@ -36,45 +47,6 @@ FetchContent_Declare(
   GIT_TAG        v2.13.9
 )
 FetchContent_MakeAvailable(catch)
-
-# Download/include CMake/Conan integration.
-if(NOT EXISTS "${CMAKE_CURRENT_BINARY_DIR}/conan.cmake")
-    message(STATUS "Downloading conan.cmake from https://github.com/conan-io/cmake-conan")
-    file(DOWNLOAD "https://github.com/conan-io/cmake-conan/raw/v0.16.1/conan.cmake"
-                  "${CMAKE_CURRENT_BINARY_DIR}/conan.cmake"
-                  TLS_VERIFY ON)
-endif()
-include(${CMAKE_CURRENT_BINARY_DIR}/conan.cmake)
-
-# Invoke Conan.
-conan_cmake_run(
-    REQUIRES
-        boost/1.77.0
-        jsoncpp/1.9.4
-        msgpack/3.3.0
-        zlib/1.2.11
-    OPTIONS
-        boost:without_context=True
-        boost:without_contract=True
-        boost:without_coroutine=True
-        boost:without_fiber=True
-        boost:without_graph=True
-        boost:without_graph_parallel=True
-        boost:without_iostreams=True
-        boost:without_json=True
-        boost:without_locale=True
-        boost:without_log=True
-        boost:without_mpi=True
-        boost:without_nowide=True
-        boost:without_serialization=True
-        boost:without_stacktrace=True
-        boost:without_test=True
-        boost:without_timer=True
-        boost:without_type_erasure=True
-        boost:without_wave=True
-        *:shared=False
-    BASIC_SETUP
-    BUILD missing)
 
 add_definitions(-DBOOST_CONFIG_SUPPRESS_OUTDATED_MESSAGE)
 
@@ -121,7 +93,7 @@ file(GLOB_RECURSE impls ${glob_options}
 # Fetch the Astroid preprocessor.
 FetchContent_Declare(preprocessor
     GIT_REPOSITORY https://github.com/mghro/astroid-preprocessor
-    GIT_TAG 0.2.0)
+    GIT_TAG 09c33f109f16c5d3669d2b00568df207a4f9dc14)
 FetchContent_MakeAvailable(preprocessor)
 
 # Preprocess the API headers.
@@ -131,23 +103,34 @@ preprocess_header_files(
     # TODO: Make this its own actual app...
     TYPE_APP_ID dosimetry
     FUNCTION_APP_ID dosimetry
-    NAMESPACE cradle
-    INDEX_FILE "${CMAKE_CURRENT_BINARY_DIR}/generated/src/cradle/api_index.hpp"
+    NAMESPACE astroid
+    INDEX_FILE "${CMAKE_CURRENT_BINARY_DIR}/generated/src/astroid/api_index.hpp"
     INPUT_FILES ${preprocessed_files})
 list(APPEND srcs ${generated_srcs})
 list(APPEND headers ${generated_headers}
-    "${CMAKE_CURRENT_BINARY_DIR}/generated/src/cradle/api_index.hpp")
+    "${CMAKE_CURRENT_BINARY_DIR}/generated/src/astroid/api_index.hpp")
 
-add_library(cradle STATIC ${srcs} ${headers} ${impls} ${CLIPPER_SOURCE_FILES})
-target_include_directories(cradle PUBLIC
-    ${CONAN_INCLUDE_DIRS}
+find_package(Boost REQUIRED
+    COMPONENTS date_time filesystem)
+find_package(msgpack CONFIG REQUIRED)
+find_package(Catch2 3 REQUIRED)
+find_package(cradle REQUIRED)
+
+add_library(astroid STATIC ${srcs} ${headers} ${impls} ${CLIPPER_SOURCE_FILES})
+target_include_directories(astroid PUBLIC
     ${CLIPPER_INCLUDE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}/generated/src
     ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_compile_definitions(
-    cradle PUBLIC ${CONAN_DEFINES} ${CONAN_COMPILE_DEFINITIONS})
-target_link_directories(cradle PUBLIC ${CONAN_LIB_DIRS})
-target_link_libraries(cradle PUBLIC ${CONAN_LIBS} Catch2::Catch2)
+    astroid PUBLIC)
+target_link_directories(astroid PUBLIC)
+target_link_libraries(astroid PUBLIC
+    cradle::cradle_typing
+    Catch2::Catch2
+    msgpackc-cxx
+    Boost::boost
+    Boost::filesystem
+    Boost::date_time)
 
 # The rest of this is concerned with testing, which we don't want to do if
 # we're just building as a dependency.
@@ -168,7 +151,7 @@ endif()
 # Add the unit test runner.
 file(GLOB_RECURSE UNIT_TEST_FILES CONFIGURE_DEPENDS "unit_tests/*.cpp")
 add_executable(unit_test_runner ${UNIT_TEST_FILES})
-target_link_libraries(unit_test_runner cradle)
+target_link_libraries(unit_test_runner astroid)
 target_include_directories(unit_test_runner
     PRIVATE ${PROJECT_SOURCE_DIR}/unit_tests)
 
@@ -180,7 +163,7 @@ add_custom_target(
     COMMAND ${CMAKE_COMMAND} -E remove_directory unit-testing
     COMMAND ${CMAKE_COMMAND} -E make_directory unit-testing
     COMMAND ${CMAKE_COMMAND} -E chdir unit-testing ${CMAKE_COMMAND}
-                             -E env CRADLE_DEPLOY_DIR=${PROJECT_BINARY_DIR}
+                             -E env ASTROID_DEPLOY_DIR=${PROJECT_BINARY_DIR}
                              $<TARGET_FILE:unit_test_runner>
     WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
     DEPENDS unit_test_runner)

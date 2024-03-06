@@ -1,13 +1,13 @@
-#include <cradle/imaging/histogram.hpp>
+#include <astroid/imaging/histogram.hpp>
 
-#include <cradle/imaging/test.hpp>
+#include <astroid/imaging/test.hpp>
 
-using namespace cradle;
+using namespace astroid;
 
 TEST_CASE("raw_bytes_test")
 {
     unsigned const s = 3;
-    image<3, cradle::uint8_t, unique> img;
+    image<3, astroid::uint8_t, unique> img;
     create_image(img, make_vector(s, s, s));
     int const initial_n = 61;
     sequential_fill(img, initial_n, 1);
@@ -26,7 +26,7 @@ TEST_CASE("raw_bytes_test")
 
 TEST_CASE("raw_random_data_test")
 {
-    cradle::uint16_t image_data[] = {
+    astroid::uint16_t image_data[] = {
         17,
         12,
         43,

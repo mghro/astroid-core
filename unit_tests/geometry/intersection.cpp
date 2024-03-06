@@ -1,8 +1,8 @@
-#include <cradle/geometry/intersection.hpp>
+#include <astroid/geometry/intersection.hpp>
 
-#include <cradle/test.hpp>
+#include <astroid/test.hpp>
 
-using namespace cradle;
+using namespace astroid;
 
 template<typename T>
 void
@@ -13,7 +13,7 @@ assert_intersection(
 {
     optional<vector<3, T>> p = intersection(plane, segment);
     REQUIRE(p);
-    CRADLE_CHECK_ALMOST_EQUAL(p.get(), correct_p);
+    ASTROID_CHECK_ALMOST_EQUAL(*p, correct_p);
 }
 
 template<typename T>
@@ -75,10 +75,10 @@ assert_intersection(
     optional<line_segment<3, T>> segment = intersection(plane, tri);
     REQUIRE(segment);
     REQUIRE(
-        (almost_equal(segment.get()[0], correct_segment[0])
-             && almost_equal(segment.get()[1], correct_segment[1])
-         || almost_equal(segment.get()[0], correct_segment[1])
-                && almost_equal(segment.get()[1], correct_segment[0])));
+        (almost_equal((*segment)[0], correct_segment[0])
+             && almost_equal((*segment)[1], correct_segment[1])
+         || almost_equal((*segment)[0], correct_segment[1])
+                && almost_equal((*segment)[1], correct_segment[0])));
 }
 
 template<typename T>
@@ -165,8 +165,8 @@ assert_intersection(
 {
     optional<line_segment<N, T>> result = intersection(segment, box);
     REQUIRE(result);
-    CRADLE_CHECK_ALMOST_EQUAL(correct_result[0], result.get()[0]);
-    CRADLE_CHECK_ALMOST_EQUAL(correct_result[1], result.get()[1]);
+    ASTROID_CHECK_ALMOST_EQUAL(correct_result[0], (*result)[0]);
+    ASTROID_CHECK_ALMOST_EQUAL(correct_result[1], (*result)[1]);
 }
 
 template<unsigned N, typename T>
