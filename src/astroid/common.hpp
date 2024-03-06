@@ -739,20 +739,6 @@ typedef Paths Polygons;
 } // namespace ClipperLib
 namespace astroid {
 
-// array size checking utility
-
-struct array_size_error : exception
-{
-    array_size_error(size_t expected_size, size_t actual_size);
-    ~array_size_error() throw()
-    {
-    }
-    size_t expected_size, actual_size;
-};
-
-void
-check_array_size(size_t expected_size, size_t actual_size);
-
 // OTHER UTILITIES
 
 using ownership_holder = std::shared_ptr<cradle::data_owner>;
@@ -870,7 +856,7 @@ void
 from_dynamic(c_array<N, T>* x, cradle::dynamic const& v)
 {
     cradle::dynamic_array const& array = cast<cradle::dynamic_array>(v);
-    check_array_size(N, array.size());
+    cradle::check_array_size(N, array.size());
     for (unsigned i = 0; i != N; ++i)
         from_dynamic(&(*x)[i], array[i]);
 }
@@ -985,10 +971,11 @@ T*
 allocate(array<T>* array, size_t n_elements)
 {
     auto ptr = std::make_unique<T[]>(n_elements);
-    array->elements = ptr.get();
+    T* raw_ptr = ptr.get();
+    array->elements = raw_ptr;
     array->ownership = make_unique_ptr_owner<T[]>(std::move(ptr));
     array->n_elements = n_elements;
-    return ptr.get();
+    return raw_ptr;
 }
 
 template<class T>

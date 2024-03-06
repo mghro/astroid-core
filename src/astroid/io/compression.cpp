@@ -1,10 +1,7 @@
 #include <astroid/io/compression.hpp>
 #include <astroid/io/file.hpp>
-#include <zlib.h>
 
-#ifdef _WIN32
-#pragma comment(lib, "zlib.lib")
-#endif
+#include <zlib.h>
 
 namespace astroid {
 

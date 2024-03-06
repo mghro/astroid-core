@@ -115,22 +115,21 @@ find_package(Boost REQUIRED
 find_package(msgpack CONFIG REQUIRED)
 find_package(Catch2 3 REQUIRED)
 find_package(cradle REQUIRED)
+find_package(ZLIB REQUIRED)
 
 add_library(astroid STATIC ${srcs} ${headers} ${impls} ${CLIPPER_SOURCE_FILES})
 target_include_directories(astroid PUBLIC
     ${CLIPPER_INCLUDE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}/generated/src
     ${CMAKE_CURRENT_SOURCE_DIR}/src)
-target_compile_definitions(
-    astroid PUBLIC)
-target_link_directories(astroid PUBLIC)
 target_link_libraries(astroid PUBLIC
     cradle::cradle_typing
     Catch2::Catch2
     msgpackc-cxx
     Boost::boost
     Boost::filesystem
-    Boost::date_time)
+    Boost::date_time
+    ZLIB::ZLIB)
 
 # The rest of this is concerned with testing, which we don't want to do if
 # we're just building as a dependency.

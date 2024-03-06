@@ -234,7 +234,7 @@ variant_from_dynamic(image<N, variant, shared>* x, cradle::dynamic const& v)
     size_t expected_size = product(x->size)
                            * get_channel_size(x->pixels.type_info.type)
                            * get_channel_count(x->pixels.type_info.format);
-    check_array_size(expected_size, b.size());
+    cradle::check_array_size(expected_size, b.size());
     x->pixels.ownership = b.ownership();
     x->pixels.view = b.data();
 }

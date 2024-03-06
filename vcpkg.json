@@ -12,7 +12,8 @@
         "boost-date-time",
         "boost-format",
         "boost-preprocessor",
-        "boost-polygon"
+        "boost-polygon",
+        "zlib"
     ],
     "overrides": [
         {
