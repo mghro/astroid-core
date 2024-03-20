@@ -70,6 +70,7 @@ struct immutable_value : untyped_immutable_value
     size_t
     hash() const override
     {
+        using cradle::invoke_hash;
         return invoke_hash(this->value);
     }
     cradle::dynamic
@@ -128,7 +129,7 @@ size_t
 invoke_hash(immutable<T> const& x)
 {
     using cradle::invoke_hash;
-    return is_initialized(x) ? cradle::invoke_hash(get(x)) : 0;
+    return is_initialized(x) ? invoke_hash(get(x)) : 0;
 }
 
 template<class T>
