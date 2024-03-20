@@ -1077,7 +1077,7 @@ from_dynamic(array<T>* x, cradle::dynamic const& v)
     cradle::blob const& b = cast<cradle::blob>(v);
     x->n_elements = b.size() / sizeof(T);
     x->elements = reinterpret_cast<T const*>(b.data());
-    x->ownership = b.ownership();
+    x->ownership = b.shared_owner();
 }
 template<class T>
 void

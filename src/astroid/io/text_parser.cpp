@@ -57,7 +57,7 @@ initialize_parser_with_blob(
         label,
         reinterpret_cast<char const*>(b.data()),
         b.size(),
-        b.ownership());
+        b.shared_owner());
 }
 
 void
