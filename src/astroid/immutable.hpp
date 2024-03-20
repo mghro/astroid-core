@@ -108,24 +108,24 @@ reset(immutable<T>& x)
 
 template<class T>
 void
-initialize(immutable<T>& x, T const& value)
+initialize(immutable<T>& x, T value)
 {
     x.ptr.reset(new immutable_value<T>);
-    x.ptr->value = value;
+    x.ptr->value = std::move(value);
 }
 
 template<class T>
 immutable<T>
-make_immutable(T const& value)
+make_immutable(T value)
 {
     immutable<T> x;
-    initialize(x, value);
+    initialize(x, std::move(value));
     return x;
 }
 
 template<class T>
 size_t
-invoke_hash(cradle::immutable<T> const& x)
+invoke_hash(immutable<T> const& x)
 {
     using cradle::invoke_hash;
     return is_initialized(x) ? cradle::invoke_hash(get(x)) : 0;
