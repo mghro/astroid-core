@@ -65,6 +65,7 @@ struct immutable_value : untyped_immutable_value
     size_t
     deep_size() const override
     {
+        using cradle::deep_sizeof;
         return deep_sizeof(this->value);
     }
     size_t
@@ -76,7 +77,8 @@ struct immutable_value : untyped_immutable_value
     cradle::dynamic
     as_dynamic() const override
     {
-        return to_value(this->value);
+        using cradle::to_dynamic;
+        return to_dynamic(this->value);
     }
     bool
     equals(untyped_immutable_value const* other) const override
