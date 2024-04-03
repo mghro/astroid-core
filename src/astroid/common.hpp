@@ -613,37 +613,6 @@ struct remove_const_reference<T const&>
     typedef T type;
 };
 
-} // namespace astroid
-namespace cradle {
-
-// TODO: Fix hashing framework.
-template<class T>
-size_t
-invoke_hash(std::vector<T> const& v)
-{
-    size_t hash = 0;
-    for (auto const& i : v)
-        hash = combine_hashes(invoke_hash(i), hash);
-    return hash;
-}
-
-// TODO: Fix hashing framework.
-template<class K, class V>
-size_t
-invoke_hash(std::map<K, V> const& v)
-{
-    size_t hash = 0;
-    for (auto const& i : v)
-    {
-        hash = combine_hashes(
-            combine_hashes(invoke_hash(i.first), invoke_hash(i.second)), hash);
-    }
-    return hash;
-}
-
-} // namespace cradle
-namespace astroid {
-
 // Given a vector of optional values, return a vector containing all values
 // inside those optionals.
 template<class Value>
@@ -884,21 +853,20 @@ operator<<(std::ostream& s, c_array<N, T> const& x)
     return s;
 }
 } // namespace astroid
-namespace std {
+
 template<unsigned N, class T>
-struct hash<astroid::c_array<N, T>>
+struct std::hash<astroid::c_array<N, T>>
 {
     size_t
     operator()(astroid::c_array<N, T> const& x) const
     {
-        using cradle::invoke_hash;
         size_t h = 0;
         for (size_t i = 0; i != N; ++i)
-            h = cradle::combine_hashes(h, invoke_hash(x[i]));
+            h = cradle::combine_hashes(h, cradle::invoke_hash(x[i]));
         return h;
     }
 };
-} // namespace std
+
 namespace astroid {
 
 // array stores an immutable array of values with unspecified ownership.
@@ -1106,12 +1074,11 @@ operator<<(std::ostream& s, array<T> const& x)
 
 template<class T>
 size_t
-invoke_hash(astroid::array<T> const& x)
+hash_value(astroid::array<T> const& x)
 {
-    using cradle::invoke_hash;
     size_t h = 0;
     for (auto const& i : x)
-        h = cradle::combine_hashes(h, invoke_hash(i));
+        h = cradle::combine_hashes(h, cradle::invoke_hash(i));
     return h;
 }
 

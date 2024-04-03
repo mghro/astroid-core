@@ -152,12 +152,11 @@ uniform_vector(T value)
 // hash function
 template<unsigned N, class T>
 size_t
-invoke_hash(astroid::vector<N, T> const& v)
+hash_value(astroid::vector<N, T> const& v)
 {
-    using cradle::invoke_hash;
     size_t h = 0;
     for (unsigned i = 0; i != N; ++i)
-        h = cradle::combine_hashes(h, invoke_hash(v[i]));
+        h = cradle::combine_hashes(h, cradle::invoke_hash(v[i]));
     return h;
 }
 
@@ -848,12 +847,11 @@ struct std::hash<astroid::matrix<M, N, T>>
     size_t
     operator()(astroid::matrix<M, N, T> const& m) const
     {
-        using cradle::invoke_hash;
         size_t h = 0;
         for (unsigned i = 0; i != M; ++i)
         {
             for (unsigned j = 0; j != N; ++j)
-                h = cradle::combine_hashes(h, invoke_hash(m(i, j)));
+                h = cradle::combine_hashes(h, cradle::invoke_hash(m(i, j)));
         }
         return h;
     }
@@ -1309,8 +1307,8 @@ struct std::hash<astroid::line_segment<N, T>>
     size_t
     operator()(astroid::line_segment<N, T> const& x) const
     {
-        using cradle::invoke_hash;
-        return cradle::combine_hashes(invoke_hash(x[0]), invoke_hash(x[1]));
+        return cradle::combine_hashes(
+            cradle::invoke_hash(x[0]), cradle::invoke_hash(x[1]));
     }
 };
 namespace astroid {
@@ -1379,10 +1377,10 @@ struct std::hash<astroid::triangle<N, T>>
     size_t
     operator()(astroid::triangle<N, T> const& x) const
     {
-        using cradle::invoke_hash;
         return cradle::combine_hashes(
-            invoke_hash(x[0]),
-            cradle::combine_hashes(invoke_hash(x[1]), invoke_hash(x[2])));
+            cradle::invoke_hash(x[0]),
+            cradle::combine_hashes(
+                cradle::invoke_hash(x[1]), cradle::invoke_hash(x[2])));
     }
 };
 namespace astroid {

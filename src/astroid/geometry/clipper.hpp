@@ -94,8 +94,7 @@ struct std::hash<astroid::clipper_polyset>
     size_t
     operator()(astroid::clipper_polyset const& x) const
     {
-        using cradle::invoke_hash;
-        return invoke_hash(astroid::from_clipper(x));
+        return cradle::invoke_hash(astroid::from_clipper(x));
     }
 };
 

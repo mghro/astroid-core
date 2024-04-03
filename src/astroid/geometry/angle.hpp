@@ -303,18 +303,17 @@ operator<<(std::ostream& ostream, const angle<T, Units>& a)
 }
 
 } // namespace astroid
-namespace std {
+
 template<typename T, class Units>
-struct hash<astroid::angle<T, Units>>
+struct std::hash<astroid::angle<T, Units>>
 {
     size_t
     operator()(astroid::angle<T, Units> x) const
     {
-        using cradle::invoke_hash;
-        return invoke_hash(x.get());
+        return cradle::invoke_hash(x.get());
     }
 };
-} // namespace std
+
 namespace astroid {
 
 // trigonometric functions that work with angles

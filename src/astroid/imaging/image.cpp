@@ -55,10 +55,9 @@ namespace astroid {
     }                                                                         \
     namespace astroid {                                                       \
     size_t                                                                    \
-    invoke_hash(image<N, T, shared> const& x)                                 \
+    hash_value(image<N, T, shared> const& x)                                  \
     {                                                                         \
-        using cradle::invoke_hash;                                            \
-        return invoke_hash(as_variant(x));                                    \
+        return hash_value(as_variant(x));                                     \
     }
 
 #define ASTROID_DEFINE_REGULAR_IMAGE_INTERFACE_FOR_TYPE(T)                    \

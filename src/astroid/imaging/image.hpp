@@ -798,7 +798,7 @@ get_pixel_ref(
     };                                                                        \
     namespace astroid {                                                       \
     size_t                                                                    \
-    invoke_hash(image<N, T, shared> const& x);
+    hash_value(image<N, T, shared> const& x);
 
 #define ASTROID_DECLARE_REGULAR_IMAGE_INTERFACE_FOR_TYPE(T)                   \
     ASTROID_DECLARE_REGULAR_IMAGE_INTERFACE(1, T)                             \

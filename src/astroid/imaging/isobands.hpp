@@ -51,20 +51,18 @@ struct colored_triangle : c_array<3, colored_vertex<N, T>>
 
 // hash function
 } // namespace astroid
-namespace std {
 template<unsigned N, class T>
-struct hash<astroid::colored_triangle<N, T>>
+struct std::hash<astroid::colored_triangle<N, T>>
 {
     size_t
     operator()(astroid::colored_triangle<N, T> const& x) const
     {
-        using cradle::invoke_hash;
         return cradle::combine_hashes(
-            invoke_hash(x[0]),
-            cradle::combine_hashes(invoke_hash(x[1]), invoke_hash(x[2])));
+            cradle::invoke_hash(x[0]),
+            cradle::combine_hashes(
+                cradle::invoke_hash(x[1]), cradle::invoke_hash(x[2])));
     }
 };
-} // namespace std
 namespace astroid {
 
 // This is similar to compute_isobands, but it also associates colors with

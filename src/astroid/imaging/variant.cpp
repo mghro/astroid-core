@@ -357,9 +357,8 @@ hash_variant_image(image<N, variant, shared> const& x)
     }                                                                         \
     namespace astroid {                                                       \
     size_t                                                                    \
-    invoke_hash(image<N, variant, shared> const& x)                           \
+    hash_value(image<N, variant, shared> const& x)                            \
     {                                                                         \
-        using cradle::invoke_hash;                                            \
         return astroid::hash_variant_image(x);                                \
     }
 
