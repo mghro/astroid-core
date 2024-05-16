@@ -17,6 +17,12 @@ struct allocator_interface
 template<class T>
 struct unique_ptr_data_owner : public cradle::data_owner
 {
+    virtual std::uint8_t*
+    data()
+    {
+        return reinterpret_cast<std::uint8_t*>(ptr.get());
+    }
+
     std::unique_ptr<T> ptr;
 };
 

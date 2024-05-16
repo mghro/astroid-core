@@ -39,3 +39,5 @@ struct shared_memory_allocation_policy
 };
 
 } // namespace astroid
+
+#endif

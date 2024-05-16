@@ -1,10 +1,12 @@
 #ifndef ASTROID_MATH_COMMON_HPP
 #define ASTROID_MATH_COMMON_HPP
 
-#include <astroid/common.hpp>
 #include <cassert>
 #include <cmath>
 #include <limits>
+
+#include <astroid/array.hpp>
+#include <astroid/common.hpp>
 
 #ifdef min
 #undef min

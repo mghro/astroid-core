@@ -1,9 +1,10 @@
 #ifndef ASTROID_ARRAY_HPP
 #define ASTROID_ARRAY_HPP
 
+#include <memory>
+
 #include <astroid/allocators.hpp>
 #include <astroid/common.hpp>
-#include <memory>
 
 namespace astroid {
 
@@ -59,14 +60,21 @@ struct array
 
 template<class T, class Allocator>
 T*
-allocate(array<T>* array, Allocator& allocator, size_t n_elements)
+allocate(array<T>* array, size_t n_elements, Allocator& allocator)
 {
     std::shared_ptr<cradle::data_owner> owner = allocator.allocate(n_elements);
-    T* raw_ptr = std::reinterpret_pointer_cast<T*>(owner->data());
+    T* raw_ptr = reinterpret_cast<T*>(owner->data());
     array->elements = raw_ptr;
     array->ownership = std::move(owner);
     array->n_elements = n_elements;
     return raw_ptr;
+}
+
+template<class T>
+T*
+allocate(array<T>* array, size_t n_elements)
+{
+    return allocate(array, n_elements, default_allocator<T>());
 }
 
 template<class T>
