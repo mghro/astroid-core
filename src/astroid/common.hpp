@@ -704,7 +704,7 @@ using ownership_holder = std::shared_ptr<cradle::data_owner>;
 
 } // namespace astroid
 
-#define DEFINE_NORMALIZATION_UUID(type)                                       \
+#define ASTROID_DEFINE_NORMALIZATION_UUID(type)                               \
     template<>                                                                \
     struct cradle::normalization_uuid_str<type>                               \
     {                                                                         \
