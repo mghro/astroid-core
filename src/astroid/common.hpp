@@ -707,12 +707,12 @@ using ownership_holder = std::shared_ptr<cradle::data_owner>;
 #define ASTROID_DEFINE_NORMALIZATION_UUID(ns, type)                           \
     }                                                                         \
     template<>                                                                \
-    struct cradle::normalization_uuid_str<type>                               \
+    struct cradle::normalization_uuid_str<ns::type>                           \
     {                                                                         \
         static const inline std::string func{                                 \
-            "normalization<"##type##",func>"};                                \
+            "normalization<"##ns##"_"##type##",func>"};                       \
         static const inline std::string coro{                                 \
-            "normalization<"##type##",coro>"};                                \
+            "normalization<"##ns##"_"##type##",coro>"};                       \
     };                                                                        \
     namespace ns {
 
