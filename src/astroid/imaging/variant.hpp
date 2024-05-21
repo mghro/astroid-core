@@ -1,6 +1,7 @@
 #ifndef ASTROID_IMAGING_VARIANT_HPP
 #define ASTROID_IMAGING_VARIANT_HPP
 
+#include <astroid/c_array.hpp>
 #include <astroid/imaging/color.hpp>
 #include <astroid/imaging/geometry.hpp>
 #include <astroid/imaging/image.hpp>
@@ -175,9 +176,9 @@ class image_type_mismatch : public astroid::exception
         channel_type actual_type,
         string const& actual)
         : astroid::exception(
-            "image format/type mismatch"
-            "\n  expected: "
-            + expected + "\n  actual: " + actual),
+              "image format/type mismatch"
+              "\n  expected: "
+              + expected + "\n  actual: " + actual),
           expected_type_(expected_type),
           expected_format_(expected_format),
           expected_(new string(expected)),

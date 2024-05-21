@@ -1,8 +1,9 @@
 #ifndef ASTROID_GEOMETRY_CLIPPER_HPP
 #define ASTROID_GEOMETRY_CLIPPER_HPP
 
-#include <astroid/geometry/polygonal.hpp>
 #include <clipper.hpp>
+
+#include <astroid/geometry/polygonal.hpp>
 
 // This file provides an interface between ASTROID's polygonal geometry
 // representations and the Clipper library, which provides some useful

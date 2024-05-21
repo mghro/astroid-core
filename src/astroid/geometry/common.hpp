@@ -1,13 +1,16 @@
 #ifndef ASTROID_GEOMETRY_COMMON_HPP
 #define ASTROID_GEOMETRY_COMMON_HPP
 
+#include <cmath>
+#include <ostream>
+
+#include <cradle/typing/core/omissible.h>
+#include <cradle/typing/core/type_definitions.h>
+
+#include <astroid/c_array.hpp>
 #include <astroid/common.hpp>
 #include <astroid/geometry/forward.hpp>
 #include <astroid/math/common.hpp>
-#include <cmath>
-#include <cradle/typing/core/omissible.h>
-#include <cradle/typing/core/type_definitions.h>
-#include <ostream>
 
 namespace astroid {
 

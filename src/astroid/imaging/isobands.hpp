@@ -1,9 +1,11 @@
 #ifndef ASTROID_IMAGING_ISOBANDS_HPP
 #define ASTROID_IMAGING_ISOBANDS_HPP
 
+#include <vector>
+
+#include <astroid/c_array.hpp>
 #include <astroid/geometry/common.hpp>
 #include <astroid/imaging/image.hpp>
-#include <vector>
 
 namespace astroid {
 

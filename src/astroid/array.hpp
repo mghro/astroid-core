@@ -118,7 +118,7 @@ size_t
 deep_sizeof(array<T> const& x)
 {
     using cradle::deep_sizeof;
-    // We assume that c_array is only used with types that have a static
+    // We assume that array is only used with types that have a static
     // deep_sizeof.
     return deep_sizeof(T()) * x.size();
 }

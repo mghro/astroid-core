@@ -1,6 +1,8 @@
 #ifndef ASTROID_GUI_DISPLAYS_SCENES_HPP
 #define ASTROID_GUI_DISPLAYS_SCENES_HPP
 
+#include <astroid/c_array.hpp>
+
 #include <astroid/geometry/slicing.hpp>
 
 namespace astroid {

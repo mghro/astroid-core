@@ -1,11 +1,13 @@
 #ifndef ASTROID_IMAGING_IMAGE_HPP
 #define ASTROID_IMAGING_IMAGE_HPP
 
+#include <cradle/typing/core/type_definitions.h>
+
+#include <astroid/c_array.hpp>
 #include <astroid/geometry/common.hpp>
 #include <astroid/imaging/color.hpp>
 #include <astroid/imaging/forward.hpp>
 #include <astroid/units.hpp>
-#include <cradle/typing/core/type_definitions.h>
 
 namespace astroid {
 
