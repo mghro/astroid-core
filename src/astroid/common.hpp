@@ -276,7 +276,8 @@ struct vector
             (*this)[i] = static_cast<T>(other[i]);
     }
 
- private:
+    MSGPACK_DEFINE(elements)
+
     T elements[N];
 };
 // 2D constructor
@@ -646,8 +647,8 @@ map(Fn const& fn, std::vector<Item> const& items)
 // functional map over a map
 template<class Key, class Value, class Fn>
 auto
-map(Fn const& fn, std::map<Key, Value> const& items)
-    -> std::map<Key, decltype(fn(Value()))>
+map(Fn const& fn,
+    std::map<Key, Value> const& items) -> std::map<Key, decltype(fn(Value()))>
 {
     typedef decltype(fn(Value())) mapped_item_type;
     std::map<Key, mapped_item_type> result;

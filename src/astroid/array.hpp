@@ -171,21 +171,35 @@ operator<(array<T> const& a, array<T> const& b)
 
 template<class T>
 void
-from_dynamic(array<T>* x, cradle::dynamic const& v)
+from_blob(astroid::array<T>* x, cradle::blob const& b)
 {
-    cradle::blob const& b = cast<cradle::blob>(v);
     x->n_elements = b.size() / sizeof(T);
     x->elements = reinterpret_cast<T const*>(b.data());
     x->ownership = b.shared_owner();
 }
+
 template<class T>
-void
-to_dynamic(cradle::dynamic* v, array<T> const& x)
+cradle::blob
+to_blob(astroid::array<T> x)
 {
-    *v = cradle::blob(
-        x.ownership,
+    return cradle::blob(
+        std::move(x.ownership),
         reinterpret_cast<std::byte const*>(x.elements),
         x.n_elements * sizeof(T));
+}
+
+template<class T>
+void
+from_dynamic(array<T>* x, cradle::dynamic const& v)
+{
+    from_blob(x, cast<cradle::blob>(v));
+}
+
+template<class T>
+void
+to_dynamic(cradle::dynamic* v, array<T> x)
+{
+    *v = to_blob(std::move(x));
 }
 
 template<class T>

@@ -186,6 +186,8 @@ struct box
     }
 
     vector<N, T> corner, size;
+
+    MSGPACK_DEFINE(corner, size);
 };
 
 template<unsigned N, typename T>
@@ -1530,7 +1532,7 @@ bounding_box(
     compute_bounding_box(box, points);
     return box ? *box
                : astroid::box<N, T>(
-                   uniform_vector<N, T>(0), uniform_vector<N, T>(0));
+                     uniform_vector<N, T>(0), uniform_vector<N, T>(0));
 }
 
 } // namespace astroid

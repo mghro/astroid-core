@@ -5,4 +5,6 @@
 
 #include <cradle/inner/requests/normalization_uuid.h>
 
+#include <astroid/io/msgpack.hpp>
+
 #endif
