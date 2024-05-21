@@ -709,10 +709,10 @@ using ownership_holder = std::shared_ptr<cradle::data_owner>;
     template<>                                                                \
     struct cradle::normalization_uuid_str<ns::type>                           \
     {                                                                         \
-        static const inline std::string func{                                 \
-            "normalization<"##ns##"_"##type##",func>"};                       \
-        static const inline std::string coro{                                 \
-            "normalization<"##ns##"_"##type##",coro>"};                       \
+        static const inline std::string func{"normalization<" #ns "_" #type   \
+                                             ",func>"};                       \
+        static const inline std::string coro{"normalization<" #ns "_" #type   \
+                                             ",coro>"};                       \
     };                                                                        \
     namespace ns {
 
