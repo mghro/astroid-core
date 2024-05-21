@@ -5,6 +5,8 @@
 
 #include <cradle/inner/requests/normalization_uuid.h>
 
+#include <cradle/inner/encodings/cereal_value.h>
+
 #include <astroid/io/msgpack.hpp>
 
 #endif
