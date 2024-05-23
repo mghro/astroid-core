@@ -84,12 +84,12 @@ is_orthogonal_to_axes(untyped_image_base<N> const& img)
 }
 
 template<unsigned N>
-box<N, double>
+astroid::box<N, double>
 get_bounding_box(untyped_image_base<N> const& img)
 {
     assert(is_orthogonal_to_axes(img));
     vector<N, double> origin = get_origin(img);
-    box<N, double> box(
+    astroid::box<N, double> box(
         origin,
         transform_point(get_spatial_mapping(img), vector<N, double>(img.size))
             - origin);

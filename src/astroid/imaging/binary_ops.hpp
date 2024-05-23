@@ -3,6 +3,8 @@
 
 #include <astroid/imaging/geometry.hpp>
 
+#include <astroid/imaging/binary_ops.ipp>
+
 // This file provides utilities for doing pixel-by-pixel binary operations on
 // pairs of images. This is non-trivial when the images lie on different grids.
 
@@ -126,7 +128,5 @@ compute_max_difference(
     image<N, Pixel2, Storage2> const& img2);
 
 } // namespace astroid
-
-#include <astroid/imaging/binary_ops.ipp>
 
 #endif

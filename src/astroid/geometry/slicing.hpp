@@ -46,7 +46,7 @@ template<unsigned N>
 slice_description_list
 get_slices_for_grid(regular_grid<N, double> const& grid, unsigned axis)
 {
-    check_index_bounds("axis", axis, N);
+    // TODO: check_index_bounds("axis", axis, N);
     unsigned n_slices = grid.n_points[axis];
     slice_description_list slices(n_slices);
     for (unsigned i = 0; i != n_slices; ++i)

@@ -5,6 +5,8 @@
 #include <astroid/imaging/image.hpp>
 #include <astroid/imaging/variant.hpp>
 
+#include <astroid/imaging/statistics.ipp>
+
 namespace astroid {
 
 // Get the minimum and maximum values in the given image.
@@ -108,7 +110,5 @@ standard_deviation_from_image_stats(
     image<1, Bin, shared> const& histogram, statistics<double> const& stats);
 
 } // namespace astroid
-
-#include <astroid/imaging/statistics.ipp>
 
 #endif

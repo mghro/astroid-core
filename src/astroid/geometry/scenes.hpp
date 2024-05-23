@@ -19,16 +19,6 @@ struct sliced_scene_geometry
 api(fun with(N : 2, 3))
 template<unsigned N>
 sliced_scene_geometry<N>
-make_sliced_scene_geometry(c_array<N, slice_description_list> const& slicing)
-{
-    sliced_scene_geometry<N> geometry;
-    geometry.slicing = slicing;
-    return geometry;
-}
-
-api(fun with(N : 2, 3))
-template<unsigned N>
-sliced_scene_geometry<N>
 make_regular_sliced_scene_geometry(regular_grid<N, double> const& scene_grid)
 {
     sliced_scene_geometry<N> geometry;

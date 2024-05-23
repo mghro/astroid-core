@@ -5,6 +5,8 @@
 #include <astroid/imaging/image.hpp>
 #include <vector>
 
+#include <astroid/imaging/isolines.ipp>
+
 namespace astroid {
 
 // Given a grayscale image and a level, this will create a list of line
@@ -35,7 +37,5 @@ close_isoline_contours(
     double level);
 
 } // namespace astroid
-
-#include <astroid/imaging/isolines.ipp>
 
 #endif

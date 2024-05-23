@@ -136,23 +136,6 @@ make_grid_covering_box(box<N, T> const& box, vector<N, unsigned> const& counts)
     return grid;
 }
 
-// Create a regular grid.
-// creates a grid with start point p0, spacing s, and point count np.
-api(fun trivial with(N : 1, 2, 3, 4; T : double))
-template<unsigned N, typename T>
-regular_grid<N, T>
-make_regular_grid(
-    vector<N, T> const& p0,
-    vector<N, T> const& spacing,
-    vector<N, unsigned> const& np)
-{
-    regular_grid<N, T> grid;
-    grid.p0 = p0;
-    grid.spacing = spacing;
-    grid.n_points = np;
-    return grid;
-}
-
 api(fun trivial with(N : 1, 2, 3, 4; T : double) name(grid_bounding_box))
 template<unsigned N, typename T>
 box<N, T>

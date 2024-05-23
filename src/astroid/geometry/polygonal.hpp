@@ -142,7 +142,7 @@ as_polygon(box<2, double> const& box);
 
 api(fun trivial name(circle_as_polygon))
 polygon2
-as_polygon(circle<double> const& circle, unsigned n_segments);
+as_polygon(astroid::circle<double> const& circle, unsigned n_segments);
 
 api(fun trivial name(triangle_as_polygon))
 polygon2

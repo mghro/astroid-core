@@ -194,8 +194,7 @@ convert_image_to_8bit(image<N, variant, shared> const& image)
             discretized,
             image,
             linear_function<double>(
-                get(min_max).min,
-                (get(min_max).max - get(min_max).min) / 255));
+                min_max->min, (min_max->max - min_max->min) / 255));
     }
     return as_variant(discretized);
 }
@@ -289,7 +288,7 @@ template<unsigned N, class Pixel, class Storage>
 string
 image_value_units(image<N, Pixel, Storage> const& image)
 {
-    return get_name(image.units);
+    return image.units;
 }
 
 api(fun with(N : 1, 2, 3))

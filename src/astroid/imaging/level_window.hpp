@@ -3,6 +3,8 @@
 
 #include <astroid/imaging/variant.hpp>
 
+#include <astroid/imaging/level_window.ipp>
+
 namespace astroid {
 
 // Apply a level and window mapping to the given image value.
@@ -52,7 +54,5 @@ apply_paletted_level_window(
     double window);
 
 } // namespace astroid
-
-#include <astroid/imaging/level_window.ipp>
 
 #endif

@@ -9,58 +9,6 @@
 
 namespace astroid {
 
-// Compute the integral of all image values along the given line segment.
-api(fun with(N : 2, 3; Pixel : variant; Storage : shared))
-template<unsigned N, class Pixel, class Storage>
-// The integral of all image values along the line segment.
-double
-compute_image_integral_over_line_segment(
-    // The image that the line segment will run through.
-    image<N, Pixel, Storage> const& image,
-    // The line segment that the image integral will be calculated over.
-    line_segment<N, double> const& segment);
-
-// Compute the integral of image values along the given line segment that lie
-// within a range.
-api(fun with(N : 2, 3; Pixel : variant; Storage : shared))
-template<unsigned N, class Pixel, class Storage>
-// The integral of image values along the line segment that lie within the
-// given range.
-double
-compute_image_integral_over_line_segment_min_max(
-    // The image that the line segment will run through.
-    image<N, Pixel, Storage> const& image,
-    // The line segment that the image integral will be calculated over.
-    line_segment<N, double> const& segment,
-    // The minimum value that will be calculated in the integral.
-    double min,
-    // The maximum value that will be calculated in the integral.
-    double max,
-    // The value to add to the integral when image pixel is outside the range
-    // of 'min' and 'max'.
-    double zero_value);
-
-// Compute the integral of all image values along the given ray.
-api(fun with(N : 2, 3; Pixel : variant; Storage : shared))
-template<unsigned N, class Pixel, class Storage>
-// The integral of all image values along the ray.
-double
-compute_image_integral_over_ray(
-    // The image that the ray will run through.
-    image<N, Pixel, Storage> const& image,
-    // The ray that the image integral will be calculated over.
-    ray<N, double> const& ray);
-
-// This is the inverse of compute_image_integral_over_ray.
-// It computes the distance along the given ray that yields the given integral.
-api(fun with(N : 2, 3; Pixel : variant; Storage : shared))
-template<unsigned N, class Pixel, class Storage>
-double
-compute_inverse_image_integral_over_ray(
-    image<N, Pixel, Storage> const& image,
-    ray<N, double> const& ray,
-    double integral);
-
 // If you need to compute the value integral along the same ray (in the same
 // image) to many different points, using this class can be more efficient than
 // repeatedly calling the stand-alone function.  Rather than always tracing
@@ -178,5 +126,61 @@ class image_integral_computer
 } // namespace astroid
 
 #include <astroid/imaging/integral.ipp>
+
+namespace astroid {
+
+// Compute the integral of all image values along the given line segment.
+api(fun with(N : 2, 3; Pixel : variant; Storage : shared))
+template<unsigned N, class Pixel, class Storage>
+// The integral of all image values along the line segment.
+double
+compute_image_integral_over_line_segment(
+    // The image that the line segment will run through.
+    image<N, Pixel, Storage> const& image,
+    // The line segment that the image integral will be calculated over.
+    line_segment<N, double> const& segment);
+
+// Compute the integral of image values along the given line segment that lie
+// within a range.
+api(fun with(N : 2, 3; Pixel : variant; Storage : shared))
+template<unsigned N, class Pixel, class Storage>
+// The integral of image values along the line segment that lie within the
+// given range.
+double
+compute_image_integral_over_line_segment_min_max(
+    // The image that the line segment will run through.
+    image<N, Pixel, Storage> const& image,
+    // The line segment that the image integral will be calculated over.
+    line_segment<N, double> const& segment,
+    // The minimum value that will be calculated in the integral.
+    double min,
+    // The maximum value that will be calculated in the integral.
+    double max,
+    // The value to add to the integral when image pixel is outside the range
+    // of 'min' and 'max'.
+    double zero_value);
+
+// Compute the integral of all image values along the given ray.
+api(fun with(N : 2, 3; Pixel : variant; Storage : shared))
+template<unsigned N, class Pixel, class Storage>
+// The integral of all image values along the ray.
+double
+compute_image_integral_over_ray(
+    // The image that the ray will run through.
+    image<N, Pixel, Storage> const& image,
+    // The ray that the image integral will be calculated over.
+    ray<N, double> const& ray);
+
+// This is the inverse of compute_image_integral_over_ray.
+// It computes the distance along the given ray that yields the given integral.
+api(fun with(N : 2, 3; Pixel : variant; Storage : shared))
+template<unsigned N, class Pixel, class Storage>
+double
+compute_inverse_image_integral_over_ray(
+    image<N, Pixel, Storage> const& image,
+    ray<N, double> const& ray,
+    double integral);
+
+} // namespace astroid
 
 #endif

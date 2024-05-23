@@ -330,7 +330,7 @@ sliced_image_sample(
     unsigned slice_axis = get_slice_axis(slices);
     auto slice = find_sliced_image_slice(slices, p[slice_axis]);
     if (slice)
-        return image_sample(get(slice).content, astroid::slice(p, slice_axis));
+        return image_sample(slice->content, astroid::slice(p, slice_axis));
     else
         return none;
 }
@@ -351,7 +351,7 @@ sliced_image_units(std::vector<image_slice<N, variant, shared>> const& slices)
                 "value units are inconsistent across slices");
         }
     }
-    return get_name(merged_units);
+    return merged_units;
 }
 
 } // namespace astroid
