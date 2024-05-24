@@ -34,7 +34,9 @@ struct shared_memory_allocation_policy
     shared_memory_allocator<T>
     make_allocator()
     {
-        return shared_memory_allocator<T>{context};
+        shared_memory_allocator<T> allocator;
+        allocator.context = context;
+        return allocator;
     }
 };
 
