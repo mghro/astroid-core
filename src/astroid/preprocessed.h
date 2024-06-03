@@ -7,4 +7,7 @@
 #include <cradle/inner/requests/normalization_uuid.h>
 #include <cradle/typing/core/preprocessed.h>
 
+#include <cereal/types/map.hpp>
+#include <cereal/types/vector.hpp>
+
 #endif
