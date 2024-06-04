@@ -99,6 +99,7 @@ template<unsigned N, class T>
 size_t
 deep_sizeof(c_array<N, T> const& x)
 {
+    using cradle::deep_sizeof;
     size_t size = 0;
     for (auto const& element : x)
     {
