@@ -258,8 +258,8 @@ MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS)
             msgpack::packer<Stream>& p,
             astroid::immutable<Value> const& v) const
         {
-            if (v)
-                p.pack(*v);
+            if (is_initialized(v))
+                p.pack(get(v));
             else
                 p.pack_nil();
             return p;
@@ -274,8 +274,8 @@ MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS)
             msgpack::object::with_zone& o,
             astroid::immutable<Value> const& v) const
         {
-            if (v)
-                adaptor::object_with_zone<Value>()(o, *v);
+            if (is_initialized(v))
+                adaptor::object_with_zone<Value>()(o, get(v));
             else
                 o.type = msgpack::type::NIL;
         }
