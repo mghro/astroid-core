@@ -52,6 +52,26 @@ to_thinknode_string(datetime const& t);
 
 namespace cradle {
 
+template<>
+struct type_info_query<astroid::date>
+{
+    static void
+    get(api_type_info* info)
+    {
+        *info = make_api_type_info_with_string_type(api_string_type());
+    }
+};
+
+template<>
+struct type_info_query<astroid::datetime>
+{
+    static void
+    get(api_type_info* info)
+    {
+        *info = make_api_type_info_with_datetime_type(api_datetime_type());
+    }
+};
+
 inline size_t
 deep_sizeof(astroid::date const& x)
 {
