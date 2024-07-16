@@ -33,3 +33,14 @@ TEST_CASE("thinknode_datetime_tests")
             + milliseconds(420),
         "2024-07-16T02:27:13.420Z");
 }
+
+TEST_CASE("date/time dynamic value conversion")
+{
+    datetime t = sys_days(2024y / July / 16) + hours(2) + minutes(27)
+                 + seconds(13) + milliseconds(420);
+    datetime u;
+    cradle::dynamic v;
+    to_dynamic(&v, t);
+    from_dynamic(&u, v);
+    REQUIRE(t == u);
+}
