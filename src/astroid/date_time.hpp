@@ -73,6 +73,18 @@ struct type_info_query<astroid::datetime>
 };
 
 inline size_t
+hash_value(astroid::date const& x)
+{
+    return std::chrono::sys_days(x).time_since_epoch().count();
+}
+
+inline size_t
+hash_value(astroid::datetime const& x)
+{
+    return x.time_since_epoch().count();
+}
+
+inline size_t
 deep_sizeof(astroid::date const& x)
 {
     return sizeof(x);
