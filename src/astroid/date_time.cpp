@@ -75,8 +75,12 @@ to_thinknode_string(datetime const& t)
         std::chrono::floor<std::chrono::milliseconds>(t));
 }
 
+} // namespace astroid
+
+namespace cradle {
+
 void
-to_dynamic(cradle::dynamic* v, datetime const& x)
+to_dynamic(cradle::dynamic* v, astroid::datetime const& x)
 {
     using namespace std::chrono;
     auto milliseconds_since_epoch
@@ -87,7 +91,7 @@ to_dynamic(cradle::dynamic* v, datetime const& x)
 }
 
 void
-from_dynamic(datetime* x, cradle::dynamic const& v)
+from_dynamic(astroid::datetime* x, cradle::dynamic const& v)
 {
     using namespace std::chrono;
     auto t = cast<boost::posix_time::ptime>(v);
@@ -99,4 +103,4 @@ from_dynamic(datetime* x, cradle::dynamic const& v)
          + milliseconds(milliseconds_since_epoch);
 }
 
-} // namespace astroid
+} // namespace cradle

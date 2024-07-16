@@ -46,36 +46,42 @@ parse_thinknode_datetime(std::string const& s);
 string
 to_thinknode_string(datetime const& t);
 
-inline size_t
-deep_sizeof(date const& x)
-{
-    return sizeof(x);
-}
-
-inline size_t
-deep_sizeof(datetime const& x)
-{
-    return sizeof(x);
-}
-
-inline void
-to_dynamic(cradle::dynamic* v, date const& x)
-{
-    *v = to_thinknode_string(x);
-}
-
-inline void
-from_dynamic(date* x, cradle::dynamic const& v)
-{
-    *x = parse_thinknode_date(cast<std::string>(v));
-}
-
-void
-to_dynamic(cradle::dynamic* v, datetime const& x);
-
-void
-from_dynamic(datetime* x, cradle::dynamic const& v);
-
 } // namespace astroid
+
+// Hmm... Is there a better way to manage namespaces/lookup?
+
+namespace cradle {
+
+inline size_t
+deep_sizeof(astroid::date const& x)
+{
+    return sizeof(x);
+}
+
+inline size_t
+deep_sizeof(astroid::datetime const& x)
+{
+    return sizeof(x);
+}
+
+inline void
+to_dynamic(cradle::dynamic* v, astroid::date const& x)
+{
+    *v = astroid::to_thinknode_string(x);
+}
+
+inline void
+from_dynamic(astroid::date* x, cradle::dynamic const& v)
+{
+    *x = astroid::parse_thinknode_date(cast<std::string>(v));
+}
+
+void
+to_dynamic(cradle::dynamic* v, astroid::datetime const& x);
+
+void
+from_dynamic(astroid::datetime* x, cradle::dynamic const& v);
+
+} // namespace cradle
 
 #endif
