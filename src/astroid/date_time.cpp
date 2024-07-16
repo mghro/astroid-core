@@ -1,149 +1,78 @@
-#include <astroid/common.hpp>
 #include <astroid/date_time.hpp>
-#include <boost/date_time/c_local_time_adjustor.hpp>
-#include <boost/date_time/gregorian/gregorian.hpp>
-#include <boost/date_time/posix_time/posix_time.hpp>
-#include <boost/format.hpp>
+
+#include <chrono>
+#include <format>
+
+#include <astroid/common.hpp>
 
 namespace astroid {
 
 static date
-parse_date(std::string const& s)
+parse_thinknode_date(std::string const& s)
 {
-    namespace bg = boost::gregorian;
     std::istringstream is(s);
-    is.imbue(std::locale(
-        std::locale::classic(), new bg::date_input_facet("%Y-%m-%d")));
-    try
-    {
-        date d;
-        is >> d;
-        if (d != date() && !is.fail()
-            && is.peek() == std::istringstream::traits_type::eof())
-        {
-            return d;
-        }
-    }
-    catch (...)
-    {
-    }
+    date d;
+    is >> std::chrono::parse("%Y-%m-%d", d);
+    if (!is.fail() && is.peek() == std::istringstream::traits_type::eof())
+        return d;
     throw exception("unrecognized date format");
 }
 
 string
 to_string(date const& d)
 {
-    namespace bg = boost::gregorian;
-    std::ostringstream os;
-    os.imbue(std::locale(std::cout.getloc(), new bg::date_facet("%Y-%m-%d")));
-    os << d;
-    return os.str();
+    return std::format("{:%Y-%m-%d}", d);
 }
 
-string static to_value_string(date const& d)
+static string
+to_thinknode_string(date const& d)
 {
-    namespace bg = boost::gregorian;
-    std::ostringstream os;
-    os.imbue(std::locale(std::cout.getloc(), new bg::date_facet("%Y-%m-%d")));
-    os << d;
-    return os.str();
+    return std::format("{:%Y-%m-%d}", d);
 }
 
-time
-parse_time(std::string const& s)
+datetime
+parse_thinknode_datetime(std::string const& s)
 {
-    namespace bt = boost::posix_time;
     std::istringstream is(s);
-    is.imbue(std::locale(
-        std::cout.getloc(), new bt::time_input_facet("%Y-%m-%dT%H:%M:%s")));
-    try
-    {
-        time t;
-        is >> t;
-        char z;
-        is.get(z);
-        if (t != time() && z == 'Z' && !is.fail()
-            && is.peek() == std::istringstream::traits_type::eof())
-        {
-            return t;
-        }
-    }
-    catch (...)
-    {
-    }
-    throw exception("unrecognized datetime format");
+    datetime t;
+    is >> std::chrono::parse("%Y-%m-%dT%H:%M:%S%Z", t);
+    if (!is.fail() && is.peek() == std::istringstream::traits_type::eof())
+        return t;
+    throw exception("unrecognized date/time format");
 }
 
 string
-to_string(time const& t)
+to_string(datetime const& t)
 {
-    namespace bt = boost::posix_time;
-    std::ostringstream os;
-    os.imbue(
-        std::locale(std::cout.getloc(), new bt::time_facet("%Y-%m-%d %X")));
-    os << t;
-    return os.str();
+    return std::format("{:%Y-%m-%d %X}", t);
 }
 
 string
-to_local_string(time const& t)
+to_local_string(datetime const& t)
 {
-    auto local = boost::date_time::c_local_adjustor<time>::utc_to_local(t);
-    namespace bt = boost::posix_time;
-    std::ostringstream os;
-    os.imbue(
-        std::locale(std::cout.getloc(), new bt::time_facet("%Y-%m-%d %X")));
-    os << local;
-    return os.str();
+    return std::format(
+        "{:%Y-%m-%d %X}", std::chrono::current_zone()->to_local(t));
 }
 
 string
-to_local_date_string(time const& t)
+to_local_date_string(datetime const& t)
 {
-    auto local = boost::date_time::c_local_adjustor<time>::utc_to_local(t);
-    return to_string(local.date());
+    return std::format(
+        "{:%Y-%m-%d}", std::chrono::current_zone()->to_local(t));
 }
 
 string
-to_local_time_string(time const& t)
+to_local_time_string(datetime const& t)
 {
-    auto local = boost::date_time::c_local_adjustor<time>::utc_to_local(t);
-    namespace bt = boost::posix_time;
-    std::ostringstream os;
-    os.imbue(std::locale(std::cout.getloc(), new bt::time_facet("%X")));
-    os << local;
-    return os.str();
+    return std::format("{:%X}", std::chrono::current_zone()->to_local(t));
 }
 
 string
-to_value_string(time const& t)
+to_thinknode_string(datetime const& t)
 {
-    namespace bt = boost::posix_time;
-    std::ostringstream os;
-    os.imbue(
-        std::locale(std::cout.getloc(), new bt::time_facet("%Y-%m-%dT%H:%M")));
-    os << t;
-    // Add the seconds and timezone manually to match Thinknode.
-    os
-        << (boost::format(":%02d.%03dZ") % t.time_of_day().seconds()
-            % (t.time_of_day().total_milliseconds() % 1000));
-    return os.str();
-}
-
-expanded_date
-expand_date(date const& collapsed)
-{
-    date::ymd_type ymd = collapsed.year_month_day();
-    return expanded_date(ymd.year, ymd.month, ymd.day);
-}
-
-date
-collapse_date(expanded_date const& expanded)
-{
-    return date(
-        expanded.year,
-        boost::gregorian::greg_month(expanded.month),
-        expanded.day);
+    return std::format(
+        "{:%Y-%m-%dT%H:%M:%SZ}",
+        std::chrono::floor<std::chrono::milliseconds>(t));
 }
 
 } // namespace astroid
