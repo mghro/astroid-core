@@ -716,4 +716,70 @@ using ownership_holder = std::shared_ptr<cradle::data_owner>;
     };                                                                        \
     namespace ns {
 
+// TODO: Why don't we pick up the msgpack implementation?
+namespace msgpack {
+MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS)
+{
+    namespace adaptor {
+
+    // Place class template specialization here
+    template<class T>
+    struct convert<std::optional<T>>
+    {
+        msgpack::object const&
+        operator()(msgpack::object const& o, std::optional<T>& v) const
+        {
+            if (o.type == msgpack::type::NIL)
+            {
+                v = std::nullopt;
+            }
+            else
+            {
+                adaptor::convert<T> converter;
+                T t;
+                converter(o, t);
+                v = t;
+            }
+            return o;
+        }
+    };
+
+    template<class T>
+    struct pack<std::optional<T>>
+    {
+        template<typename Stream>
+        packer<Stream>&
+        operator()(msgpack::packer<Stream>& o, std::optional<T> const& v) const
+        {
+            if (v)
+                o.pack(*v);
+            else
+                o.pack_nil();
+            return o;
+        }
+    };
+
+    template<class T>
+    struct object_with_zone<std::optional<T>>
+    {
+        void
+        operator()(
+            msgpack::object::with_zone& o, std::optional<T> const& v) const
+        {
+            if (v)
+            {
+                adaptor::object_with_zone<T> packer;
+                packer(o, *v);
+            }
+            else
+            {
+                o.type = type::NIL;
+            }
+        }
+    };
+
+    } // namespace adaptor
+} // MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS)
+} // namespace msgpack
+
 #endif
