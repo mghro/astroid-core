@@ -124,4 +124,20 @@ struct std::hash<astroid::datetime>
     }
 };
 
+namespace boost {
+
+inline std::size_t
+hash_value(astroid::date const& d) noexcept
+{
+    return std::hash<astroid::date>()(d);
+}
+
+inline std::size_t
+hash_value(astroid::datetime const& t) noexcept
+{
+    return std::hash<astroid::datetime>()(t);
+}
+
+} // namespace boost
+
 #endif
