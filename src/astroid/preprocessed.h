@@ -10,4 +10,6 @@
 #include <cereal/types/map.hpp>
 #include <cereal/types/vector.hpp>
 
+#include <msgpack/adaptor/cpp17/optional.hpp>
+
 #endif
