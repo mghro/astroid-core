@@ -3,8 +3,6 @@
 
 #include <algorithm>
 #include <cassert>
-#include <cradle/inner/core/type_definitions.h>
-#include <cradle/inner/core/type_interfaces.h>
 #include <cstdint>
 #include <exception>
 #include <iostream>
@@ -21,6 +19,11 @@
 
 #include <boost/date_time/posix_time/posix_time_types.hpp>
 
+#include <cradle/inner/core/type_definitions.h>
+#include <cradle/inner/core/type_interfaces.h>
+#include <cradle/typing/core/type_definitions.h>
+#include <cradle/typing/core/type_interfaces.h>
+
 #ifndef _WIN32
 // ignore warnings for GCC
 #pragma GCC diagnostic ignored "-Wunused-parameter"
@@ -29,6 +32,13 @@
 // General-purpose utility functions and types...
 
 namespace astroid {
+
+using cradle::to_dynamic;
+using cradle::to_string;
+using cradle::operator<<;
+
+using cradle::load;
+using cradle::save;
 
 typedef long long counter_type;
 
@@ -704,6 +714,19 @@ using ownership_holder = std::shared_ptr<cradle::data_owner>;
 
 } // namespace astroid
 
+#define ASTROID_DEFINE_PRIMITIZE_NORMALIZATION_UUID(type)                     \
+    template<>                                                                \
+    struct cradle::normalization_uuid_str<type>                               \
+    {                                                                         \
+        static const inline std::string func{"normalization<" #type           \
+                                             ",func>"};                       \
+        static const inline std::string coro{"normalization<" #type           \
+                                             ",coro>"};                       \
+    };
+
+ASTROID_DEFINE_PRIMITIZE_NORMALIZATION_UUID(float)
+ASTROID_DEFINE_PRIMITIZE_NORMALIZATION_UUID(double)
+
 #define ASTROID_DEFINE_NORMALIZATION_UUID(ns, type)                           \
     }                                                                         \
     template<>                                                                \
@@ -775,6 +798,120 @@ MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS)
             {
                 o.type = type::NIL;
             }
+        }
+    };
+
+    } // namespace adaptor
+} // MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS)
+} // namespace msgpack
+
+// TODO: Move to CRADLE
+
+namespace msgpack {
+MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS)
+{
+    namespace adaptor {
+
+    // Place class template specialization here
+    template<class T>
+    struct convert<cradle::omissible<T>>
+    {
+        msgpack::object const&
+        operator()(msgpack::object const& o, cradle::omissible<T>& v) const
+        {
+            if (o.type == msgpack::type::NIL)
+            {
+                v = cradle::omissible<T>();
+            }
+            else
+            {
+                adaptor::convert<T> converter;
+                T t;
+                converter(o, t);
+                v = t;
+            }
+            return o;
+        }
+    };
+
+    template<class T>
+    struct pack<cradle::omissible<T>>
+    {
+        template<typename Stream>
+        packer<Stream>&
+        operator()(
+            msgpack::packer<Stream>& o, cradle::omissible<T> const& v) const
+        {
+            if (v)
+                o.pack(*v);
+            else
+                o.pack_nil();
+            return o;
+        }
+    };
+
+    template<class T>
+    struct object_with_zone<cradle::omissible<T>>
+    {
+        void
+        operator()(
+            msgpack::object::with_zone& o, cradle::omissible<T> const& v) const
+        {
+            if (v)
+            {
+                adaptor::object_with_zone<T> packer;
+                packer(o, *v);
+            }
+            else
+            {
+                o.type = type::NIL;
+            }
+        }
+    };
+
+    } // namespace adaptor
+} // MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS)
+} // namespace msgpack
+
+// TODO: Move to CRADLE
+
+namespace msgpack {
+MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS)
+{
+    namespace adaptor {
+
+    // Place class template specialization here
+    template<>
+    struct convert<cradle::nil_t>
+    {
+        msgpack::object const&
+        operator()(msgpack::object const& o, cradle::nil_t& v) const
+        {
+            if (o.type != msgpack::type::NIL)
+                throw msgpack::type_error();
+            return o;
+        }
+    };
+
+    template<>
+    struct pack<cradle::nil_t>
+    {
+        template<typename Stream>
+        packer<Stream>&
+        operator()(msgpack::packer<Stream>& o, cradle::nil_t const& v) const
+        {
+            o.pack_nil();
+            return o;
+        }
+    };
+
+    template<>
+    struct object_with_zone<cradle::nil_t>
+    {
+        void
+        operator()(msgpack::object::with_zone& o, cradle::nil_t const& v) const
+        {
+            o.type = type::NIL;
         }
     };
 

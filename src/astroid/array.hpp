@@ -277,4 +277,23 @@ MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS)
 }
 } // namespace msgpack
 
+#define ASTROID_DEFINE_PRIMITIVE_ARRAY_NORMALIZATION_UUID(type)               \
+    template<>                                                                \
+    struct cradle::normalization_uuid_str<astroid::array<type>>               \
+    {                                                                         \
+        static const inline std::string func{"normalization<array_" #type     \
+                                             ",func>"};                       \
+        static const inline std::string coro{"normalization<array_" #type     \
+                                             ",coro>"};                       \
+    };
+
+ASTROID_DEFINE_PRIMITIVE_ARRAY_NORMALIZATION_UUID(double)
+ASTROID_DEFINE_PRIMITIVE_ARRAY_NORMALIZATION_UUID(float)
+
+template<class T>
+struct cradle::serializable_via_cereal<astroid::array<T>>
+{
+    static constexpr bool value = true;
+};
+
 #endif
