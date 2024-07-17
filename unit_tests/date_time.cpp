@@ -1,6 +1,7 @@
 #include <astroid/date_time.hpp>
 
 #include <chrono>
+#include <cradle/inner/core/hash.h>
 #include <cstdlib>
 #include <set>
 
@@ -43,4 +44,13 @@ TEST_CASE("date/time dynamic value conversion")
     to_dynamic(&v, t);
     from_dynamic(&u, v);
     REQUIRE(t == u);
+}
+
+TEST_CASE("date/time hashes")
+{
+    datetime t = sys_days(2024y / July / 16) + hours(2) + minutes(27)
+                 + seconds(13) + milliseconds(420);
+    // The specific return value doesn't really matter, but this should at
+    // least compile.
+    cradle::invoke_hash(t);
 }

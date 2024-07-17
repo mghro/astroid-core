@@ -5,6 +5,8 @@
 
 #include <astroid/common.hpp>
 
+#include <boost/functional/hash.hpp>
+
 namespace astroid {
 
 typedef std::chrono::year_month_day date;
@@ -124,7 +126,9 @@ struct std::hash<astroid::datetime>
     }
 };
 
-namespace boost {
+// TODO: This is bad, but it's the only way I've found to make Boost hashes
+// work.
+namespace std {
 
 inline std::size_t
 hash_value(astroid::date const& d) noexcept
@@ -138,6 +142,6 @@ hash_value(astroid::datetime const& t) noexcept
     return std::hash<astroid::datetime>()(t);
 }
 
-} // namespace boost
+} // namespace std
 
 #endif
