@@ -202,9 +202,7 @@ namespace impl {
 namespace noncopyable_ {
 struct noncopyable
 {
-    noncopyable()
-    {
-    }
+    noncopyable() = default;
 
  private:
     noncopyable(noncopyable const& other);
@@ -214,6 +212,22 @@ struct noncopyable
 } // namespace noncopyable_
 } // namespace impl
 typedef impl::noncopyable_::noncopyable noncopyable;
+
+// Similar to noncopyable, but disables moving.
+namespace impl {
+namespace nonmovable_ {
+struct nonmovable
+{
+    nonmovable() = default;
+
+ private:
+    nonmovable(nonmovable&& other);
+    nonmovable&
+    operator=(nonmovable&& other);
+};
+} // namespace nonmovable_
+} // namespace impl
+typedef impl::nonmovable_::nonmovable nonmovable;
 
 struct exception : std::exception
 {
