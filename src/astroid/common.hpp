@@ -738,6 +738,8 @@ using ownership_holder = std::shared_ptr<cradle::data_owner>;
                                              ",coro>"};                       \
     };
 
+ASTROID_DEFINE_PRIMITIZE_NORMALIZATION_UUID(bool)
+
 ASTROID_DEFINE_PRIMITIZE_NORMALIZATION_UUID(float)
 ASTROID_DEFINE_PRIMITIZE_NORMALIZATION_UUID(double)
 
