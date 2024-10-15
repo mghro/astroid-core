@@ -761,7 +761,6 @@ MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS)
 {
     namespace adaptor {
 
-    // Place class template specialization here
     template<class T>
     struct convert<std::optional<T>>
     {
@@ -828,7 +827,6 @@ MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS)
 {
     namespace adaptor {
 
-    // Place class template specialization here
     template<class T>
     struct convert<cradle::omissible<T>>
     {
@@ -896,7 +894,6 @@ MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS)
 {
     namespace adaptor {
 
-    // Place class template specialization here
     template<>
     struct convert<cradle::nil_t>
     {
