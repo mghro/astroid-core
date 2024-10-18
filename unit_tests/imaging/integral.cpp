@@ -51,7 +51,7 @@ struct filler_fn
     void
     operator()(astroid::uint8_t& x)
     {
-        x = n++ / 10;
+        x = astroid::uint8_t(n++ / 10);
     }
 };
 

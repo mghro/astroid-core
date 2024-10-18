@@ -59,7 +59,6 @@ aligned_view(image<N, T, SP> const& img)
     image<N, T, SP> r = img;
     for (unsigned i = 0; i != N; ++i)
     {
-        unsigned corresponding_axis = 0;
         for (unsigned j = 0; j != N; ++j)
         {
             if (!almost_equal(r.axes[j][i], 0.))

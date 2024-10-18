@@ -17,11 +17,11 @@ shrink_image(
         result.axes[i] *= factor;
     Pixel* r = get_iterator(result.pixels);
     double one_over_factor_squared = 1. / (factor * factor);
-    for (int i = 0; i != result_size[1]; ++i)
+    for (unsigned i = 0; i != result_size[1]; ++i)
     {
         typename image<2, Pixel, SrcSP>::iterator_type src_p
             = get_iterator(src.pixels) + i * factor * src.step[1];
-        for (int j = 0; j != result_size[0];
+        for (unsigned j = 0; j != result_size[0];
              ++j, ++r, src_p += factor * src.step[0])
         {
             double sum = 0;

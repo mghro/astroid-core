@@ -20,8 +20,8 @@ void
 sequential_fill(image<N, Pixel, SP>& img, Value initial, Value increment)
 {
     sequential_fill_fn<Pixel> fn;
-    fn.value = initial;
-    fn.increment = increment;
+    fn.value = Pixel(initial);
+    fn.increment = Pixel(increment);
     foreach_pixel(img, fn);
 }
 

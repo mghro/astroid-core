@@ -4,7 +4,7 @@ namespace astroid {
 
 namespace impl {
 
-static isobands_table_cell isobands_table[243]
+static isobands_table_cell the_isobands_table[243]
     = {{{{0,
           {{0, 0, 0, 0},
            {0, 0, 0, 0},
@@ -4383,7 +4383,7 @@ static isobands_table_cell isobands_table[243]
 isobands_table_cell const*
 get_isobands_table()
 {
-    return isobands_table;
+    return the_isobands_table;
 }
 
 } // namespace impl

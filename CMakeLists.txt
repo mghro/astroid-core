@@ -31,6 +31,66 @@ endif()
 
 set(CMAKE_CXX_STANDARD 20)
 
+# Detect the compiler.
+if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    set(IS_CLANG true)
+else()
+    set(IS_CLANG false)
+endif()
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    set(IS_GCC true)
+else()
+    set(IS_GCC false)
+endif()
+if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    set(IS_MSVC true)
+else()
+    set(IS_MSVC false)
+endif()
+
+# Enable a high level of compiler warnings and treat them as errors.
+if(IS_GCC OR IS_CLANG)
+    add_compile_options(-Wall -Werror -Wextra -pedantic)
+    # Disable warnings that are too strict.
+    # unused function parameters
+    add_compile_options(-Wno-unused-parameter)
+    # Workaround for https://github.com/andreasbuhr/cppcoro/issues/77:
+    # set(CMAKE_CXX_STANDARD 20) causes CMake to append -std=gnu++2a,
+    # causing a built-in -Dlinux=1,
+    # causing build failures when "namespace linux" is encountered.
+    add_compile_options(-Ulinux)
+elseif(IS_MSVC)
+    # First strip out the old warning level.
+    string(REPLACE "/W3" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
+    add_compile_options(/W4 /WX)
+    # Disable warnings that are too strict.
+    # "unreferenced formal parameter"
+    add_compile_options(/wd4100)
+    # "declaration hides previous local declaration"
+    add_compile_options(/wd4456)
+    # "unreferenced local function has been removed"
+    add_compile_options(/wd4505)
+    # Warnings about a derived class inheriting member functions via dominance
+    # (which is correct and intended).
+    add_compile_options(/wd4250)
+    # warnings about functions that are potentially insecure
+    add_definitions(/D_CRT_SECURE_NO_WARNINGS)
+    add_definitions(/D_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS)
+    # Also suppress linker warnings about missing .pdb files that seem to inevitably creep in.
+    add_link_options(/ignore:4099)
+    # "operator '|': deprecated between enumerations of different types"
+    # in cereal\external\rapidjson\document.h
+    add_compile_options(/wd5054)
+    # The "unreachable code" warning is never to the point, and due to lack of
+    # context impossible to fix.
+    add_compile_options(/wd4702)
+endif()
+if(IS_GCC)
+    # Unclear what these warnings exactly mean to say, and whether they are valid.
+    # Clang and MSVC don't complain.
+    add_compile_options(-Wno-subobject-linkage)
+endif()
+
 # Determine if we're being built through FetchContent.
 if (${CMAKE_SOURCE_DIR} STREQUAL ${PROJECT_SOURCE_DIR})
     set(is_fetched FALSE)

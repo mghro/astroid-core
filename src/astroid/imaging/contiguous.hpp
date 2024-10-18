@@ -12,7 +12,8 @@ template<unsigned N, class Pixel, class SP>
 bool
 is_contiguous(image<N, Pixel, SP> const& img)
 {
-    size_t step = 1;
+    using step_type = typename image<N, Pixel, SP>::step_type;
+    step_type step = 1;
     for (unsigned i = 0; i < N; ++i)
     {
         if (img.step[i] != step)
@@ -30,7 +31,8 @@ optional<image<N, Pixel, SP>>
 make_contiguous(image<N, Pixel, SP> const& img)
 {
     image<N, Pixel, SP> dst = img;
-    size_t expected_step = 1;
+    using step_type = typename image<N, Pixel, SP>::step_type;
+    step_type expected_step = 1;
     for (unsigned i = 0; i < N; ++i)
     {
         for (unsigned j = 0; j < N; ++j)

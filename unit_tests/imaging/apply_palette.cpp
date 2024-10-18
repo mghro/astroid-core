@@ -23,8 +23,8 @@ TEST_CASE("apply_palette_test")
         = make_const_view(data, make_vector(s, s));
 
     astroid::uint16_t palette[256];
-    for (int i = 0; i < 256; ++i)
-        palette[i] = i * 7;
+    for (unsigned i = 0; i < 256; ++i)
+        palette[i] = astroid::uint16_t(i * 7);
 
     image<2, astroid::uint16_t, unique> result;
     create_image(result, make_vector(s, s));
