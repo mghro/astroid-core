@@ -161,4 +161,65 @@ struct std::hash<astroid::c_array<N, T>>
     }
 };
 
+namespace msgpack {
+MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS)
+{
+    namespace adaptor {
+
+    template<unsigned N, class Element>
+    struct convert<astroid::c_array<N, Element>>
+    {
+        msgpack::object const&
+        operator()(
+            msgpack::object const& o, astroid::c_array<N, Element>& v) const
+        {
+            if (o.type != msgpack::type::ARRAY || o.via.array.size != N)
+            {
+                throw msgpack::type_error();
+            }
+            for (unsigned i = 0; i < N; ++i)
+                o.via.array.ptr[i].convert(v[i]);
+            return o;
+        }
+    };
+
+    template<unsigned N, class Element>
+    struct pack<astroid::c_array<N, Element>>
+    {
+        template<typename Stream>
+        msgpack::packer<Stream>&
+        operator()(
+            msgpack::packer<Stream>& p,
+            astroid::c_array<N, Element> const& v) const
+        {
+            p.pack_array(N);
+            for (unsigned i = 0; i < N; ++i)
+                p.pack(v[i]);
+            return p;
+        }
+    };
+
+    } // namespace adaptor
+}
+} // namespace msgpack
+
+#define ASTROID_DEFINE_PRIMITIVE_C_ARRAY_NORMALIZATION_UUID(type)             \
+    template<unsigned N>                                                      \
+    struct cradle::normalization_uuid_str<astroid::c_array<N, type>>          \
+    {                                                                         \
+        static const inline std::string func{"normalization<c_array_" #type   \
+                                             ",func>"};                       \
+        static const inline std::string coro{"normalization<c_array_" #type   \
+                                             ",coro>"};                       \
+    };
+
+ASTROID_DEFINE_PRIMITIVE_C_ARRAY_NORMALIZATION_UUID(double)
+ASTROID_DEFINE_PRIMITIVE_C_ARRAY_NORMALIZATION_UUID(float)
+
+template<unsigned N, class T>
+struct cradle::serializable_via_cereal<astroid::c_array<N, T>>
+{
+    static constexpr bool value = true;
+};
+
 #endif
