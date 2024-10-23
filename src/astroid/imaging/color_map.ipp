@@ -7,7 +7,7 @@ namespace impl {
 template<class Color>
 struct apply_raw_color_map_fn
 {
-    std::vector<color_map_level<Color>> const* map;
+    color_map<Color> const* map;
     template<class Src>
     void
     operator()(Color& d, Src const& s)
@@ -42,7 +42,7 @@ void
 apply_raw_color_map(
     image<N, Color, DstSP> const& dst,
     image<N, SrcPixel, SrcSP> const& src,
-    std::vector<color_map_level<Color>> const& map)
+    color_map<Color> const& map)
 {
     apply_raw_color_map_fn<Color> fn;
     fn.map = &map;
@@ -54,11 +54,11 @@ void
 apply_color_map(
     image<N, Color, DstSP> const& dst,
     image<N, SrcPixel, SrcSP> const& src,
-    std::vector<color_map_level<Color>> const& map)
+    color_map<Color> const& map)
 {
     linear_function<double> inverse_value_mapping = inverse(src.value_mapping);
     std::size_t n_levels = map.size();
-    std::vector<color_map_level<Color>> raw_map(n_levels);
+    color_map<Color> raw_map(n_levels);
     for (std::size_t i = 0; i != n_levels; ++i)
     {
         raw_map[i].level = apply(inverse_value_mapping, map[i].level);
@@ -71,7 +71,7 @@ template<unsigned N, class Color, class DstSP>
 struct apply_color_map_fn
 {
     image<N, Color, DstSP> const* dst;
-    std::vector<color_map_level<Color>> const* map;
+    color_map<Color> const* map;
     template<class SrcPixel, class SrcSP>
     void
     operator()(image<N, SrcPixel, SrcSP> const& src)
@@ -85,7 +85,7 @@ void
 apply_color_map(
     image<N, Color, DstSP> const& dst,
     image<N, variant, SrcSP> const& src,
-    std::vector<color_map_level<Color>> const& map)
+    color_map<Color> const& map)
 {
     impl::apply_color_map_fn<N, Color, DstSP> fn;
     fn.dst = &dst;
@@ -98,8 +98,7 @@ apply_color_map(
 template<unsigned N, class Pixel, class Storage, class Color>
 image<N, Color, shared>
 apply_raw_color_map(
-    image<N, Pixel, Storage> const& src,
-    std::vector<color_map_level<Color>> const& map)
+    image<N, Pixel, Storage> const& src, color_map<Color> const& map)
 {
     image<N, Color, unique> dst;
     create_image(dst, src.size);
@@ -111,8 +110,7 @@ apply_raw_color_map(
 template<unsigned N, class Pixel, class Storage, class Color>
 image<N, Color, shared>
 apply_color_map(
-    image<N, Pixel, Storage> const& src,
-    std::vector<color_map_level<Color>> const& map)
+    image<N, Pixel, Storage> const& src, color_map<Color> const& map)
 {
     image<N, Color, unique> dst;
     create_image(dst, src.size);

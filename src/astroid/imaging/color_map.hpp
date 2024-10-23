@@ -13,23 +13,22 @@ struct color_map_level
     Color color;
 };
 
+template<class Color>
+using color_map = std::vector<color_map_level<astroid::rgba8>>;
+
+using rgba8_color_map = color_map<astroid::rgba8>;
+
+ASTROID_DEFINE_NORMALIZATION_UUID(astroid, rgba8_color_map)
+
 template<unsigned N, class Pixel, class Storage, class Color>
 image<N, Color, shared>
 apply_raw_color_map(
-    image<N, Pixel, Storage> const& src,
-    std::vector<color_map_level<Color>> const& map);
+    image<N, Pixel, Storage> const& src, color_map<Color> const& map);
 
-api(fun with(N : 2, 3; Pixel
-             : astroid::variant;
-             Storage
-             : astroid::shared;
-             Color
-             : astroid::rgba8))
 template<unsigned N, class Pixel, class Storage, class Color>
 image<N, Color, shared>
 apply_color_map(
-    image<N, Pixel, Storage> const& src,
-    std::vector<color_map_level<Color>> const& map);
+    image<N, Pixel, Storage> const& src, color_map<Color> const& map);
 
 } // namespace astroid
 
