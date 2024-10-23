@@ -897,7 +897,6 @@ struct std::hash<astroid::matrix<M, N, T>>
         return h;
     }
 };
-namespace astroid {
 
 #define ASTROID_DEFINE_MATRIX_NORMALIZATION_UUID(M, N, type)                  \
     template<>                                                                \
@@ -914,6 +913,8 @@ ASTROID_DEFINE_MATRIX_NORMALIZATION_UUID(3, 3, float)
 
 ASTROID_DEFINE_MATRIX_NORMALIZATION_UUID(4, 4, double)
 ASTROID_DEFINE_MATRIX_NORMALIZATION_UUID(4, 4, float)
+
+namespace astroid {
 
 // ANGLES
 
