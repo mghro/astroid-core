@@ -5,7 +5,7 @@ namespace astroid {
 
 template<typename T>
 optional<vector<3, T>>
-intersection(plane<T> const& plane, line_segment<3, T> const& segment)
+intersection(astroid::plane<T> const& plane, line_segment<3, T> const& segment)
 {
     T d0 = distance(plane, segment[0]);
     T d1 = distance(plane, segment[1]);
@@ -21,7 +21,7 @@ intersection(plane<T> const& plane, line_segment<3, T> const& segment)
 
 template<typename T>
 optional<line_segment<3, T>>
-intersection(plane<T> const& plane, triangle<3, T> const& tri)
+intersection(astroid::plane<T> const& plane, triangle<3, T> const& tri)
 {
     // Test the first two edges of the triangle for interesections.
     optional<vector<3, T>> i0
@@ -61,7 +61,7 @@ intersection(plane<T> const& plane, triangle<3, T> const& tri)
 
 template<typename T>
 std::vector<astroid::line_segment<2,double> >
-intersection(plane<T> const& plane, triangle_mesh<T> const& mesh)
+intersection(astroid::plane<T> const& plane, triangle_mesh<T> const& mesh)
 {
     std::vector<astroid::line_segment<2,double> > segments;
     for (unsigned i = 0; i < mesh.n_tris(); ++i)
@@ -77,7 +77,7 @@ intersection(plane<T> const& plane, triangle_mesh<T> const& mesh)
 
 template<unsigned N, typename T>
 ray_box_intersection<N, T>
-intersection(ray<N, T> const& ray, box<N, T> const& box)
+intersection(astroid::ray<N, T> const& ray, astroid::box<N, T> const& box)
 {
     T entrance = 0;
     T exit = std::numeric_limits<T>::infinity();
@@ -164,7 +164,7 @@ intersection(ray<N, T> const& ray, box<N, T> const& box)
 
 template<unsigned N, typename T>
 optional<line_segment<N, T>>
-intersection(line_segment<N, T> const& segment, box<N, T> const& box)
+intersection(line_segment<N, T> const& segment, astroid::box<N, T> const& box)
 {
     // Construct a ray from the line segment and let the ray-box intersection
     // code do most of the work.

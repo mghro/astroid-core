@@ -229,7 +229,7 @@ struct box
 
 template<unsigned N, typename T>
 std::ostream&
-operator<<(std::ostream& out, box<N, T> const& box)
+operator<<(std::ostream& out, astroid::box<N, T> const& box)
 {
     out << "[corner: " << box.corner << ", size: " << box.size << "]";
     return out;
@@ -280,7 +280,7 @@ get_high_corner(box<N, T> const& b)
 // Is the point p inside the given box?
 template<unsigned N, class T>
 bool
-is_inside(box<N, T> const& box, vector<N, T> const& p)
+is_inside(astroid::box<N, T> const& box, vector<N, T> const& p)
 {
     for (unsigned i = 0; i < N; ++i)
     {
@@ -294,7 +294,7 @@ is_inside(box<N, T> const& box, vector<N, T> const& p)
 // the box along the same axis?
 template<unsigned N, class T>
 bool
-is_inside(box<N, T> const& box, unsigned axis, T p)
+is_inside(astroid::box<N, T> const& box, unsigned axis, T p)
 {
     assert(axis < N);
     return p >= box.corner[axis] && p < box.corner[axis] + box.size[axis];
@@ -306,7 +306,9 @@ is_inside(box<N, T> const& box, unsigned axis, T p)
 template<unsigned N, class T>
 bool
 compute_intersection(
-    box<N, T>* result, box<N, T> const& box1, box<N, T> const& box2)
+    box<N, T>* result,
+    astroid::box<N, T> const& box1,
+    astroid::box<N, T> const& box2)
 {
     for (unsigned i = 0; i < N; i++)
     {
@@ -326,7 +328,7 @@ compute_intersection(
 // Test if the two boxes are overlapping.
 template<unsigned N, class T>
 bool
-overlapping(box<N, T> const& box1, box<N, T> const& box2)
+overlapping(astroid::box<N, T> const& box1, astroid::box<N, T> const& box2)
 {
     for (unsigned i = 0; i < N; i++)
     {
@@ -342,7 +344,7 @@ overlapping(box<N, T> const& box1, box<N, T> const& box2)
 // Add a uniform border around the given box and return the expanded box.
 template<unsigned N, class T>
 box<N, T>
-add_border(box<N, T> const& box, T border)
+add_border(astroid::box<N, T> const& box, T border)
 {
     return astroid::box<N, T>(
         box.corner - uniform_vector<N, T>(border),
@@ -352,7 +354,7 @@ add_border(box<N, T> const& box, T border)
 // Add a border around the given box and return the expanded box.
 template<unsigned N, class T>
 box<N, T>
-add_border(box<N, T> const& box, vector<N, T> const& border)
+add_border(astroid::box<N, T> const& box, vector<N, T> const& border)
 {
     return astroid::box<N, T>(box.corner - border, box.size + border * 2);
 }
@@ -441,7 +443,7 @@ area(box<2, T> const& box)
 // Clamp the given point such that it lies within the given box.
 template<unsigned N, typename T>
 vector<N, T>
-clamp(vector<N, T> const& p, box<N, T> const& box)
+clamp(vector<N, T> const& p, astroid::box<N, T> const& box)
 {
     vector<N, T> result;
     for (unsigned i = 0; i < N; i++)
@@ -455,7 +457,7 @@ clamp(vector<N, T> const& p, box<N, T> const& box)
 // check to see if the given point lies within the given box
 template<unsigned N, typename T>
 bool
-contains(box<N, T> const& box, vector<N, T> const& p)
+contains(astroid::box<N, T> const& box, vector<N, T> const& p)
 {
     for (unsigned i = 0; i < N; ++i)
     {
@@ -470,7 +472,7 @@ contains(box<N, T> const& box, vector<N, T> const& p)
 // Slice an axis off the given box.
 template<unsigned N, typename T>
 box<N - 1, T>
-slice(box<N, T> const& box, unsigned axis)
+slice(astroid::box<N, T> const& box, unsigned axis)
 {
     assert(axis < N);
     return astroid::box<N - 1, T>(
@@ -489,7 +491,7 @@ unslice(box<N, T> const& b, unsigned axis, box<1, T> const& slice)
 
 template<unsigned N, typename T>
 box<N, T>
-scale(box<N, T> const& box, double factor)
+scale(astroid::box<N, T> const& box, double factor)
 {
     for (unsigned i = 0; i != N; ++i)
     {

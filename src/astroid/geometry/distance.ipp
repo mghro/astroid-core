@@ -42,7 +42,9 @@ distance2(
 template<typename T>
 T
 distance(
-    plane<T> const& plane, vector<3, T> const& p, vector<3, T>* closest_point)
+    astroid::plane<T> const& plane,
+    vector<3, T> const& p,
+    vector<3, T>* closest_point)
 {
     T distance = dot(p - plane.point, plane.normal);
     if (closest_point != NULL)
@@ -53,7 +55,9 @@ distance(
 template<typename T>
 T
 distance2(
-    plane<T> const& plane, vector<3, T> const& p, vector<3, T>* closest_point)
+    astroid::plane<T> const& plane,
+    vector<3, T> const& p,
+    vector<3, T>* closest_point)
 {
     T d = distance(plane, p, closest_point);
     return (d < 0) ? -d * d : d * d;
@@ -62,7 +66,9 @@ distance2(
 template<typename T>
 T
 absolute_distance2(
-    plane<T> const& plane, vector<3, T> const& p, vector<3, T>* closest_point)
+    astroid::plane<T> const& plane,
+    vector<3, T> const& p,
+    vector<3, T>* closest_point)
 {
     T d = distance(plane, p, closest_point);
     return d * d;

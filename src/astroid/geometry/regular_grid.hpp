@@ -87,7 +87,7 @@ template<unsigned N, typename T>
 void
 create_grid_for_box(
     regular_grid<N, T>* grid,
-    box<N, T> const& box,
+    astroid::box<N, T> const& box,
     vector<N, T> const& spacing)
 {
     grid->spacing = spacing;
@@ -102,7 +102,7 @@ template<unsigned N, typename T>
 void
 create_grid_covering_box(
     regular_grid<N, T>* grid,
-    box<N, T> const& box,
+    astroid::box<N, T> const& box,
     vector<N, unsigned> const& counts)
 {
     grid->n_points = counts;
@@ -116,7 +116,7 @@ create_grid_covering_box(
 api(fun trivial with(N : 1, 2, 3, 4; T : double))
 template<unsigned N, typename T>
 regular_grid<N, T>
-make_grid_for_box(box<N, T> const& box, vector<N, T> const& spacing)
+make_grid_for_box(astroid::box<N, T> const& box, vector<N, T> const& spacing)
 {
     regular_grid<N, T> grid;
     create_grid_for_box(&grid, box, spacing);
@@ -129,7 +129,8 @@ make_grid_for_box(box<N, T> const& box, vector<N, T> const& spacing)
 api(fun trivial with(N : 1, 2, 3, 4; T : double))
 template<unsigned N, typename T>
 regular_grid<N, T>
-make_grid_covering_box(box<N, T> const& box, vector<N, unsigned> const& counts)
+make_grid_covering_box(
+    astroid::box<N, T> const& box, vector<N, unsigned> const& counts)
 {
     regular_grid<N, T> grid;
     create_grid_covering_box(&grid, box, counts);

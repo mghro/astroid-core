@@ -10,7 +10,8 @@ namespace astroid {
 // exactly on the plane is treated as no intersection.
 template<typename T>
 optional<vector<3, T>>
-intersection(plane<T> const& plane, line_segment<3, T> const& segment);
+intersection(
+    astroid::plane<T> const& plane, line_segment<3, T> const& segment);
 
 // Compute the intersection between a plane and a triangle.
 // Note that for purposes of uniformity, the case where the triangle lies
@@ -19,7 +20,7 @@ intersection(plane<T> const& plane, line_segment<3, T> const& segment);
 // plane the rest of the triangle is on.)
 template<typename T>
 optional<line_segment<3, T>>
-intersection(plane<T> const& plane, triangle<3, T> const& tri);
+intersection(astroid::plane<T> const& plane, triangle<3, T> const& tri);
 
 // ray_box_intersection represents the intersection between a ray and a box.
 api(struct with(N : 2, 3; T : double))
@@ -40,12 +41,12 @@ struct ray_box_intersection
 // Compute the intersection between a ray and a box.
 template<unsigned N, typename T>
 ray_box_intersection<N, T>
-intersection(ray<N, T> const& ray, box<N, T> const& box);
+intersection(astroid::ray<N, T> const& ray, astroid::box<N, T> const& box);
 
 // Compute the intersection between a line segment and a box.
 template<unsigned N, typename T>
 optional<line_segment<N, T>>
-intersection(line_segment<N, T> const& segment, box<N, T> const& box);
+intersection(line_segment<N, T> const& segment, astroid::box<N, T> const& box);
 
 // Compute the intersection of two boxes.
 template<unsigned N, typename T>

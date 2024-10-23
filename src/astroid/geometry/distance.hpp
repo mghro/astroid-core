@@ -139,10 +139,12 @@ absolute_distance2(polyset const& area, vector<2, double> const& p)
 template<typename T>
 T
 distance(
-    plane<T> const& plane, vector<3, T> const& p, vector<3, T>* closest_point);
+    astroid::plane<T> const& plane,
+    vector<3, T> const& p,
+    vector<3, T>* closest_point);
 template<typename T>
 T
-distance(plane<T> const& plane, vector<3, T> const& p)
+distance(astroid::plane<T> const& plane, vector<3, T> const& p)
 {
     return distance(plane, p, (vector<3, T>*) 0);
 }
@@ -150,10 +152,12 @@ distance(plane<T> const& plane, vector<3, T> const& p)
 template<typename T>
 T
 distance2(
-    plane<T> const& plane, vector<3, T> const& p, vector<3, T>* closest_point);
+    astroid::plane<T> const& plane,
+    vector<3, T> const& p,
+    vector<3, T>* closest_point);
 template<typename T>
 T
-distance2(plane<T> const& plane, vector<3, T> const& p)
+distance2(astroid::plane<T> const& plane, vector<3, T> const& p)
 {
     return distance2(plane, p, (vector<3, T>*) 0);
 }
@@ -161,10 +165,12 @@ distance2(plane<T> const& plane, vector<3, T> const& p)
 template<typename T>
 T
 absolute_distance2(
-    plane<T> const& plane, vector<3, T> const& p, vector<3, T>* closest_point);
+    astroid::plane<T> const& plane,
+    vector<3, T> const& p,
+    vector<3, T>* closest_point);
 template<typename T>
 T
-absolute_distance2(plane<T> const& plane, vector<3, T> const& p)
+absolute_distance2(astroid::plane<T> const& plane, vector<3, T> const& p)
 {
     return absolute_distance2(plane, p, (vector<3, T>*) 0);
 }

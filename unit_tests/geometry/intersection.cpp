@@ -7,7 +7,7 @@ using namespace astroid;
 template<typename T>
 void
 assert_intersection(
-    plane<T> const& plane,
+    astroid::plane<T> const& plane,
     line_segment<3, T> const& segment,
     vector<3, T> const& correct_p)
 {
@@ -19,7 +19,7 @@ assert_intersection(
 template<typename T>
 void
 assert_no_intersection(
-    plane<T> const& plane, line_segment<3, T> const& segment)
+    astroid::plane<T> const& plane, line_segment<3, T> const& segment)
 {
     optional<vector<3, T>> p = intersection(plane, segment);
     REQUIRE(!p);
@@ -68,7 +68,7 @@ almost_equal(vector<3, T> const& a, vector<3, T> const& b)
 template<typename T>
 void
 assert_intersection(
-    plane<T> const& plane,
+    astroid::plane<T> const& plane,
     triangle<3, T> const& tri,
     line_segment<3, T> const& correct_segment)
 {
@@ -83,7 +83,8 @@ assert_intersection(
 
 template<typename T>
 void
-assert_no_intersection(plane<T> const& plane, triangle<3, T> const& tri)
+assert_no_intersection(
+    astroid::plane<T> const& plane, triangle<3, T> const& tri)
 {
     optional<line_segment<3, T>> segment = intersection(plane, tri);
     REQUIRE(!segment);
@@ -105,8 +106,8 @@ TEST_CASE("plane_triangle_intersection_test")
 template<unsigned N, typename T>
 void
 assert_intersection(
-    ray<N, T> const& ray,
-    box<N, T> const& box,
+    astroid::ray<N, T> const& ray,
+    astroid::box<N, T> const& box,
     unsigned n_intersections,
     T entrance = 0,
     T exit = 0)
@@ -160,7 +161,7 @@ template<unsigned N, typename T>
 void
 assert_intersection(
     line_segment<N, T> const& segment,
-    box<N, T> const& box,
+    astroid::box<N, T> const& box,
     line_segment<N, T> const& correct_result)
 {
     optional<line_segment<N, T>> result = intersection(segment, box);
@@ -171,7 +172,8 @@ assert_intersection(
 
 template<unsigned N, typename T>
 void
-assert_no_intersection(line_segment<N, T> const& segment, box<N, T> const& box)
+assert_no_intersection(
+    line_segment<N, T> const& segment, astroid::box<N, T> const& box)
 {
     optional<line_segment<N, T>> result = intersection(segment, box);
     REQUIRE(!result);
