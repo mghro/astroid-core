@@ -21,7 +21,7 @@ template<unsigned N>
 image<N, variant, shared>
 create_uniform_image_no_units(
     // The box defining the image position
-    box<N, double> const& box,
+    astroid::box<N, double> const& box,
     // The value of the image pixels
     double intensity)
 {
@@ -36,7 +36,7 @@ template<unsigned N>
 image<N, variant, shared>
 create_uniform_image_with_units(
     // The box defining the image position
-    box<N, double> const& box,
+    astroid::box<N, double> const& box,
     // The value of the image pixels
     double intensity,
     // The units of the image pixel values

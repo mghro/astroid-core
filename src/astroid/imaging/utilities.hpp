@@ -157,7 +157,8 @@ fill_pixels(image<N, Pixel, SP> const& dst, Pixel value)
 
 template<unsigned N>
 image<N, variant, shared>
-create_uniform_image(box<N, double> const& box, double intensity, units units)
+create_uniform_image(
+    astroid::box<N, double> const& box, double intensity, astroid::units units)
 {
     image<N, uint8_t, unique> img;
     create_image(img, uniform_vector<N, unsigned>(1));

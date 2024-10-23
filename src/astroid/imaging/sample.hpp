@@ -64,7 +64,7 @@ interpolated_image_sample(
 template<unsigned N, class T, class SP>
 optional<typename replace_channel_type<T, double>::type>
 raw_image_sample_over_box(
-    image<N, T, SP> const& img, box<N, double> const& box);
+    image<N, T, SP> const& img, astroid::box<N, double> const& box);
 
 // Sample an image over a box.
 // The result is the average image value over that box.
@@ -77,7 +77,7 @@ image_sample_over_box(
     // The image that is being sampled.
     image<N, T, SP> const& img,
     // The box from which the average sample value is calculated.
-    box<N, double> const& box);
+    astroid::box<N, double> const& box);
 
 } // namespace astroid
 

@@ -1507,7 +1507,8 @@ bounding_box(triangle<N, T> const& tri)
 api(fun trivial with(N : 1, 2, 3, 4))
 template<unsigned N>
 box<N, double>
-add_margin_to_box(box<N, double> const& box, vector<N, double> const& size)
+add_margin_to_box(
+    astroid::box<N, double> const& box, vector<N, double> const& size)
 {
     return add_border(box, size);
 }
