@@ -74,7 +74,6 @@ struct sliced_scene_geometry;
 
 // slicing.hpp
 struct slice_description;
-typedef std::vector<slice_description> slice_description_list;
 
 } // namespace astroid
 

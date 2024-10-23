@@ -16,6 +16,10 @@ struct slice_description
     double thickness;
 };
 
+using slice_description_list = std::vector<slice_description>;
+
+ASTROID_DEFINE_NORMALIZATION_UUID(astroid, slice_description_list)
+
 // Is the point p inside the slice s?
 api(fun trivial name(point_inside_slice))
 bool
