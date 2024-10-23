@@ -908,6 +908,9 @@ struct std::hash<astroid::matrix<M, N, T>>
                                              "x" #N "_" #type ",coro>"};      \
     };
 
+ASTROID_DEFINE_MATRIX_NORMALIZATION_UUID(1, 1, double)
+ASTROID_DEFINE_MATRIX_NORMALIZATION_UUID(1, 1, float)
+
 ASTROID_DEFINE_MATRIX_NORMALIZATION_UUID(2, 2, double)
 ASTROID_DEFINE_MATRIX_NORMALIZATION_UUID(2, 2, float)
 
