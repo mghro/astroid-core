@@ -798,6 +798,15 @@ get_pixel_ref(
         static void                                                           \
         get(api_type_info* info);                                             \
     };                                                                        \
+    template<>                                                                \
+    struct cradle::normalization_uuid_str<                                    \
+        astroid::image<N, T, astroid::shared>>                                \
+    {                                                                         \
+        static const inline std::string func{"normalization<image_" #N        \
+                                             "d_" #T ",func>"};               \
+        static const inline std::string coro{"normalization<image_" #N        \
+                                             "d_" #T ",coro>"};               \
+    };                                                                        \
     namespace astroid {                                                       \
     size_t                                                                    \
     hash_value(image<N, T, shared> const& x);
