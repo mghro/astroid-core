@@ -899,6 +899,22 @@ struct std::hash<astroid::matrix<M, N, T>>
 };
 namespace astroid {
 
+#define ASTROID_DEFINE_MATRIX_NORMALIZATION_UUID(M, N, type)                  \
+    template<>                                                                \
+    struct cradle::normalization_uuid_str<astroid::matrix<M, N, type>>        \
+    {                                                                         \
+        static const inline std::string func{"normalization<matrix_" #M       \
+                                             "x" #N "_" #type ",func>"};      \
+        static const inline std::string coro{"normalization<matrix_" #M       \
+                                             "x" #N "_" #type ",coro>"};      \
+    };
+
+ASTROID_DEFINE_MATRIX_NORMALIZATION_UUID(3, 3, double)
+ASTROID_DEFINE_MATRIX_NORMALIZATION_UUID(3, 3, float)
+
+ASTROID_DEFINE_MATRIX_NORMALIZATION_UUID(4, 4, double)
+ASTROID_DEFINE_MATRIX_NORMALIZATION_UUID(4, 4, float)
+
 // ANGLES
 
 static inline double
