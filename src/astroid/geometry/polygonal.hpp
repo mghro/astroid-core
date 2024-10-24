@@ -168,7 +168,9 @@ compute_bounding_box(
 
 // POLYSETS
 
-typedef std::vector<polygon2> polygon2_list;
+using polygon2_list = std::vector<polygon2>;
+
+ASTROID_DEFINE_NORMALIZATION_UUID(astroid, polygon2_list);
 
 // A polyset represents an arbitrary (possibly noncontiguous) region in 2D
 // space using a set of polygons, each with a set of holes. The polygons
@@ -209,8 +211,7 @@ create_polyset(polyset* set, polygon2 const& poly);
 
 // Create a polyset from a list of polygons (and no holes).
 void
-create_polyset_from_polygons(
-    polyset* set, std::vector<polygon2> const& polygons);
+create_polyset_from_polygons(polyset* set, polygon2_list const& polygons);
 
 void
 add_polygon(polyset& set, polygon2 const& poly);
@@ -281,7 +282,7 @@ distance_to_polyset(
 
 // Convert the given polyset to a list of polygons (no holes).
 api(fun name(polyset_as_polygon_list))
-std::vector<polygon2>
+polygon2_list
 as_polygon_list(
     // Polyset to get polygon list from
     polyset const& set);
@@ -376,6 +377,10 @@ do_set_operation(
     polyset const& set1,
     polyset const& set2);
 
+using polyset_list = std::vector<polyset>;
+
+ASTROID_DEFINE_NORMALIZATION_UUID(astroid, polyset_list);
+
 // Compute a combination of two or more polysets.
 // If more than two polysets are specified, the operator is applied in a
 // left-associative manner.
@@ -386,7 +391,7 @@ polyset_combination(
     // Enum definition of which type of combine operation to perform
     set_operation op,
     // List of polysets
-    std::vector<polyset> const& polysets);
+    polyset_list const& polysets);
 
 // STRUCTURES
 
@@ -516,6 +521,10 @@ do_set_operation(
     structure_geometry const& structure1,
     structure_geometry const& structure2);
 
+using structure_geometry_list = std::vector<structure_geometry>;
+
+ASTROID_DEFINE_NORMALIZATION_UUID(astroid, structure_geometry_list);
+
 // Compute a combination of two or more structures.
 // If more than two structures are specified, the operator is applied in a
 // left-associative manner.
@@ -526,7 +535,7 @@ structure_combination(
     // Enum definition of which type of combine operation to perform
     set_operation op,
     // List of structures
-    std::vector<structure_geometry> const& structures);
+    structure_geometry_list const& structures);
 
 std::vector<double>
 slice_position_list(structure_geometry const& structure);

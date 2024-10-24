@@ -544,9 +544,8 @@ do_set_operation(
     from_clipper(result, solution);
 }
 
-api(fun)
 polyset
-polyset_combination(set_operation op, std::vector<polyset> const& polysets)
+polyset_combination(set_operation op, polyset_list const& polysets)
 {
     if (polysets.empty())
     {
