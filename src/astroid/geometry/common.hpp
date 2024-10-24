@@ -173,6 +173,16 @@ hash_value(astroid::vector<N, T> const& v)
                                              "D_" #type ",func>"};            \
         static const inline std::string coro{"normalization<vector_" #N       \
                                              "D_" #type ",coro>"};            \
+    };                                                                        \
+                                                                              \
+    template<>                                                                \
+    struct cradle::normalization_uuid_str<                                    \
+        std::vector<astroid::vector<N, type>>>                                \
+    {                                                                         \
+        static const inline std::string func{                                 \
+            "normalization<vector_vector_" #N "D_" #type ",func>"};           \
+        static const inline std::string coro{                                 \
+            "normalization<vector_vector_" #N "D_" #type ",coro>"};           \
     };
 
 ASTROID_DEFINE_VECTOR_NORMALIZATION_UUID(1, unsigned)
@@ -435,7 +445,7 @@ struct box
 // Get the area of a box.
 template<typename T>
 T
-area(box<2, T> const& box)
+area(astroid::box<2, T> const& box)
 {
     return box.size[0] * box.size[1];
 }

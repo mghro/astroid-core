@@ -175,6 +175,10 @@ struct weighted_grid_index
     float weight;
 };
 
+using weighted_grid_index_list = std::vector<weighted_grid_index>;
+
+ASTROID_DEFINE_NORMALIZATION_UUID(astroid, weighted_grid_index_list);
+
 api(fun)
 double
 sum_grid_index_weights(std::vector<weighted_grid_index> const& cells);

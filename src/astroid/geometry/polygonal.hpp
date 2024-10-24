@@ -138,7 +138,7 @@ struct polygon2_edge_view
 
 api(fun trivial name(box_as_polygon))
 polygon2
-as_polygon(box<2, double> const& box);
+as_polygon(astroid::box<2, double> const& box);
 
 api(fun trivial name(circle_as_polygon))
 polygon2
@@ -163,7 +163,8 @@ bounding_box(
     polygon2 const& poly);
 
 void
-compute_bounding_box(optional<box<2, double>>& box, polygon2 const& poly);
+compute_bounding_box(
+    optional<astroid::box<2, double>>& box, polygon2 const& poly);
 
 // POLYSETS
 

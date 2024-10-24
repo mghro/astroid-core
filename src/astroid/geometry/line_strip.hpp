@@ -14,6 +14,10 @@ struct line_strip
     std::vector<vector<2, double>> vertices;
 };
 
+using line_strip_list = std::vector<line_strip>;
+
+ASTROID_DEFINE_NORMALIZATION_UUID(astroid, line_strip_list);
+
 // Given a list of line segments, some of which may share vertices, this will
 // merge them along their shared vertices into a list of line strips.
 // If the tolerance parameter is non-zero, the algorithm will merge vertices

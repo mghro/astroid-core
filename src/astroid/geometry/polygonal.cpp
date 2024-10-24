@@ -20,7 +20,7 @@ namespace astroid {
 // COMMON FUNCTIONS
 
 static vector<2, double>
-get_corner(box<2, double> const& box, int index)
+get_corner(astroid::box<2, double> const& box, int index)
 {
     vector<2, double> corner;
     while (index >= 4)
@@ -146,7 +146,7 @@ is_ccw(polygon2 const& poly)
 }
 
 polygon2
-as_polygon(box<2, double> const& box)
+as_polygon(astroid::box<2, double> const& box)
 {
     polygon2 poly;
     vertex2* vertices = allocate(&poly.vertices, 4);
