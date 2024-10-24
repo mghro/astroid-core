@@ -1364,6 +1364,9 @@ ASTROID_GEOMETRY_DEFINE_FLOATING_TYPEDEFS(ray)
 template<unsigned N, typename T>
 using line_segment = c_array<2, vector<N, T>>;
 
+ASTROID_DEFINE_NORMALIZATION_UUID(astroid, line_segment<2, double>);
+ASTROID_DEFINE_NORMALIZATION_UUID(astroid, line_segment<3, double>);
+
 template<unsigned N, typename T>
 line_segment<N, T>
 make_line_segment(vector<N, T> const& v0, vector<N, T> const& v1)
@@ -1407,6 +1410,9 @@ length(line_segment<N, T> const& segment)
 
 template<unsigned N, typename T>
 using triangle = c_array<3, vector<N, T>>;
+
+ASTROID_DEFINE_NORMALIZATION_UUID(astroid, triangle<2, double>);
+ASTROID_DEFINE_NORMALIZATION_UUID(astroid, triangle<3, double>);
 
 template<unsigned N, typename T>
 triangle<N, T>
