@@ -51,8 +51,8 @@ add_single_edge_connection_lines(
         if (t >= 0 && t < 1)
         {
             vector2d intersection = p + p_step * t;
-            lines.push_back(line_segment<2, double>(
-                intersection + to_outer_edge, intersection));
+            lines.push_back(
+                make_line_segment(intersection + to_outer_edge, intersection));
         }
 
         values[0] = values[1];
@@ -189,8 +189,7 @@ compute_isolines(image<2, Pixel, Storage> const& img, double level)
                 }
 
                 // Add the segment.
-                lines.push_back(
-                    line_segment<2, double>(vertices[0], vertices[1]));
+                lines.push_back(make_line_segment(vertices[0], vertices[1]));
             }
 
             // Set up for next iteration.
@@ -258,20 +257,20 @@ close_edge(
         {
             if (values[1] >= raw_level)
             {
-                lines.push_back(line_segment<2, double>(p, p + p_step));
+                lines.push_back(make_line_segment(p, p + p_step));
             }
             else
             {
                 double f = (raw_level - values[0]) / (values[1] - values[0]);
                 vector2d intersection = p + p_step * f;
-                lines.push_back(line_segment<2, double>(p, intersection));
+                lines.push_back(make_line_segment(p, intersection));
             }
         }
         else if (values[1] >= raw_level)
         {
             double f = (raw_level - values[0]) / (values[1] - values[0]);
             vector2d intersection = p + p_step * f;
-            lines.push_back(line_segment<2, double>(p + p_step, intersection));
+            lines.push_back(make_line_segment(p + p_step, intersection));
         }
 
         values[0] = values[1];
@@ -292,9 +291,9 @@ close_corner(
     {
         vector2d p = get_pixel_center(img, index);
         lines.push_back(
-            line_segment<2, double>(p + x_vector, p + x_vector + y_vector));
+            make_line_segment(p + x_vector, p + x_vector + y_vector));
         lines.push_back(
-            line_segment<2, double>(p + y_vector, p + x_vector + y_vector));
+            make_line_segment(p + y_vector, p + x_vector + y_vector));
     }
 }
 

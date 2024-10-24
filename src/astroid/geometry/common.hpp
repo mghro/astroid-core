@@ -1362,36 +1362,16 @@ struct ray
 ASTROID_GEOMETRY_DEFINE_FLOATING_TYPEDEFS(ray)
 
 template<unsigned N, typename T>
-struct line_segment : c_array<2, vector<N, T>>
-{
-    line_segment()
-    {
-    }
-    line_segment(vector<N, T> const& v0, vector<N, T> const& v1)
-    {
-        (*this)[0] = v0;
-        (*this)[1] = v1;
-    }
-};
-
-} // namespace astroid
-template<unsigned N, class T>
-struct std::hash<astroid::line_segment<N, T>>
-{
-    size_t
-    operator()(astroid::line_segment<N, T> const& x) const
-    {
-        return cradle::combine_hashes(
-            cradle::invoke_hash(x[0]), cradle::invoke_hash(x[1]));
-    }
-};
-namespace astroid {
+using line_segment = c_array<2, vector<N, T>>;
 
 template<unsigned N, typename T>
 line_segment<N, T>
 make_line_segment(vector<N, T> const& v0, vector<N, T> const& v1)
 {
-    return line_segment<N, T>(v0, v1);
+    line_segment<N, T> segment;
+    segment[0] = v0;
+    segment[1] = v1;
+    return segment;
 }
 
 // Get a vector from the first point on the given line segment to the second.
@@ -1426,38 +1406,19 @@ length(line_segment<N, T> const& segment)
 }
 
 template<unsigned N, typename T>
-struct triangle : c_array<3, vector<N, T>>
+using triangle = c_array<3, vector<N, T>>;
+
+template<unsigned N, typename T>
+triangle<N, T>
+make_triangle(
+    vector<N, T> const& v0, vector<N, T> const& v1, vector<N, T> const& v2)
 {
-    typedef vector<N, T> vertex_type;
-
-    triangle()
-    {
-    }
-
-    triangle(
-        vertex_type const& v0, vertex_type const& v1, vertex_type const& v2)
-    {
-        (*this)[0] = v0;
-        (*this)[1] = v1;
-        (*this)[2] = v2;
-    }
-};
-
-// hash function
-} // namespace astroid
-template<unsigned N, class T>
-struct std::hash<astroid::triangle<N, T>>
-{
-    size_t
-    operator()(astroid::triangle<N, T> const& x) const
-    {
-        return cradle::combine_hashes(
-            cradle::invoke_hash(x[0]),
-            cradle::combine_hashes(
-                cradle::invoke_hash(x[1]), cradle::invoke_hash(x[2])));
-    }
-};
-namespace astroid {
+    triangle<N, T> tri;
+    tri[0] = v0;
+    tri[1] = v1;
+    tri[2] = v2;
+    return tri;
+}
 
 template<typename T>
 vector<3, T>

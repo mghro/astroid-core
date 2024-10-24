@@ -137,16 +137,13 @@ add_segment_to_strip_set(
 }
 
 std::vector<line_strip>
-connect_line_segments(
-    std::vector<line_segment<2, double>> const& segments, double tolerance)
+connect_line_segments(line_segment_2d_list const& segments, double tolerance)
 {
+    // TODO: Don't use a list here.
     std::list<std::list<vector2d>> strips;
-    for (std::vector<line_segment<2, double>>::const_iterator i
-         = segments.begin();
-         i != segments.end();
-         ++i)
+    for (auto const& segment : segments)
     {
-        add_segment_to_strip_set(strips, (*i)[0], (*i)[1], tolerance);
+        add_segment_to_strip_set(strips, segment[0], segment[1], tolerance);
     }
 
     std::vector<line_strip> result;

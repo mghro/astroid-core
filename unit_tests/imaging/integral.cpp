@@ -18,12 +18,12 @@ check_segment_integral(
 {
     ASTROID_CHECK_WITHIN_TOLERANCE(
         compute_image_integral_over_line_segment(
-            view, line_segment<N, double>(p1, p2)),
+            view, make_line_segment(p1, p2)),
         correct_value,
         tolerance);
     ASTROID_CHECK_WITHIN_TOLERANCE(
         compute_image_integral_over_line_segment(
-            view, line_segment<N, double>(p2, p1)),
+            view, make_line_segment(p2, p1)),
         correct_value,
         tolerance);
 

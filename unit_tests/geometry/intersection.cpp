@@ -30,31 +30,31 @@ TEST_CASE("plane_line_segment_intersection_test")
     assert_intersection(
         plane<double>(
             make_vector<double>(0, 1, 0), make_vector<double>(0, 1, 0)),
-        line_segment<3, double>(
+        make_line_segment(
             make_vector<double>(0, 0, 0), make_vector<double>(0, 3, 0)),
         make_vector<double>(0, 1, 0));
     assert_intersection(
         plane<double>(
             make_vector<double>(0, 1, 0), make_vector<double>(0, 1, 0)),
-        line_segment<3, double>(
+        make_line_segment(
             make_vector<double>(0, 0, 0), make_vector<double>(3, 3, 0)),
         make_vector<double>(1, 1, 0));
     assert_intersection(
         plane<double>(
             make_vector<double>(0, 1, 0), unit(make_vector<double>(1, 1, 0))),
-        line_segment<3, double>(
+        make_line_segment(
             make_vector<double>(3, 2, 0), make_vector<double>(0, -1, 0)),
         make_vector<double>(1, 0, 0));
     assert_intersection(
         plane<double>(
             make_vector<double>(-1, 1, 0), make_vector<double>(0, 1, 0)),
-        line_segment<3, double>(
+        make_line_segment(
             make_vector<double>(0, 0, 0), make_vector<double>(3, 3, 0)),
         make_vector<double>(1, 1, 0));
     assert_no_intersection(
         plane<double>(
             make_vector<double>(-1, 1, 0), make_vector<double>(0, 1, 0)),
-        line_segment<3, double>(
+        make_line_segment(
             make_vector<double>(0, 0, 0), make_vector<double>(-3, -3, 0)));
 }
 
@@ -95,11 +95,11 @@ TEST_CASE("plane_triangle_intersection_test")
     assert_intersection(
         plane<double>(
             make_vector<double>(0, 1, 0), make_vector<double>(0, 1, 0)),
-        triangle<3, double>(
+        make_triangle(
             make_vector<double>(-2, 0, 0),
             make_vector<double>(2, 0, 0),
             make_vector<double>(0, 2, 0)),
-        line_segment<3, double>(
+        make_line_segment(
             make_vector<double>(-1, 1, 0), make_vector<double>(1, 1, 0)));
 }
 
@@ -182,41 +182,41 @@ assert_no_intersection(
 TEST_CASE("segment_box_intersection")
 {
     assert_intersection(
-        line_segment<2, double>(
+        make_line_segment(
             make_vector<double>(-4, 0), make_vector<double>(4, 0)),
         box2d(make_vector<double>(-2, -2), make_vector<double>(4, 4)),
-        line_segment<2, double>(
+        make_line_segment(
             make_vector<double>(-2, 0), make_vector<double>(2, 0)));
     assert_no_intersection(
-        line_segment<2, double>(
+        make_line_segment(
             make_vector<double>(-4, 0), make_vector<double>(-12, 0)),
         box2d(make_vector<double>(-2, -2), make_vector<double>(4, 4)));
     assert_intersection(
-        line_segment<2, double>(
+        make_line_segment(
             make_vector<double>(0, 0), make_vector<double>(-4, 0)),
         box2d(make_vector<double>(-2, -2), make_vector<double>(4, 4)),
-        line_segment<2, double>(
+        make_line_segment(
             make_vector<double>(0, 0), make_vector<double>(-2, 0)));
     assert_no_intersection(
-        line_segment<2, double>(
+        make_line_segment(
             make_vector<double>(0, -4.5), make_vector<double>(-4.5, 0)),
         box2d(make_vector<double>(-2, -2), make_vector<double>(4, 4)));
     assert_intersection(
-        line_segment<2, double>(
+        make_line_segment(
             make_vector<double>(-4, -4), make_vector<double>(4, 4)),
         box2d(make_vector<double>(-2, -2), make_vector<double>(4, 4)),
-        line_segment<2, double>(
+        make_line_segment(
             make_vector<double>(-2, -2), make_vector<double>(2, 2)));
     assert_intersection(
-        line_segment<2, double>(
+        make_line_segment(
             make_vector<double>(-4, 0), make_vector<double>(4, 8)),
         box2d(make_vector<double>(-2, 0), make_vector<double>(4, 6)),
-        line_segment<2, double>(
+        make_line_segment(
             make_vector<double>(-2, 2), make_vector<double>(2, 6)));
     assert_intersection(
-        line_segment<2, double>(
+        make_line_segment(
             make_vector<double>(-4, 0), make_vector<double>(0, 4)),
         box2d(make_vector<double>(-2, 0), make_vector<double>(4, 6)),
-        line_segment<2, double>(
+        make_line_segment(
             make_vector<double>(-2, 2), make_vector<double>(0, 4)));
 }

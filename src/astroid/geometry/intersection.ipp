@@ -25,34 +25,34 @@ intersection(astroid::plane<T> const& plane, triangle<3, T> const& tri)
 {
     // Test the first two edges of the triangle for interesections.
     optional<vector<3, T>> i0
-        = intersection(plane, line_segment<3, T>(tri[0], tri[1]));
+        = intersection(plane, make_line_segment(tri[0], tri[1]));
     optional<vector<3, T>> i1
-        = intersection(plane, line_segment<3, T>(tri[1], tri[2]));
+        = intersection(plane, make_line_segment(tri[1], tri[2]));
 
     // If the triangle intersects the plane at all, it must intersect along
     // exactly two edges.
     if (i0)
     {
         if (i1)
-            return line_segment<3, T>(*i0, *i1);
+            return make_line_segment(*i0, *i1);
         else
         {
             optional<vector<3, T>> i2
-                = intersection(plane, line_segment<3, T>(tri[2], tri[0]));
+                = intersection(plane, make_line_segment(tri[2], tri[0]));
             assert(i2);
-            return line_segment<3, T>(i2.value(), *i0);
+            return make_line_segment(i2.value(), *i0);
         }
     }
     else if (i1)
     {
         optional<vector<3, T>> i2
-            = intersection(plane, line_segment<3, T>(tri[2], tri[0]));
+            = intersection(plane, make_line_segment(tri[2], tri[0]));
         assert(i2);
-        return line_segment<3, T>(*i1, i2.value());
+        return make_line_segment(*i1, i2.value());
     }
     else
     {
-        assert(!intersection(plane, line_segment<3, T>(tri[2], tri[0])));
+        assert(!intersection(plane, make_line_segment(tri[2], tri[0])));
         return optional<line_segment<3, T>>();
     }
 }
@@ -178,7 +178,7 @@ intersection(line_segment<N, T> const& segment, astroid::box<N, T> const& box)
     // we need to correct for that.
     T distance_to_second = std::min(length(segment), rbi.exit_distance);
 
-    return line_segment<N, T>(
+    return make_line_segment(
         ray.origin + ray.direction * rbi.entrance_distance,
         ray.origin + ray.direction * distance_to_second);
 }

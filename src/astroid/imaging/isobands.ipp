@@ -64,7 +64,7 @@ record_triangle(
     vector<2, double> const& p2,
     double v2)
 {
-    tris.push_back(triangle<2, double>(p0, p1, p2));
+    tris.push_back(make_triangle(p0, p1, p2));
 }
 
 struct colored_triangle_recorder

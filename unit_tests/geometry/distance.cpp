@@ -25,7 +25,7 @@ TEST_CASE("point_line_segment_2d_test")
         distance(ls, make_vector<double>(-3, -4), &cp), 5.);
     ASTROID_CHECK_ALMOST_EQUAL(cp, make_vector<double>(0, 0));
 
-    ls = line_segment<2, double>(
+    ls = make_line_segment(
         make_vector<double>(0, 0), make_vector<double>(3, 3));
     ASTROID_CHECK_ALMOST_EQUAL(
         distance(ls, make_vector<double>(-3, -4), &cp), 5.);

@@ -37,8 +37,7 @@ absolute_distance2(
     for (polygon2_edge_view ev(poly); !ev.done(); ev.advance())
     {
         vector<2, double> cp;
-        double d2
-            = distance2(line_segment<2, double>(ev.p0(), ev.p1()), p, &cp);
+        double d2 = distance2(make_line_segment(ev.p0(), ev.p1()), p, &cp);
         if (!have_min || d2 < min_d2)
         {
             min_d2 = d2;

@@ -672,7 +672,7 @@ triangle3d
 get_triangle(triangle_mesh const& mesh, face3_array::size_type index)
 {
     face3 face = mesh.faces[index];
-    return triangle3d(
+    return make_triangle(
         mesh.vertices[face[0]],
         mesh.vertices[face[1]],
         mesh.vertices[face[2]]);

@@ -20,7 +20,7 @@ TEST_CASE("actual_poly_test")
     std::vector<line_segment<2, double>> segments;
 
     for (polygon2_edge_view ev(original); !ev.done(); ev.advance())
-        segments.push_back(line_segment<2, double>(ev.p0(), ev.p1()));
+        segments.push_back(make_line_segment(ev.p0(), ev.p1()));
 
     strips = connect_line_segments(segments, tolerance);
 
@@ -47,7 +47,7 @@ TEST_CASE("not_connected_test")
     polygon2_edge_view ev(original);
     ev.advance();
     for (; !ev.done(); ev.advance())
-        segments.push_back(line_segment<2, double>(ev.p0(), ev.p1()));
+        segments.push_back(make_line_segment(ev.p0(), ev.p1()));
 
     strips = connect_line_segments(segments, tolerance);
 
@@ -71,9 +71,9 @@ TEST_CASE("extraneous_segments_test")
     std::vector<line_segment<2, double>> segments;
 
     for (polygon2_edge_view ev(original); !ev.done(); ev.advance())
-        segments.push_back(line_segment<2, double>(ev.p0(), ev.p1()));
+        segments.push_back(make_line_segment(ev.p0(), ev.p1()));
 
-    segments.push_back(line_segment<2, double>(
+    segments.push_back(make_line_segment(
         make_vector<double>(2, 0), make_vector<double>(2, 1)));
 
     strips = connect_line_segments(segments, tolerance);
@@ -100,7 +100,7 @@ TEST_CASE("multiple_polys_test")
     std::vector<line_segment<2, double>> segments;
 
     for (polygon2_edge_view ev(original); !ev.done(); ev.advance())
-        segments.push_back(line_segment<2, double>(ev.p0(), ev.p1()));
+        segments.push_back(make_line_segment(ev.p0(), ev.p1()));
 
     strips = connect_line_segments(segments, tolerance);
 
@@ -113,7 +113,7 @@ TEST_CASE("multiple_polys_test")
     }
 
     for (polygon2_edge_view ev(other); !ev.done(); ev.advance())
-        segments.push_back(line_segment<2, double>(ev.p0(), ev.p1()));
+        segments.push_back(make_line_segment(ev.p0(), ev.p1()));
 
     strips = connect_line_segments(segments, tolerance);
 
