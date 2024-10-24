@@ -31,23 +31,6 @@ endif()
 
 set(CMAKE_CXX_STANDARD 20)
 
-# Detect the compiler.
-if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    set(IS_CLANG true)
-else()
-    set(IS_CLANG false)
-endif()
-if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    set(IS_GCC true)
-else()
-    set(IS_GCC false)
-endif()
-if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    set(IS_MSVC true)
-else()
-    set(IS_MSVC false)
-endif()
-
 # Enable a high level of compiler warnings and treat them as errors.
 if(IS_GCC OR IS_CLANG)
     add_compile_options(-Wall -Werror -Wextra -pedantic)
@@ -153,7 +136,7 @@ file(GLOB_RECURSE impls ${glob_options}
 # Fetch the Astroid preprocessor.
 FetchContent_Declare(preprocessor
     GIT_REPOSITORY https://github.com/mghro/astroid-preprocessor
-    GIT_TAG 1a36d964dd7810118551353290723007ce08e104)
+    GIT_TAG 20a9b96c3cd9eb8c3d0686b41fdfcfffa826547f)
 FetchContent_MakeAvailable(preprocessor)
 
 # Preprocess the API headers.
