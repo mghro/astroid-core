@@ -40,7 +40,7 @@ create_uniform_image_with_units(
     // The value of the image pixels
     double intensity,
     // The units of the image pixel values
-    units const& units)
+    astroid::units const& units)
 {
     return create_uniform_image(box, intensity, units);
 }
@@ -57,7 +57,7 @@ create_uniform_image_on_grid(
     // The value at which to set all pixels
     double intensity,
     // The units of the value for the image
-    units const& units)
+    astroid::units const& units)
 {
     image<N, double, unique> image;
     create_image_on_grid(image, grid);
