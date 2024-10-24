@@ -89,7 +89,7 @@ compute_image_integral_over_line_segment_min_max(
 template<unsigned N, class Pixel, class Storage>
 double
 compute_image_integral_over_ray(
-    image<N, Pixel, Storage> const& img, ray<N, double> const& ray)
+    image<N, Pixel, Storage> const& img, astroid::ray<N, double> const& ray)
 {
     image_integral_computer<N, Pixel, Storage> computer(img, ray);
     return computer.compute_integral_to(
@@ -113,7 +113,7 @@ struct ray_image_integral_computer
 template<unsigned N, class Storage>
 double
 compute_image_integral_over_ray(
-    image<N, variant, Storage> const& img, ray<N, double> const& ray)
+    image<N, variant, Storage> const& img, astroid::ray<N, double> const& ray)
 {
     impl::ray_image_integral_computer<N> fn;
     fn.ray = ray;
@@ -125,7 +125,7 @@ template<unsigned N, class Pixel, class Storage>
 double
 compute_inverse_image_integral_over_ray(
     image<N, Pixel, Storage> const& img,
-    ray<N, double> const& ray,
+    astroid::ray<N, double> const& ray,
     double integral)
 {
     image_integral_computer<N, Pixel, Storage> computer(img, ray);
@@ -151,7 +151,7 @@ template<unsigned N, class Storage>
 double
 compute_inverse_image_integral_over_ray(
     image<N, variant, Storage> const& img,
-    ray<N, double> const& ray,
+    astroid::ray<N, double> const& ray,
     double integral)
 {
     impl::inverse_ray_image_integral_computer<N> fn;
@@ -164,7 +164,7 @@ compute_inverse_image_integral_over_ray(
 template<unsigned N, class Pixel, class Storage>
 image_integral_computer<N, Pixel, Storage>::image_integral_computer(
     image<N, Pixel, Storage> const& img,
-    ray<N, double> const& ray,
+    astroid::ray<N, double> const& ray,
     double min,
     double max,
     double zero_value)

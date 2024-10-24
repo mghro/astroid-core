@@ -25,7 +25,7 @@ class image_integral_computer
  public:
     image_integral_computer(
         image<N, Pixel, Storage> const& img,
-        ray<N, double> const& ray,
+        astroid::ray<N, double> const& ray,
         double min = -DBL_MAX,
         double max = DBL_MAX,
         double zero_value = 0.);
@@ -169,7 +169,7 @@ compute_image_integral_over_ray(
     // The image that the ray will run through.
     image<N, Pixel, Storage> const& image,
     // The ray that the image integral will be calculated over.
-    ray<N, double> const& ray);
+    astroid::ray<N, double> const& ray);
 
 // This is the inverse of compute_image_integral_over_ray.
 // It computes the distance along the given ray that yields the given integral.
@@ -178,7 +178,7 @@ template<unsigned N, class Pixel, class Storage>
 double
 compute_inverse_image_integral_over_ray(
     image<N, Pixel, Storage> const& image,
-    ray<N, double> const& ray,
+    astroid::ray<N, double> const& ray,
     double integral);
 
 } // namespace astroid
