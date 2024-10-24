@@ -728,7 +728,7 @@ using ownership_holder = std::shared_ptr<cradle::data_owner>;
 
 } // namespace astroid
 
-#define ASTROID_DEFINE_PRIMITIZE_NORMALIZATION_UUID(type)                     \
+#define ASTROID_DEFINE_PRIMITIVE_NORMALIZATION_UUID(type)                     \
     template<>                                                                \
     struct cradle::normalization_uuid_str<type>                               \
     {                                                                         \
@@ -738,10 +738,12 @@ using ownership_holder = std::shared_ptr<cradle::data_owner>;
                                              ",coro>"};                       \
     };
 
-ASTROID_DEFINE_PRIMITIZE_NORMALIZATION_UUID(bool)
+ASTROID_DEFINE_PRIMITIVE_NORMALIZATION_UUID(bool)
 
-ASTROID_DEFINE_PRIMITIZE_NORMALIZATION_UUID(float)
-ASTROID_DEFINE_PRIMITIZE_NORMALIZATION_UUID(double)
+ASTROID_DEFINE_PRIMITIVE_NORMALIZATION_UUID(float)
+ASTROID_DEFINE_PRIMITIVE_NORMALIZATION_UUID(double)
+ASTROID_DEFINE_PRIMITIVE_NORMALIZATION_UUID(int)
+ASTROID_DEFINE_PRIMITIVE_NORMALIZATION_UUID(unsigned)
 
 #define ASTROID_DEFINE_NORMALIZATION_UUID(ns, type)                           \
     }                                                                         \
