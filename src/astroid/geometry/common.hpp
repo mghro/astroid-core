@@ -1513,6 +1513,11 @@ compute_bounding_box(
     box = astroid::box<N, T>(min, max - min);
 }
 
+template<unsigned N, typename T>
+using vector_list = std::vector<vector<N, T>>;
+
+ASTROID_GEOMETRY_DEFINE_FLOATING_TYPEDEFS(vector_list)
+
 // Compute the bounding box of a list of points.
 api(fun with(N : 1, 2, 3, 4; T : double) name(point_list_bounding_box))
 template<unsigned N, typename T>
