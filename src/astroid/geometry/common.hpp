@@ -163,50 +163,6 @@ hash_value(astroid::vector<N, T> const& v)
     return h;
 }
 
-} // namespace astroid
-
-#define ASTROID_DEFINE_VECTOR_NORMALIZATION_UUID(N, type)                     \
-    template<>                                                                \
-    struct cradle::normalization_uuid_str<astroid::vector<N, type>>           \
-    {                                                                         \
-        static const inline std::string func{"normalization<vector_" #N       \
-                                             "D_" #type ",func>"};            \
-        static const inline std::string coro{"normalization<vector_" #N       \
-                                             "D_" #type ",coro>"};            \
-    };                                                                        \
-                                                                              \
-    template<>                                                                \
-    struct cradle::normalization_uuid_str<                                    \
-        std::vector<astroid::vector<N, type>>>                                \
-    {                                                                         \
-        static const inline std::string func{                                 \
-            "normalization<vector_vector_" #N "D_" #type ",func>"};           \
-        static const inline std::string coro{                                 \
-            "normalization<vector_vector_" #N "D_" #type ",coro>"};           \
-    };
-
-ASTROID_DEFINE_VECTOR_NORMALIZATION_UUID(1, unsigned)
-ASTROID_DEFINE_VECTOR_NORMALIZATION_UUID(1, int)
-ASTROID_DEFINE_VECTOR_NORMALIZATION_UUID(1, double)
-ASTROID_DEFINE_VECTOR_NORMALIZATION_UUID(1, float)
-
-ASTROID_DEFINE_VECTOR_NORMALIZATION_UUID(2, unsigned)
-ASTROID_DEFINE_VECTOR_NORMALIZATION_UUID(2, int)
-ASTROID_DEFINE_VECTOR_NORMALIZATION_UUID(2, double)
-ASTROID_DEFINE_VECTOR_NORMALIZATION_UUID(2, float)
-
-ASTROID_DEFINE_VECTOR_NORMALIZATION_UUID(3, unsigned)
-ASTROID_DEFINE_VECTOR_NORMALIZATION_UUID(3, int)
-ASTROID_DEFINE_VECTOR_NORMALIZATION_UUID(3, double)
-ASTROID_DEFINE_VECTOR_NORMALIZATION_UUID(3, float)
-
-ASTROID_DEFINE_VECTOR_NORMALIZATION_UUID(4, unsigned)
-ASTROID_DEFINE_VECTOR_NORMALIZATION_UUID(4, int)
-ASTROID_DEFINE_VECTOR_NORMALIZATION_UUID(4, double)
-ASTROID_DEFINE_VECTOR_NORMALIZATION_UUID(4, float)
-
-namespace astroid {
-
 // BOX
 
 // A box is an N-dimensional generalization of a rectangle. In one dimension,
@@ -1364,8 +1320,7 @@ ASTROID_GEOMETRY_DEFINE_FLOATING_TYPEDEFS(ray)
 template<unsigned N, typename T>
 using line_segment = c_array<2, vector<N, T>>;
 
-ASTROID_DEFINE_NORMALIZATION_UUID(astroid, (line_segment<2, double>) );
-ASTROID_DEFINE_NORMALIZATION_UUID(astroid, (line_segment<3, double>) );
+ASTROID_GEOMETRY_DEFINE_FLOATING_TYPEDEFS(line_segment)
 
 template<unsigned N, typename T>
 line_segment<N, T>
@@ -1411,8 +1366,7 @@ length(line_segment<N, T> const& segment)
 template<unsigned N, typename T>
 using triangle = c_array<3, vector<N, T>>;
 
-ASTROID_DEFINE_NORMALIZATION_UUID(astroid, (triangle<2, double>) );
-ASTROID_DEFINE_NORMALIZATION_UUID(astroid, (triangle<3, double>) );
+ASTROID_GEOMETRY_DEFINE_FLOATING_TYPEDEFS(triangle)
 
 template<unsigned N, typename T>
 triangle<N, T>
