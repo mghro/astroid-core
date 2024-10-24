@@ -1054,7 +1054,7 @@ transform_triangle_mesh(
 triangle_mesh_with_normals
 transform_triangle_mesh(
     triangle_mesh_with_normals const& original,
-    matrix<4, 4, double> const& matrix)
+    astroid::matrix<4, 4, double> const& matrix)
 {
     triangle_mesh_with_normals output_mesh;
 

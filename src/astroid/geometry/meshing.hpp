@@ -253,14 +253,15 @@ compute_solid_angle(triangle_mesh const& mesh, vector3d const& p);
 api(fun)
 triangle_mesh
 transform_triangle_mesh(
-    triangle_mesh const& original, matrix<4, 4, double> const& matrix);
+    triangle_mesh const& original,
+    astroid::matrix<4, 4, double> const& matrix);
 
 // Transform a triangle mesh with normals.
 api(fun name(transform_triangle_mesh_with_normals))
 triangle_mesh_with_normals
 transform_triangle_mesh(
     triangle_mesh_with_normals const& original,
-    matrix<4, 4, double> const& matrix);
+    astroid::matrix<4, 4, double> const& matrix);
 
 } // namespace astroid
 
