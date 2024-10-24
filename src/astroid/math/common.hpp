@@ -244,6 +244,10 @@ scale_array(
     return result;
 }
 
+using float_array_list = std::vector<array<float>>;
+
+ASTROID_DEFINE_NORMALIZATION_UUID(astroid, float_array_list);
+
 api(fun remote execution_class(cpu.x4) with(T : float))
 template<class T>
 // Summed result array

@@ -93,7 +93,8 @@ compute_weighted_sum(
     double weight2);
 
 // Computes the sum of a list of images.
-api(fun with(N : 1, 2, 3))
+// TODO: Expose this properly.
+// api(fun with(N : 1, 2, 3))
 template<unsigned N>
 // The resulting sum image of the list of images.
 image<N, variant, shared>
