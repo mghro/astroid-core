@@ -750,6 +750,11 @@ update_unique_hash(unique_hasher& hasher, dynamic const& x)
     update_unique_hash(hasher, value_to_msgpack_blob(x));
 }
 
+inline void
+update_unique_hash(unique_hasher& hasher, cradle::nil_t const&)
+{
+}
+
 template<class Key, class Value>
 void
 update_unique_hash(unique_hasher& hasher, std::map<Key, Value> const& x)
