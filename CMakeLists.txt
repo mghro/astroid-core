@@ -46,6 +46,8 @@ elseif(IS_MSVC)
     # First strip out the old warning level.
     string(REPLACE "/W3" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
     add_compile_options(/W4 /WX)
+    # Enable big object files.
+    add_compile_options(/bigobj)
     # Disable warnings that are too strict.
     # "unreferenced formal parameter"
     add_compile_options(/wd4100)
@@ -136,7 +138,7 @@ file(GLOB_RECURSE impls ${glob_options}
 # Fetch the Astroid preprocessor.
 FetchContent_Declare(preprocessor
     GIT_REPOSITORY https://github.com/mghro/astroid-preprocessor
-    GIT_TAG 20a9b96c3cd9eb8c3d0686b41fdfcfffa826547f)
+    GIT_TAG cadd56ea0d9bf02171dcd0f47c0d72126f13186f)
 FetchContent_MakeAvailable(preprocessor)
 
 # Preprocess the API headers.

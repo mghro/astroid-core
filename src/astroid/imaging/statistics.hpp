@@ -25,13 +25,13 @@ raw_image_min_max(image<N, T, SP> const& img);
 
 // Given a vector representing the individual min/max values for a set of
 // images, this merges them to create the overall min/max values for the set.
-api(fun with(T : double))
+// api(fun with(T : double))
 template<class T>
 optional<min_max<T>>
 merge_min_max_values(std::vector<optional<min_max<T>>> const& values);
 
 // Get the overall minimum and maximum values for a vector of images.
-api(fun disk_cached with(N : 1, 2, 3; T : variant; SP : shared))
+// api(fun disk_cached with(N : 1, 2, 3; T : variant; SP : shared))
 template<unsigned N, class T, class SP>
 // The minimum and maximum of the values of the images in the vector.
 optional<min_max<double>>
@@ -83,7 +83,7 @@ weighted_partial_image_statistics(
 
 // Given a vector representing the individual statistics for a set of images,
 // this merges them to create the overall statistics for the set.
-api(fun with(T : double))
+// api(fun with(T : double))
 template<class T>
 // The statistics (minimum, maximum, mean, and number of values) merged from a
 // vector of statistics.
@@ -93,7 +93,7 @@ merge_statistics(
     std::vector<statistics<T>> const& stats);
 
 // Get the overall statistics for a vector of images.
-api(fun with(N : 1, 2, 3; T : variant; SP : shared))
+// api(fun with(N : 1, 2, 3; T : variant; SP : shared))
 template<unsigned N, class T, class SP>
 // The overall statistics (minimum, maximum, mean, and number of values) of a
 // vector of images.

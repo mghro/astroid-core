@@ -288,6 +288,22 @@ shift_interpolated_function(
     return tmp;
 }
 
+} // namespace astroid
+
+#define ASTROID_DEFINE_MAP_NORMALIZATION_UUID(key, value)                     \
+    template<>                                                                \
+    struct cradle::normalization_uuid_str<std::map<key, value>>               \
+    {                                                                         \
+        static const inline std::string func{"normalization<map_" #key        \
+                                             "_" #value ",func>"};            \
+        static const inline std::string coro{"normalization<map_" #key        \
+                                             "_" #value ",coro>"};            \
+    };
+
+ASTROID_DEFINE_MAP_NORMALIZATION_UUID(double, double)
+
+namespace astroid {
+
 // Returns the data result by interpolating between the two items nearest to
 // the given x value
 api(fun trivial)

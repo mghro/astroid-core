@@ -146,6 +146,27 @@ operator<<(std::ostream& s, c_array<N, T> const& x)
     s << "}";
     return s;
 }
+
+template<unsigned N, class T>
+void
+update_unique_hash(cradle::unique_hasher& hasher, c_array<N, T> const& x)
+{
+    using cradle::update_unique_hash;
+    for (auto const& i : x)
+        update_unique_hash(hasher, i);
+}
+
+template<unsigned N, class T>
+size_t
+hash_value(astroid::c_array<N, T> const& x)
+{
+    using cradle::hash_value;
+    size_t h = 0;
+    for (size_t i = 0; i != N; ++i)
+        h = cradle::combine_hashes(h, hash_value(x[i]));
+    return h;
+}
+
 } // namespace astroid
 
 template<unsigned N, class T>
@@ -154,10 +175,7 @@ struct std::hash<astroid::c_array<N, T>>
     size_t
     operator()(astroid::c_array<N, T> const& x) const
     {
-        size_t h = 0;
-        for (size_t i = 0; i != N; ++i)
-            h = cradle::combine_hashes(h, cradle::invoke_hash(x[i]));
-        return h;
+        return hash_value(x);
     }
 };
 

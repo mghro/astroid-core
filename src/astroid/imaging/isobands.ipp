@@ -83,7 +83,7 @@ record_triangle(
     vector<2, double> const& p2,
     double v2)
 {
-    recorder.tris->push_back(colored_triangle<2, double>(
+    recorder.tris->push_back(make_colored_triangle<2, double>(
         colored_vertex<2, double>(
             p0, interpolate(recorder.low_color, recorder.high_color, v0)),
         colored_vertex<2, double>(

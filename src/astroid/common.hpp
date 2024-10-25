@@ -728,6 +728,42 @@ using ownership_holder = std::shared_ptr<cradle::data_owner>;
 
 } // namespace astroid
 
+// TODO: Move this to CRADLE.
+
+namespace cradle {
+
+template<class T>
+void
+update_unique_hash(unique_hasher& hasher, std::optional<T> const& x)
+{
+    uint8_t has_value = x.has_value() ? 1 : 0;
+    hasher.encode_bytes(&has_value, 1);
+    if (x)
+        update_unique_hash(hasher, *x);
+}
+
+template<class Key, class Value>
+void
+update_unique_hash(unique_hasher& hasher, std::map<Key, Value> const& x)
+{
+    size_t n_items = x.size();
+    hasher.encode_bytes(&n_items, sizeof(n_items));
+    for (auto const& item : x)
+    {
+        update_unique_hash(hasher, item.first);
+        update_unique_hash(hasher, item.second);
+    }
+}
+
+template<class Value>
+size_t
+hash_value(Value const& x)
+{
+    return std::hash<Value>()(x);
+}
+
+} // namespace cradle
+
 #define ASTROID_DEFINE_PRIMITIVE_NORMALIZATION_UUID(type)                     \
     template<>                                                                \
     struct cradle::normalization_uuid_str<type>                               \
@@ -743,6 +779,22 @@ ASTROID_DEFINE_PRIMITIVE_NORMALIZATION_UUID(bool)
 ASTROID_DEFINE_PRIMITIVE_NORMALIZATION_UUID(float)
 ASTROID_DEFINE_PRIMITIVE_NORMALIZATION_UUID(double)
 ASTROID_DEFINE_PRIMITIVE_NORMALIZATION_UUID(unsigned)
+
+#define ASTROID_DEFINE_VECTOR_NORMALIZATION_UUID(type)                        \
+    template<>                                                                \
+    struct cradle::normalization_uuid_str<std::vector<type>>                  \
+    {                                                                         \
+        static const inline std::string func{"normalization<vector_" #type    \
+                                             ",func>"};                       \
+        static const inline std::string coro{"normalization<vector_" #type    \
+                                             ",coro>"};                       \
+    };
+
+ASTROID_DEFINE_VECTOR_NORMALIZATION_UUID(float)
+ASTROID_DEFINE_VECTOR_NORMALIZATION_UUID(double)
+ASTROID_DEFINE_VECTOR_NORMALIZATION_UUID(int)
+ASTROID_DEFINE_VECTOR_NORMALIZATION_UUID(unsigned)
+ASTROID_DEFINE_VECTOR_NORMALIZATION_UUID(size_t)
 
 #define ASTROID_DEFINE_NORMALIZATION_UUID(ns, type)                           \
     }                                                                         \

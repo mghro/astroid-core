@@ -24,12 +24,20 @@ struct image_slice
     image<N, Pixel, Storage> content;
 };
 
+template<unsigned N>
+using variant_image_slice_list = std::vector<image_slice<N, variant, shared>>;
+
+ASTROID_DEFINE_NORMALIZATION_UUID(astroid, variant_image_slice_list<1>);
+ASTROID_DEFINE_NORMALIZATION_UUID(astroid, variant_image_slice_list<2>);
+ASTROID_DEFINE_NORMALIZATION_UUID(astroid, variant_image_slice_list<3>);
+
 enum class slice_position_type
 {
     OUT_OF_BOUNDS,
     SINGLE,
     DOUBLE,
 };
+
 struct decoded_slice_position
 {
     slice_position_type type;

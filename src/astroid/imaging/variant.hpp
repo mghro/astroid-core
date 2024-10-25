@@ -707,7 +707,7 @@ struct unboxed_pixel_copier
     }
 };
 
-api(fun with(N : 2, 3))
+// api(fun with(N : 2, 3))
 template<unsigned N>
 unboxed_image<N>
 unbox_image(image<N, variant, shared> const& boxed)
@@ -732,7 +732,7 @@ unbox_image(image<N, variant, shared> const& boxed)
     return unboxed;
 }
 
-api(fun with(N : 2, 3))
+// api(fun with(N : 2, 3))
 template<unsigned N>
 image<N, variant, shared>
 box_image(unboxed_image<N> const& unboxed)
@@ -859,7 +859,7 @@ combine_image_helper(
 }
 
 // Combine multiple images into single image
-api(fun with(N : 1, 2, 3))
+// api(fun with(N : 1, 2, 3))
 template<unsigned N>
 // Combined image
 image<N, double, shared>
@@ -949,7 +949,7 @@ combine_images(
 }
 
 // Manually convert a float image to a double
-api(fun with(N : 1, 2, 3))
+// api(fun with(N : 1, 2, 3))
 template<unsigned N>
 // Float image
 image<N, double, shared>

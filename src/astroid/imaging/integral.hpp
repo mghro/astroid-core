@@ -136,7 +136,7 @@ template<unsigned N, class Pixel, class Storage>
 double
 compute_image_integral_over_line_segment(
     // The image that the line segment will run through.
-    image<N, Pixel, Storage> const& image,
+    image<N, Pixel, Storage> const& img,
     // The line segment that the image integral will be calculated over.
     line_segment<N, double> const& segment);
 
@@ -149,7 +149,7 @@ template<unsigned N, class Pixel, class Storage>
 double
 compute_image_integral_over_line_segment_min_max(
     // The image that the line segment will run through.
-    image<N, Pixel, Storage> const& image,
+    image<N, Pixel, Storage> const& img,
     // The line segment that the image integral will be calculated over.
     line_segment<N, double> const& segment,
     // The minimum value that will be calculated in the integral.
@@ -167,7 +167,7 @@ template<unsigned N, class Pixel, class Storage>
 double
 compute_image_integral_over_ray(
     // The image that the ray will run through.
-    image<N, Pixel, Storage> const& image,
+    image<N, Pixel, Storage> const& img,
     // The ray that the image integral will be calculated over.
     astroid::ray<N, double> const& ray);
 
@@ -177,7 +177,7 @@ api(fun with(N : 2, 3; Pixel : variant; Storage : shared))
 template<unsigned N, class Pixel, class Storage>
 double
 compute_inverse_image_integral_over_ray(
-    image<N, Pixel, Storage> const& image,
+    image<N, Pixel, Storage> const& img,
     astroid::ray<N, double> const& ray,
     double integral);
 

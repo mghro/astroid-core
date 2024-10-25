@@ -163,6 +163,26 @@ hash_value(astroid::vector<N, T> const& v)
     return h;
 }
 
+template<unsigned N, class T>
+void
+update_unique_hash(cradle::unique_hasher& hasher, vector<N, T> const& x)
+{
+    using cradle::update_unique_hash;
+    // TODO: Assume/check/exploit contiguous memory layout.
+    for (unsigned i = 0; i != N; ++i)
+        update_unique_hash(hasher, x[i]);
+}
+
+}
+
+template<unsigned N, class T>
+struct cradle::serializable_via_cereal<astroid::vector<N, T>>
+{
+    static constexpr bool value = true;
+};
+
+namespace astroid {
+
 // BOX
 
 // A box is an N-dimensional generalization of a rectangle. In one dimension,
@@ -678,6 +698,8 @@ class matrix
         return *this;
     }
 
+    MSGPACK_DEFINE(data_);
+
  private:
     T data_[M * N];
 };
@@ -846,6 +868,17 @@ inverse(matrix<2, 2, T> const& m)
     return inv;
 }
 
+template<unsigned M, unsigned N, class T>
+void
+update_unique_hash(cradle::unique_hasher& hasher, matrix<M, N, T> const& x)
+{
+    using cradle::update_unique_hash;
+    // TODO: Assume/check/exploit contiguous memory layout.
+    for (unsigned i = 0; i != M; ++i)
+        for (unsigned j = 0; j != N; ++j)
+            update_unique_hash(hasher, x(i, j));
+}
+
 // hash function
 } // namespace astroid
 template<unsigned M, unsigned N, class T>
@@ -885,6 +918,12 @@ ASTROID_DEFINE_MATRIX_NORMALIZATION_UUID(3, 3, float)
 
 ASTROID_DEFINE_MATRIX_NORMALIZATION_UUID(4, 4, double)
 ASTROID_DEFINE_MATRIX_NORMALIZATION_UUID(4, 4, float)
+
+template<unsigned M, unsigned N, class T>
+struct cradle::serializable_via_cereal<astroid::matrix<M, N, T>>
+{
+    static constexpr bool value = true;
+};
 
 namespace astroid {
 

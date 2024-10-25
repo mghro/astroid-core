@@ -11,7 +11,7 @@ namespace astroid {
 
 // Given a grayscale image and a level, this will create a list of line
 // segments that divide the image into regions above and below the level.
-api(fun with(Pixel : variant; Storage : shared))
+// api(fun with(Pixel : variant; Storage : shared))
 template<class Pixel, class Storage>
 // The list of line segments that divide the image into regions above and below
 // the given level.

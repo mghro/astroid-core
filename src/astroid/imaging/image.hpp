@@ -2,6 +2,7 @@
 #define ASTROID_IMAGING_IMAGE_HPP
 
 #include <cradle/typing/core/type_definitions.h>
+#include <cradle/typing/encodings/msgpack.h>
 
 #include <astroid/c_array.hpp>
 #include <astroid/geometry/common.hpp>
@@ -807,9 +808,56 @@ get_pixel_ref(
         static const inline std::string coro{"normalization<image_" #N        \
                                              "d_" #T ",coro>"};               \
     };                                                                        \
+    namespace msgpack {                                                       \
+    MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS)                     \
+    {                                                                         \
+        namespace adaptor {                                                   \
+        template<>                                                            \
+        struct convert<astroid::image<N, T, astroid::shared>>                 \
+        {                                                                     \
+            msgpack::object const&                                            \
+            operator()(                                                       \
+                msgpack::object const& o,                                     \
+                astroid::image<N, T, astroid::shared>& x) const               \
+            {                                                                 \
+                cradle::blob b;                                               \
+                o.convert(b);                                                 \
+                auto v = cradle::parse_msgpack_value(                         \
+                    reinterpret_cast<uint8_t const*>(b.data()), b.size());    \
+                from_dynamic(&x, v);                                          \
+                return o;                                                     \
+            }                                                                 \
+        };                                                                    \
+        template<>                                                            \
+        struct pack<astroid::image<N, T, astroid::shared>>                    \
+        {                                                                     \
+            template<typename Stream>                                         \
+            packer<Stream>&                                                   \
+            operator()(                                                       \
+                msgpack::packer<Stream>& o,                                   \
+                astroid::image<N, T, astroid::shared> const& x) const         \
+            {                                                                 \
+                cradle::dynamic d;                                            \
+                to_dynamic(&d, x);                                            \
+                o.pack(cradle::value_to_msgpack_blob(d));                     \
+                return o;                                                     \
+            }                                                                 \
+        };                                                                    \
+        }                                                                     \
+    }                                                                         \
+    }                                                                         \
+    template<>                                                                \
+    struct cradle::serializable_via_cereal<                                   \
+        astroid::image<N, T, astroid::shared>>                                \
+    {                                                                         \
+        static constexpr bool value = true;                                   \
+    };                                                                        \
     namespace astroid {                                                       \
     size_t                                                                    \
-    hash_value(image<N, T, shared> const& x);
+    hash_value(image<N, T, shared> const& x);                                 \
+    void                                                                      \
+    update_unique_hash(                                                       \
+        cradle::unique_hasher& hasher, image<N, T, shared> const& x);
 
 #define ASTROID_DECLARE_REGULAR_IMAGE_INTERFACE_FOR_TYPE(T)                   \
     ASTROID_DECLARE_REGULAR_IMAGE_INTERFACE(1, T)                             \

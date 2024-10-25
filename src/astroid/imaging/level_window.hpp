@@ -13,7 +13,7 @@ apply_level_window(double level, double window, double image_value);
 
 // Apply the specified level and window to the source image and return the
 // resulting 8-bit image.
-api(fun with(N : 2, 3; Pixel : variant; SP : shared))
+// api(fun with(N : 2, 3; Pixel : variant; SP : shared))
 template<unsigned N, class Pixel, class SP>
 image<N, uint8_t, shared>
 apply_level_window(

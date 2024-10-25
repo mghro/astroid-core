@@ -5,7 +5,7 @@
 
 namespace astroid {
 
-api(fun)
+// api(fun)
 image3
 transform_image_values_3d(
     image3 const& image,

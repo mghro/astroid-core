@@ -313,8 +313,34 @@ template<unsigned N>
 size_t
 hash_variant_image(image<N, variant, shared> const& x)
 {
-    // TODO: hash for real?
-    return 0;
+    using cradle::hash_value;
+    size_t hash = 0;
+    hash = cradle::combine_hashes(hash, hash_value(x.size));
+    hash = cradle::combine_hashes(hash, hash_value(x.origin));
+    hash = cradle::combine_hashes(hash, hash_value(x.axes));
+    hash = cradle::combine_hashes(hash, hash_value(x.value_mapping));
+    hash = cradle::combine_hashes(hash, hash_value(x.units));
+    hash = cradle::combine_hashes(hash, hash_value(x.pixels.type_info));
+    // TODO: Hash pixels.
+    return hash;
+}
+
+template<unsigned N>
+void
+update_variant_image_unique_hash(
+    cradle::unique_hasher& hasher, image<N, variant, shared> const& x)
+{
+    using cradle::update_unique_hash;
+    update_unique_hash(hasher, x.size);
+    update_unique_hash(hasher, x.origin);
+    update_unique_hash(hasher, x.axes);
+    update_unique_hash(hasher, x.value_mapping);
+    update_unique_hash(hasher, x.units);
+    update_unique_hash(hasher, x.pixels.type_info);
+    hasher.encode_bytes(
+        x.pixels.view,
+        product(x.size) * get_channel_size(x.pixels.type_info.type)
+            * get_channel_count(x.pixels.type_info.format));
 }
 
 #define ASTROID_DEFINE_REGULAR_IMAGE_INTERFACE(N, T)                          \
@@ -360,6 +386,12 @@ hash_variant_image(image<N, variant, shared> const& x)
     hash_value(image<N, variant, shared> const& x)                            \
     {                                                                         \
         return astroid::hash_variant_image(x);                                \
+    }                                                                         \
+    void                                                                      \
+    update_unique_hash(                                                       \
+        cradle::unique_hasher& hasher, image<N, variant, shared> const& x)    \
+    {                                                                         \
+        return astroid::update_variant_image_unique_hash(hasher, x);          \
     }
 
 ASTROID_DEFINE_REGULAR_IMAGE_INTERFACE(1, astroid::image1)

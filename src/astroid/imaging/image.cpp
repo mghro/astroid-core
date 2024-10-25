@@ -58,6 +58,12 @@ namespace astroid {
     hash_value(image<N, T, shared> const& x)                                  \
     {                                                                         \
         return hash_value(as_variant(x));                                     \
+    }                                                                         \
+    void                                                                      \
+    update_unique_hash(                                                       \
+        cradle::unique_hasher& hasher, image<N, T, shared> const& x)          \
+    {                                                                         \
+        update_unique_hash(hasher, as_variant(x));                            \
     }
 
 #define ASTROID_DEFINE_REGULAR_IMAGE_INTERFACE_FOR_TYPE(T)                    \

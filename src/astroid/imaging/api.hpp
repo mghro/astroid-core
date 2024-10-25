@@ -97,16 +97,16 @@ template<unsigned N>
 regular_grid<N, double>
 get_image_grid(
     // The image whose point grid is desired
-    image<N, variant, shared> const& image)
+    image<N, variant, shared> const& img)
 {
-    return get_grid(image);
+    return get_grid(img);
 }
 
 api(fun trivial with(N : 2, 3; Pixel : variant; Storage : shared))
 template<unsigned N, class Pixel, class Storage>
 optional<image_slice<N - 1, Pixel, Storage>>
 uninterpolated_image_slice(
-    image<N, Pixel, Storage> const& image,
+    image<N, Pixel, Storage> const& img,
     unsigned slice_axis,
     double slice_position)
 {
@@ -116,83 +116,83 @@ uninterpolated_image_slice(
     vector<N, double> slice_p = uniform_vector<N>(0.);
     slice_p[slice_axis] = slice_position;
     int slice_number = int(transform_point(
-        inverse(get_spatial_mapping(image)), slice_p)[slice_axis]);
+        inverse(get_spatial_mapping(img)), slice_p)[slice_axis]);
 
-    if (slice_number < 0 || slice_number >= int(image.size[slice_axis]))
+    if (slice_number < 0 || slice_number >= int(img.size[slice_axis]))
         return none;
 
-    return sliced_view(image, slice_axis, slice_number);
+    return sliced_view(img, slice_axis, slice_number);
 }
 
 api(fun with(N : 2, 3; Pixel : variant; Storage : shared))
 template<unsigned N, class Pixel, class Storage>
 optional<image<N - 1, Pixel, Storage>>
 interpolated_image_slice(
-    image<N, Pixel, Storage> const& image,
+    image<N, Pixel, Storage> const& img,
     unsigned slice_axis,
     double slice_position)
 {
     if (slice_axis > N - 1)
         throw exception("interpolated_slice_image: invalid axis");
-    return interpolated_slice(image, slice_axis, slice_position);
+    return interpolated_slice(img, slice_axis, slice_position);
 }
 
 api(fun trivial with(N : 1, 2, 3))
 template<unsigned N>
 vector<N, unsigned>
-image_size(image<N, variant, shared> const& image)
+image_size(image<N, variant, shared> const& img)
 {
-    return image.size;
+    return img.size;
 }
 
 api(fun trivial with(N : 1, 2, 3))
 template<unsigned N>
 vector<N, double>
-image_origin(image<N, variant, shared> const& image)
+image_origin(image<N, variant, shared> const& img)
 {
-    return image.origin;
+    return img.origin;
 }
 
 api(fun trivial with(N : 1, 2, 3))
 template<unsigned N>
 vector<N, double>
-image_spacing(image<N, variant, shared> const& image)
+image_spacing(image<N, variant, shared> const& img)
 {
-    return get_spacing(image);
+    return get_spacing(img);
 }
 
 api(fun trivial with(N : 1, 2, 3))
 template<unsigned N>
 matrix<N + 1, N + 1, double>
-image_transformation(image<N, variant, shared> const& image)
+image_transformation(image<N, variant, shared> const& img)
 {
-    return get_spatial_mapping(image);
+    return get_spatial_mapping(img);
 }
 
 api(fun trivial)
 image<2, variant, shared>
-rotate_2d_image(image<2, variant, shared> const& image, int angle)
+rotate_2d_image(image<2, variant, shared> const& img, int angle)
 {
     if (angle % 90 != 0)
         throw exception(
             "rotate_2d_image: angle must be a multiple of 90 degrees");
     image2 rotated = aligned_view(transformed_view(
-        image, rotation(astroid::angle<double, degrees>(angle))));
+        img, rotation(astroid::angle<double, degrees>(angle))));
     return rotated;
 }
 
 api(fun trivial with(N : 1, 2, 3))
 template<unsigned N>
 image<N, variant, shared>
-convert_image_to_8bit(image<N, variant, shared> const& image)
+convert_image_to_8bit(image<N, variant, shared> const& img)
 {
-    auto min_max = image_min_max(image);
+    auto min_max = image_min_max(img);
     astroid::image<N, uint8_t, shared> discretized;
     if (min_max)
     {
         discretize(
             discretized,
-            image,
+            img,
             linear_function<double>(
                 min_max->min, (min_max->max - min_max->min) / 255));
     }
@@ -204,13 +204,13 @@ api(fun trivial with(N : 1, 2, 3; Pixel : variant; Storage : shared))
 template<unsigned N, class Pixel, class Storage>
 image<N, Pixel, Storage>
 scale_image_values(
-    image<N, Pixel, Storage> const& image,
+    image<N, Pixel, Storage> const& img,
     double scale_factor,
     units const& expected_units,
     units const& new_units)
 {
-    check_units(expected_units, image.units);
-    astroid::image<N, variant, shared> result = image;
+    check_units(expected_units, img.units);
+    astroid::image<N, variant, shared> result = img;
     result.value_mapping.slope *= scale_factor;
     result.value_mapping.intercept *= scale_factor;
     result.units = new_units;
@@ -229,7 +229,7 @@ template<unsigned N, class Pixel, class Storage>
 image<1, variant, shared>
 image_histogram(
     // Image to create the histogram from
-    image<N, Pixel, Storage> const& image,
+    image<N, Pixel, Storage> const& img,
     // Minimum value for output histogram bins
     double min_value,
     // Maximum value for output histogram bins
@@ -238,7 +238,7 @@ image_histogram(
     double bin_size)
 {
     return as_variant(
-        compute_histogram<uint32_t>(image, min_value, max_value, bin_size));
+        compute_histogram<uint32_t>(img, min_value, max_value, bin_size));
 }
 
 // Creates a histogram using the specified 1D image which only includes the
@@ -251,7 +251,7 @@ template<unsigned N, class Pixel, class Storage>
 image<1, variant, shared>
 partial_image_histogram(
     // Image to create the histogram from
-    image<N, Pixel, Storage> const& image,
+    image<N, Pixel, Storage> const& img,
     // List of weighted grid indices which will serve as data points in the
     // histogram
     std::vector<weighted_grid_index> const& indices,
@@ -263,7 +263,7 @@ partial_image_histogram(
     double bin_size)
 {
     return as_variant(compute_partial_histogram<float>(
-        image,
+        img,
         get_elements_pointer(indices),
         indices.size(),
         min_value,
@@ -278,17 +278,17 @@ template<unsigned N>
 box<N, double>
 image_bounding_box(
     // Image to compute bounding box of
-    image<N, variant, shared> const& image)
+    image<N, variant, shared> const& img)
 {
-    return get_bounding_box(image);
+    return get_bounding_box(img);
 }
 
 api(fun trivial with(N : 1, 2, 3; Pixel : variant; Storage : shared))
 template<unsigned N, class Pixel, class Storage>
 string
-image_value_units(image<N, Pixel, Storage> const& image)
+image_value_units(image<N, Pixel, Storage> const& img)
 {
-    return image.units;
+    return img.units;
 }
 
 api(fun with(N : 1, 2, 3))

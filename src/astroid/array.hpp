@@ -219,12 +219,21 @@ operator<<(std::ostream& s, array<T> const& x)
 
 template<class T>
 size_t
-hash_value(astroid::array<T> const& x)
+hash_value(array<T> const& x)
 {
     size_t h = 0;
     for (auto const& i : x)
         h = cradle::combine_hashes(h, cradle::invoke_hash(i));
     return h;
+}
+
+template<class T>
+void
+update_unique_hash(cradle::unique_hasher& hasher, array<T> const& x)
+{
+    using cradle::update_unique_hash;
+    for (auto const& i : x)
+        update_unique_hash(hasher, i);
 }
 
 } // namespace astroid
