@@ -23,6 +23,7 @@
 #include <cradle/inner/core/type_interfaces.h>
 #include <cradle/typing/core/type_definitions.h>
 #include <cradle/typing/core/type_interfaces.h>
+#include <cradle/typing/encodings/msgpack.h>
 
 #ifndef _WIN32
 // ignore warnings for GCC
@@ -740,6 +741,13 @@ update_unique_hash(unique_hasher& hasher, std::optional<T> const& x)
     hasher.encode_bytes(&has_value, 1);
     if (x)
         update_unique_hash(hasher, *x);
+}
+
+inline void
+update_unique_hash(unique_hasher& hasher, dynamic const& x)
+{
+    // TODO: Something more direct?
+    update_unique_hash(hasher, value_to_msgpack_blob(x));
 }
 
 template<class Key, class Value>
