@@ -755,6 +755,16 @@ update_unique_hash(unique_hasher& hasher, std::map<Key, Value> const& x)
     }
 }
 
+template<class T>
+void
+update_unique_hash(unique_hasher& hasher, cradle::omissible<T> const& x)
+{
+    uint8_t has_value = x ? 1 : 0;
+    hasher.encode_bytes(&has_value, 1);
+    if (x)
+        update_unique_hash(hasher, *x);
+}
+
 template<class Value>
 size_t
 hash_value(Value const& x)
