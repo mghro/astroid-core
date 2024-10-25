@@ -313,14 +313,14 @@ template<unsigned N>
 size_t
 hash_variant_image(image<N, variant, shared> const& x)
 {
-    using cradle::hash_value;
     size_t hash = 0;
-    hash = cradle::combine_hashes(hash, hash_value(x.size));
-    hash = cradle::combine_hashes(hash, hash_value(x.origin));
-    hash = cradle::combine_hashes(hash, hash_value(x.axes));
-    hash = cradle::combine_hashes(hash, hash_value(x.value_mapping));
-    hash = cradle::combine_hashes(hash, hash_value(x.units));
-    hash = cradle::combine_hashes(hash, hash_value(x.pixels.type_info));
+    hash = cradle::combine_hashes(hash, cradle::invoke_hash(x.size));
+    hash = cradle::combine_hashes(hash, cradle::invoke_hash(x.origin));
+    hash = cradle::combine_hashes(hash, cradle::invoke_hash(x.axes));
+    hash = cradle::combine_hashes(hash, cradle::invoke_hash(x.value_mapping));
+    hash = cradle::combine_hashes(hash, cradle::invoke_hash(x.units));
+    hash = cradle::combine_hashes(
+        hash, cradle::invoke_hash(x.pixels.type_info));
     // TODO: Hash pixels.
     return hash;
 }

@@ -160,10 +160,9 @@ template<unsigned N, class T>
 size_t
 hash_value(astroid::c_array<N, T> const& x)
 {
-    using cradle::hash_value;
     size_t h = 0;
     for (size_t i = 0; i != N; ++i)
-        h = cradle::combine_hashes(h, hash_value(x[i]));
+        h = cradle::combine_hashes(h, cradle::invoke_hash(x[i]));
     return h;
 }
 
