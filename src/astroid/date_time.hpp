@@ -104,6 +104,13 @@ to_dynamic(cradle::dynamic* v, astroid::datetime const& x);
 void
 from_dynamic(astroid::datetime* x, cradle::dynamic const& v);
 
+inline void
+update_unique_hash(cradle::unique_hasher& hasher, astroid::datetime const& x)
+{
+    // TODO: Is this OK?
+    hasher.encode_bytes(&x, sizeof(x));
+}
+
 } // namespace cradle
 
 template<>
