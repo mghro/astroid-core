@@ -138,7 +138,7 @@ file(GLOB_RECURSE impls ${glob_options}
 # Fetch the Astroid preprocessor.
 FetchContent_Declare(preprocessor
     GIT_REPOSITORY https://github.com/mghro/astroid-preprocessor
-    GIT_TAG cadd56ea0d9bf02171dcd0f47c0d72126f13186f)
+    GIT_TAG e2232af8dfc8ff3860da85e8f943788589665296)
 FetchContent_MakeAvailable(preprocessor)
 
 # Preprocess the API headers.
