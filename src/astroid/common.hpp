@@ -778,12 +778,7 @@ update_unique_hash(unique_hasher& hasher, cradle::omissible<T> const& x)
         update_unique_hash(hasher, *x);
 }
 
-template<class Value>
-size_t
-hash_value(Value const& x)
-{
-    return std::hash<Value>()(x);
-}
+using boost::hash_value;
 
 } // namespace cradle
 
