@@ -18,12 +18,14 @@
 #include <vector>
 
 #include <boost/date_time/posix_time/posix_time_types.hpp>
+#include <boost/numeric/conversion/cast.hpp>
 
 #include <cradle/inner/core/type_definitions.h>
 #include <cradle/inner/core/type_interfaces.h>
 #include <cradle/typing/core/type_definitions.h>
 #include <cradle/typing/core/type_interfaces.h>
 #include <cradle/typing/encodings/msgpack.h>
+#include <cradle/typing/encodings/msgpack_internals.h>
 
 #ifndef _WIN32
 // ignore warnings for GCC
@@ -996,6 +998,144 @@ MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS)
         operator()(msgpack::object::with_zone& o, cradle::nil_t const& v) const
         {
             o.type = type::NIL;
+        }
+    };
+
+    } // namespace adaptor
+} // MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS)
+} // namespace msgpack
+
+// TODO: Move to CRADLE
+
+namespace astroid {
+
+inline cradle::dynamic
+read_msgpack_dynamic_value(msgpack::object const& object)
+{
+    using namespace cradle;
+    switch (object.type)
+    {
+        case msgpack::type::NIL:
+        default:
+            return dynamic(nil);
+        case msgpack::type::BOOLEAN:
+            return dynamic(object.via.boolean);
+        case msgpack::type::POSITIVE_INTEGER:
+            return dynamic(boost::numeric_cast<integer>(object.via.u64));
+        case msgpack::type::NEGATIVE_INTEGER:
+            return dynamic(boost::numeric_cast<integer>(object.via.i64));
+        case msgpack::type::FLOAT:
+            return dynamic(boost::numeric_cast<double>(object.via.f64));
+        case msgpack::type::STR: {
+            string s;
+            object.convert(s);
+            return dynamic(std::move(s));
+        }
+        case msgpack::type::BIN:
+            throw std::runtime_error("unsupported MessagePack type");
+            // return dynamic(blob{
+            //     ownership,
+            //     as_bytes(object.via.bin.ptr),
+            //     object.via.bin.size});
+        case msgpack::type::ARRAY: {
+            size_t size = object.via.array.size;
+            dynamic_array array;
+            array.reserve(size);
+            for (size_t i = 0; i != size; ++i)
+            {
+                array.push_back(
+                    read_msgpack_dynamic_value(object.via.array.ptr[i]));
+            }
+            return dynamic(std::move(array));
+        }
+        case msgpack::type::MAP: {
+            dynamic_map map;
+            for (size_t i = 0; i != object.via.map.size; ++i)
+            {
+                auto const& pair = object.via.map.ptr[i];
+                map[read_msgpack_dynamic_value(pair.key)]
+                    = read_msgpack_dynamic_value(pair.val);
+            }
+            return dynamic(std::move(map));
+        }
+        case msgpack::type::EXT: {
+            switch (object.via.ext.type())
+            {
+                case 1: // datetime
+                {
+                    int64_t t = 0;
+                    auto const* data = object.via.ext.data();
+                    switch (object.via.ext.size)
+                    {
+                        case 1:
+                            t = *reinterpret_cast<int8_t const*>(data);
+                            break;
+                        case 2: {
+                            uint16_t native_data
+                                = boost::endian::big_to_native(
+                                    *reinterpret_cast<uint16_t const*>(data));
+                            t = *reinterpret_cast<int16_t const*>(
+                                &native_data);
+                            break;
+                        }
+                        case 4: {
+                            uint32_t native_data
+                                = boost::endian::big_to_native(
+                                    *reinterpret_cast<uint32_t const*>(data));
+                            t = *reinterpret_cast<int32_t const*>(
+                                &native_data);
+                            break;
+                        }
+                        case 8: {
+                            uint64_t native_data
+                                = boost::endian::big_to_native(
+                                    *reinterpret_cast<uint64_t const*>(data));
+                            t = *reinterpret_cast<int64_t const*>(
+                                &native_data);
+                            break;
+                        }
+                    }
+                    return dynamic(
+                        ptime(date(1970, 1, 1))
+                        + boost::posix_time::milliseconds(t));
+                }
+                default:
+                    throw std::runtime_error(
+                        "unsupported MessagePack extension type");
+            }
+            break;
+        }
+    }
+}
+
+} // namespace astroid
+
+namespace msgpack {
+MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS)
+{
+    namespace adaptor {
+
+    template<>
+    struct convert<cradle::dynamic>
+    {
+        msgpack::object const&
+        operator()(msgpack::object const& object, cradle::dynamic& v) const
+        {
+            using namespace cradle;
+            v = astroid::read_msgpack_dynamic_value(object);
+            return object;
+        }
+    };
+
+    template<>
+    struct pack<cradle::dynamic>
+    {
+        template<typename Stream>
+        packer<Stream>&
+        operator()(msgpack::packer<Stream>& o, cradle::dynamic const& v) const
+        {
+            cradle::write_msgpack_value(o, v);
+            return o;
         }
     };
 
