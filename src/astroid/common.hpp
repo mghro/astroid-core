@@ -1143,4 +1143,20 @@ MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS)
 } // MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS)
 } // namespace msgpack
 
+// TODO: Move to CRADLE
+
+namespace cradle {
+
+ASTROID_DEFINE_NORMALIZATION_UUID(cradle, integer)
+
+ASTROID_DEFINE_NORMALIZATION_UUID(cradle, dynamic_array)
+
+} // namespace cradle
+
+template<>
+struct cradle::serializable_via_cereal<cradle::dynamic>
+{
+    static constexpr bool value = true;
+};
+
 #endif
