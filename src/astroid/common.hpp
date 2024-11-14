@@ -1149,7 +1149,9 @@ namespace cradle {
 
 ASTROID_DEFINE_NORMALIZATION_UUID(cradle, integer)
 
+ASTROID_DEFINE_NORMALIZATION_UUID(cradle, dynamic)
 ASTROID_DEFINE_NORMALIZATION_UUID(cradle, dynamic_array)
+ASTROID_DEFINE_NORMALIZATION_UUID(cradle, dynamic_map)
 
 } // namespace cradle
 
