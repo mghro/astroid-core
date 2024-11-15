@@ -1009,6 +1009,27 @@ MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS)
 
 namespace astroid {
 
+template<class T>
+struct my_unique_ptr_data_owner : public cradle::data_owner
+{
+    virtual std::uint8_t*
+    data()
+    {
+        return reinterpret_cast<std::uint8_t*>(ptr.get());
+    }
+
+    std::unique_ptr<T> ptr;
+};
+
+template<class T>
+std::shared_ptr<cradle::data_owner>
+make_my_unique_ptr_owner(std::unique_ptr<T> ptr)
+{
+    my_unique_ptr_data_owner<T> owner;
+    owner.ptr = std::move(ptr);
+    return std::make_shared<my_unique_ptr_data_owner<T>>(std::move(owner));
+}
+
 inline cradle::dynamic
 read_msgpack_dynamic_value(msgpack::object const& object)
 {
@@ -1031,12 +1052,14 @@ read_msgpack_dynamic_value(msgpack::object const& object)
             object.convert(s);
             return dynamic(std::move(s));
         }
-        case msgpack::type::BIN:
-            throw std::runtime_error("unsupported MessagePack type");
-            // return dynamic(blob{
-            //     ownership,
-            //     as_bytes(object.via.bin.ptr),
-            //     object.via.bin.size});
+        case msgpack::type::BIN: {
+            auto const size = object.via.bin.size;
+            auto ownership = make_my_unique_ptr_owner<std::byte[]>(
+                std::make_unique<std::byte[]>(size));
+            std::byte* data = reinterpret_cast<std::byte*>(ownership->data());
+            std::memcpy(data, object.via.bin.ptr, size);
+            return cradle::dynamic(cradle::blob(ownership, data, size));
+        }
         case msgpack::type::ARRAY: {
             size_t size = object.via.array.size;
             dynamic_array array;
