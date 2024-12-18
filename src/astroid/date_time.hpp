@@ -107,8 +107,15 @@ from_dynamic(astroid::datetime* x, cradle::dynamic const& v);
 inline void
 update_unique_hash(cradle::unique_hasher& hasher, astroid::datetime const& x)
 {
-    // TODO: Is this OK?
-    hasher.encode_bytes(&x, sizeof(x));
+    auto const t = x.time_since_epoch().count();
+    hasher.encode_bytes(&t, sizeof(t));
+}
+
+inline void
+update_unique_hash(cradle::unique_hasher& hasher, astroid::date const& x)
+{
+    auto const d = std::chrono::sys_days(x).time_since_epoch().count();
+    hasher.encode_bytes(&d, sizeof(d));
 }
 
 } // namespace cradle
