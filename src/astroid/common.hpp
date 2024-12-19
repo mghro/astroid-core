@@ -1119,7 +1119,7 @@ read_msgpack_dynamic_value(msgpack::object const& object)
                         }
                     }
                     return dynamic(
-                        ptime(date(1970, 1, 1))
+                        ptime(boost::gregorian::date(1970, 1, 1))
                         + boost::posix_time::milliseconds(t));
                 }
                 default:

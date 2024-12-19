@@ -54,3 +54,14 @@ TEST_CASE("date/time hashes")
     // least compile.
     cradle::invoke_hash(t);
 }
+
+TEST_CASE("date/time deep_sizeof")
+{
+    datetime t = sys_days(2024y / July / 16) + hours(2) + minutes(27)
+                 + seconds(13) + milliseconds(420);
+    REQUIRE(cradle::deep_sizeof(t) == sizeof(t));
+
+    // There have been issues with this not compiling.
+    std::optional<datetime> o;
+    REQUIRE(cradle::deep_sizeof(o) > 0);
+}

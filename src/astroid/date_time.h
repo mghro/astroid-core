@@ -1,16 +1,11 @@
 #ifndef ASTROID_DATE_TIME_H
 #define ASTROID_DATE_TIME_H
 
-#include <chrono>
-
 #include <astroid/common.hpp>
 
 #include <boost/functional/hash.hpp>
 
 namespace astroid {
-
-typedef std::chrono::year_month_day date;
-typedef std::chrono::system_clock::time_point datetime;
 
 date
 parse_thinknode_date(std::string const& s);
@@ -74,18 +69,6 @@ struct type_info_query<astroid::datetime>
     }
 };
 
-inline size_t
-deep_sizeof(astroid::date const& x)
-{
-    return sizeof(x);
-}
-
-inline size_t
-deep_sizeof(astroid::datetime const& x)
-{
-    return sizeof(x);
-}
-
 inline void
 to_dynamic(cradle::dynamic* v, astroid::date const& x)
 {
@@ -119,43 +102,5 @@ update_unique_hash(cradle::unique_hasher& hasher, astroid::date const& x)
 }
 
 } // namespace cradle
-
-template<>
-struct std::hash<astroid::date>
-{
-    std::size_t
-    operator()(astroid::date const& d) const noexcept
-    {
-        return std::chrono::sys_days(d).time_since_epoch().count();
-    }
-};
-
-template<>
-struct std::hash<astroid::datetime>
-{
-    std::size_t
-    operator()(astroid::datetime const& t) const noexcept
-    {
-        return t.time_since_epoch().count();
-    }
-};
-
-// TODO: This is bad, but it's the only way I've found to make Boost hashes
-// work.
-namespace std {
-
-inline std::size_t
-hash_value(astroid::date const& d) noexcept
-{
-    return std::hash<astroid::date>()(d);
-}
-
-inline std::size_t
-hash_value(astroid::datetime const& t) noexcept
-{
-    return std::hash<astroid::datetime>()(t);
-}
-
-} // namespace std
 
 #endif
