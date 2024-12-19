@@ -1,5 +1,5 @@
-#ifndef ASTROID_DATE_TIME_HPP
-#define ASTROID_DATE_TIME_HPP
+#ifndef ASTROID_DATE_TIME_H
+#define ASTROID_DATE_TIME_H
 
 #include <chrono>
 
