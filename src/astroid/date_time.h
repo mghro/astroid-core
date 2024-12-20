@@ -161,4 +161,10 @@ MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS)
 
 } // namespace msgpack
 
+template<>
+struct cradle::serializable_via_cereal<astroid::date>
+{
+    static constexpr bool value = true;
+};
+
 #endif
