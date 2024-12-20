@@ -103,4 +103,62 @@ update_unique_hash(cradle::unique_hasher& hasher, astroid::date const& x)
 
 } // namespace cradle
 
+namespace msgpack {
+MSGPACK_API_VERSION_NAMESPACE(MSGPACK_DEFAULT_API_NS)
+{
+    namespace adaptor {
+
+    template<>
+    struct convert<std::chrono::year_month_day>
+    {
+        msgpack::object const&
+        operator()(
+            msgpack::object const& o, std::chrono::year_month_day& v) const
+        {
+            // Convert from msgpack object to string then parse
+            std::string s;
+            o.convert(s);
+            v = astroid::parse_thinknode_date(s);
+            return o;
+        }
+    };
+
+    template<>
+    struct pack<std::chrono::year_month_day>
+    {
+        template<typename Stream>
+        msgpack::packer<Stream>&
+        operator()(
+            msgpack::packer<Stream>& p,
+            std::chrono::year_month_day const& v) const
+        {
+            // Convert to string representation and pack
+            p.pack(astroid::to_thinknode_string(v));
+            return p;
+        }
+    };
+
+    template<>
+    struct object_with_zone<std::chrono::year_month_day>
+    {
+        void
+        operator()(
+            msgpack::object::with_zone& o,
+            std::chrono::year_month_day const& v) const
+        {
+            std::string s = astroid::to_thinknode_string(v);
+            o.type = msgpack::type::STR;
+            o.via.str.size = static_cast<uint32_t>(s.size());
+            char* ptr = static_cast<char*>(
+                o.zone.allocate_align(s.size(), MSGPACK_ZONE_ALIGNOF(char)));
+            std::memcpy(ptr, s.data(), s.size());
+            o.via.str.ptr = ptr;
+        }
+    };
+
+    } // namespace adaptor
+}
+
+} // namespace msgpack
+
 #endif
