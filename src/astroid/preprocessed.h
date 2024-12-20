@@ -11,6 +11,9 @@ using datetime = std::chrono::system_clock::time_point;
 
 } // namespace astroid
 
+// Because these overloads can't rely on ADL, they have to be provided before
+// the generic implementations are included. (There must be a better way...)
+
 namespace cradle {
 
 inline size_t
@@ -27,43 +30,21 @@ deep_sizeof(astroid::datetime const& x)
 
 } // namespace cradle
 
-template<>
-struct std::hash<astroid::date>
-{
-    std::size_t
-    operator()(astroid::date const& d) const noexcept
-    {
-        return std::chrono::sys_days(d).time_since_epoch().count();
-    }
-};
-
-template<>
-struct std::hash<astroid::datetime>
-{
-    std::size_t
-    operator()(astroid::datetime const& t) const noexcept
-    {
-        return t.time_since_epoch().count();
-    }
-};
-
-// TODO: This is bad, but it's the only way I've found to make Boost hashes
-// work.
-namespace std {
+namespace boost {
 
 inline std::size_t
 hash_value(astroid::date const& d) noexcept
 {
-    return std::hash<astroid::date>()(d);
+    return std::chrono::sys_days(d).time_since_epoch().count();
 }
 
 inline std::size_t
 hash_value(astroid::datetime const& t) noexcept
 {
-    return std::hash<astroid::datetime>()(t);
+    return t.time_since_epoch().count();
 }
 
-} // namespace std
+} // namespace boost
 
 #include <cradle/inner/encodings/cereal_value.h>
 #include <cradle/inner/encodings/msgpack_adaptors_main.h>

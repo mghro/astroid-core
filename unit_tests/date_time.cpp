@@ -46,16 +46,50 @@ TEST_CASE("date/time dynamic value conversion")
     REQUIRE(t == u);
 }
 
-TEST_CASE("date/time hashes")
+TEST_CASE("date hashes")
+{
+    date d = 2024y / July / 16;
+    // The specific return value doesn't really matter, but this should at
+    // least compile.
+    cradle::invoke_hash(d);
+    // Again, the specific return value doesn't really matter, but this should
+    // at least compile.
+    using boost::hash_value;
+    hash_value(d);
+
+    // There have been issues with this not compiling.
+    std::optional<date> o = d;
+    hash_value(o);
+}
+
+TEST_CASE("date deep_sizeof")
+{
+    date d = 2024y / July / 16;
+    REQUIRE(cradle::deep_sizeof(d) == sizeof(d));
+
+    // There have been issues with this not compiling.
+    std::optional<date> o;
+    REQUIRE(cradle::deep_sizeof(o) > 0);
+}
+
+TEST_CASE("datetime hashes")
 {
     datetime t = sys_days(2024y / July / 16) + hours(2) + minutes(27)
                  + seconds(13) + milliseconds(420);
     // The specific return value doesn't really matter, but this should at
     // least compile.
     cradle::invoke_hash(t);
+    // Again, the specific return value doesn't really matter, but this should
+    // at least compile.
+    using boost::hash_value;
+    hash_value(t);
+
+    // There have been issues with this not compiling.
+    std::optional<datetime> o = t;
+    hash_value(o);
 }
 
-TEST_CASE("date/time deep_sizeof")
+TEST_CASE("datetime deep_sizeof")
 {
     datetime t = sys_days(2024y / July / 16) + hours(2) + minutes(27)
                  + seconds(13) + milliseconds(420);
