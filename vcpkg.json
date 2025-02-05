@@ -2,7 +2,7 @@
     "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg.schema.json",
     "name": "astroid-core",
     "version": "0.1.0",
-    "builtin-baseline": "7ba0ba7334c3346e7eee1e049ba85da193a8d821",
+    "builtin-baseline": "0ed3bfe969b2f95ad45f431c5ea482a69f132a67",
     "dependencies": [
         "cradle",
         "catch2",

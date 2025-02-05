@@ -32,49 +32,51 @@ endif()
 set(CMAKE_CXX_STANDARD 20)
 
 # Enable a high level of compiler warnings and treat them as errors.
-if(IS_GCC OR IS_CLANG)
-    add_compile_options(-Wall -Werror -Wextra -pedantic)
-    # Disable warnings that are too strict.
-    # unused function parameters
-    add_compile_options(-Wno-unused-parameter)
-    # Workaround for https://github.com/andreasbuhr/cppcoro/issues/77:
-    # set(CMAKE_CXX_STANDARD 20) causes CMake to append -std=gnu++2a,
-    # causing a built-in -Dlinux=1,
-    # causing build failures when "namespace linux" is encountered.
-    add_compile_options(-Ulinux)
-elseif(IS_MSVC)
-    # First strip out the old warning level.
-    string(REPLACE "/W3" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
-    add_compile_options(/W4 /WX)
-    # Enable big object files.
-    add_compile_options(/bigobj)
-    # Disable warnings that are too strict.
-    # "unreferenced formal parameter"
-    add_compile_options(/wd4100)
-    # "declaration hides previous local declaration"
-    add_compile_options(/wd4456)
-    # "unreferenced local function has been removed"
-    add_compile_options(/wd4505)
-    # Warnings about a derived class inheriting member functions via dominance
-    # (which is correct and intended).
-    add_compile_options(/wd4250)
-    # warnings about functions that are potentially insecure
-    add_definitions(/D_CRT_SECURE_NO_WARNINGS)
-    add_definitions(/D_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS)
-    # Also suppress linker warnings about missing .pdb files that seem to inevitably creep in.
-    add_link_options(/ignore:4099)
-    # "operator '|': deprecated between enumerations of different types"
-    # in cereal\external\rapidjson\document.h
-    add_compile_options(/wd5054)
-    # The "unreachable code" warning is never to the point, and due to lack of
-    # context impossible to fix.
-    add_compile_options(/wd4702)
-endif()
-if(IS_GCC)
-    # Unclear what these warnings exactly mean to say, and whether they are valid.
-    # Clang and MSVC don't complain.
-    add_compile_options(-Wno-subobject-linkage)
-endif()
+function(set_warning_levels target)
+    if(IS_GCC OR IS_CLANG)
+        target_compile_options(${target} PUBLIC -Wall -Werror -Wextra -pedantic)
+        # Disable warnings that are too strict.
+        # unused function parameters
+        target_compile_options(${target} PUBLIC -Wno-unused-parameter)
+        # Workaround for https://github.com/andreasbuhr/cppcoro/issues/77:
+        # set(CMAKE_CXX_STANDARD 20) causes CMake to append -std=gnu++2a,
+        # causing a built-in -Dlinux=1,
+        # causing build failures when "namespace linux" is encountered.
+        target_compile_options(${target} PUBLIC -Ulinux)
+    elseif(IS_MSVC)
+        # First strip out the old warning level.
+        string(REPLACE "/W3" "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS})
+        target_compile_options(${target} PUBLIC /W4 /WX)
+        # Enable big object files.
+        target_compile_options(${target} PUBLIC /bigobj)
+        # Disable warnings that are too strict.
+        # "unreferenced formal parameter"
+        target_compile_options(${target} PUBLIC /wd4100)
+        # "declaration hides previous local declaration"
+        target_compile_options(${target} PUBLIC /wd4456)
+        # "unreferenced local function has been removed"
+        target_compile_options(${target} PUBLIC /wd4505)
+        # Warnings about a derived class inheriting member functions via dominance
+        # (which is correct and intended).
+        target_compile_options(${target} PUBLIC /wd4250)
+        # warnings about functions that are potentially insecure
+        target_definitions(${target} PUBLIC /D_CRT_SECURE_NO_WARNINGS)
+        target_definitions(${target} PUBLIC /D_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS)
+        # Also suppress linker warnings about missing .pdb files that seem to inevitably creep in.
+        target_link_options(${target} PUBLIC /ignore:4099)
+        # "operator '|': deprecated between enumerations of different types"
+        # in cereal\external\rapidjson\document.h
+        target_compile_options(${target} PUBLIC /wd5054)
+        # The "unreachable code" warning is never to the point, and due to lack of
+        # context impossible to fix.
+        target_compile_options(${target} PUBLIC /wd4702)
+    endif()
+    if(IS_GCC)
+        # Unclear what these warnings exactly mean to say, and whether they are valid.
+        # Clang and MSVC don't complain.
+        target_compile_options(${target} PUBLIC -Wno-subobject-linkage)
+    endif()
+endfunction()
 
 # Determine if we're being built through FetchContent.
 if (${CMAKE_SOURCE_DIR} STREQUAL ${PROJECT_SOURCE_DIR})
@@ -110,6 +112,9 @@ set(CLIPPER_INCLUDE_DIR
     "${CMAKE_CURRENT_BINARY_DIR}/clipper_ver6.4.2/cpp")
 set(CLIPPER_SOURCE_FILES
     "${CMAKE_CURRENT_BINARY_DIR}/clipper_ver6.4.2/cpp/clipper.cpp")
+add_library(clipper STATIC  ${CLIPPER_SOURCE_FILES})
+target_include_directories(clipper PUBLIC ${CLIPPER_INCLUDE_DIR})
+
 
 # Don't use CONFIGURE_DEPENDS if we're being built as a dependency.
 if (is_fetched)
@@ -162,12 +167,13 @@ find_package(Catch2 3 REQUIRED)
 find_package(cradle REQUIRED)
 find_package(ZLIB REQUIRED)
 
-add_library(astroid STATIC ${srcs} ${headers} ${impls} ${CLIPPER_SOURCE_FILES})
+add_library(astroid STATIC ${srcs} ${headers} ${impls})
+set_warning_levels(astroid)
 target_include_directories(astroid PUBLIC
-    ${CLIPPER_INCLUDE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}/generated/src
     ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_link_libraries(astroid PUBLIC
+    clipper
     cradle::cradle_typing
     Catch2::Catch2
     msgpackc-cxx
