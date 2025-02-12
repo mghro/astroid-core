@@ -23,6 +23,10 @@
         {
             "name": "openssl",
             "version-string": "1.1.1n"
+        },
+        {
+            "name": "bshoshany-thread-pool",
+            "version": "4.1.0"
         }
     ],
     "vcpkg-configuration": {
