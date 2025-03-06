@@ -60,8 +60,8 @@ function(set_warning_levels target)
         # (which is correct and intended).
         target_compile_options(${target} PUBLIC /wd4250)
         # warnings about functions that are potentially insecure
-        target_compile_definitions(${target} PUBLIC /D_CRT_SECURE_NO_WARNINGS)
-        target_compile_definitions(${target} PUBLIC /D_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS)
+        target_compile_definitions(${target} PUBLIC _CRT_SECURE_NO_WARNINGS)
+        target_compile_definitions(${target} PUBLIC _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS)
         # Also suppress linker warnings about missing .pdb files that seem to inevitably creep in.
         target_link_options(${target} PUBLIC /ignore:4099)
         # "operator '|': deprecated between enumerations of different types"

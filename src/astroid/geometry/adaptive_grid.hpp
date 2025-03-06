@@ -72,6 +72,76 @@ get_octree_box(box3d const& extents, uint64_t index);
 int
 get_octree_depth(box3d const& extents, uint64_t index);
 
+// Get the regular grid that corresponds to the given adaptive grid divided
+// uniformly at its minimum spacing.
+api(fun disk_cached name(regularize_adaptive_grid) execution_class(cpu.x16))
+regular_grid<3, double>
+regularize(adaptive_grid const& grid);
+
+// Takes an existing adaptive grid and removes all the voxels outside of the
+// specified structure
+api(fun disk_cached execution_class(cpu.x4))
+// Final adaptive grid
+adaptive_grid
+limit_adaptive_grid_by_structure(
+    // Initial adaptive grid
+    adaptive_grid const& grid,
+    // Structure to limit the adaptive grid by
+    structure_geometry const& structure);
+
+// Translate an adaptive grid into an image_3d using a vector of
+// double values
+api(fun disk_cached execution_class(cpu.x16))
+// Image of adaptive grid values
+image3
+adaptive_grid_doubles_to_image(
+    // Adaptive grid to translate into an image
+    adaptive_grid const& grid,
+    // Vector of doubles that correspond to the value in each voxel
+    std::vector<double> const& field,
+    // Units for the returned image
+    units const& img_unit);
+
+// Translate an adaptive grid into an image_3d using a vector of
+// float values
+api(fun disk_cached execution_class(cpu.x16))
+// Image of adaptive grid values
+image3
+adaptive_grid_floats_to_image(
+    // Adaptive grid to translate into an image
+    adaptive_grid const& grid,
+    // Vector of floats that correspond to the value in each voxel
+    std::vector<float> const& field,
+    // Units for the returned image
+    units const& img_unit);
+
+// Translate an adaptive grid into an image_3d using an array of
+// double values
+api(fun disk_cached execution_class(cpu.x16))
+// Image of adaptive grid values
+image3
+adaptive_grid_array_to_image(
+    // Adaptive grid to translate into an image
+    adaptive_grid const& grid,
+    // Array of double values that correspond to the value in each voxel
+    array<float> const& field,
+    // Units for the returned image
+    units const& img_unit);
+
+// Returns a list of vector3d points that correspond to the points on an
+// adaptive grid
+api(fun disk_cached monitored execution_class(cpu.x16))
+// The vector of vector3d points from the adaptive grid
+std::vector<vector3d>
+get_points_on_adaptive_grid(
+    // Adaptive grid to translate into a point list
+    adaptive_grid const& grid);
+
+// Get a list of boxes representing the voxels in an adaptive grid.
+api(fun disk_cached monitored execution_class(cpu.x16))
+std::vector<box3d>
+adaptive_grid_voxel_boxes(adaptive_grid const& grid);
+
 } // namespace astroid
 
 #endif
