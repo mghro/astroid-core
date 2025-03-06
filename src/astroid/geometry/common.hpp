@@ -173,7 +173,7 @@ update_unique_hash(cradle::unique_hasher& hasher, vector<N, T> const& x)
         update_unique_hash(hasher, x[i]);
 }
 
-}
+} // namespace astroid
 
 template<unsigned N, class T>
 struct cradle::serializable_via_cereal<astroid::vector<N, T>>
@@ -1332,6 +1332,18 @@ is_inside(circle<T> const& circle, vector<2, T> const& p)
 {
     return length(p - circle.center) <= circle.radius;
 }
+
+// an ellipse
+api(struct with(T : double))
+template<typename T>
+struct ellipse
+{
+    vector<2, T> center;
+    // x radius
+    T a;
+    // y radius
+    T b;
+};
 
 // a plane in 3D place
 api(struct with(T : double))
