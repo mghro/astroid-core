@@ -158,7 +158,7 @@ as_polygon(astroid::box<2, double> const& box)
 }
 
 polygon2
-as_polygon(circle<double> const& circle, unsigned n_segments)
+as_polygon(astroid::circle<double> const& circle, unsigned n_segments)
 {
     polygon2 poly;
     vertex2* vertices = allocate(&poly.vertices, n_segments);
@@ -168,6 +168,23 @@ as_polygon(circle<double> const& circle, unsigned n_segments)
         vertices[i]
             = make_vector(cos(a), sin(a)) * circle.radius + circle.center;
     }
+    return poly;
+}
+
+polygon2
+as_polygon(astroid::ellipse<double> const& ellipse, unsigned n_segments)
+{
+    polygon2 poly;
+    vertex2* vertices = allocate(&poly.vertices, n_segments);
+
+    for (unsigned i = 0; i < n_segments; ++i)
+    {
+        angle<double, radians> a(2. * pi * i / n_segments);
+        vertices[i] = make_vector(
+            ellipse.a * cos(a) + ellipse.center[0],
+            ellipse.b * sin(a) + ellipse.center[1]);
+    }
+
     return poly;
 }
 

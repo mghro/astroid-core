@@ -144,6 +144,10 @@ api(fun trivial name(circle_as_polygon))
 polygon2
 as_polygon(astroid::circle<double> const& circle, unsigned n_segments);
 
+api(fun trivial name(ellipse_as_polygon))
+polygon2
+as_polygon(astroid::ellipse<double> const& ellipse, unsigned n_segments);
+
 api(fun trivial name(triangle_as_polygon))
 polygon2
 as_polygon(triangle<2, double> const& tri);
