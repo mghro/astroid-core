@@ -115,7 +115,7 @@ struct flag_set
     {
     }
     // allows use within if statements without other unintended conversions
-    typedef unsigned flag_set::*unspecified_bool_type;
+    typedef unsigned flag_set::* unspecified_bool_type;
     operator unspecified_bool_type() const
     {
         return code != 0 ? &flag_set::code : 0;
@@ -674,8 +674,8 @@ map(Fn const& fn, std::vector<Item> const& items)
 // functional map over a map
 template<class Key, class Value, class Fn>
 auto
-map(Fn const& fn,
-    std::map<Key, Value> const& items) -> std::map<Key, decltype(fn(Value()))>
+map(Fn const& fn, std::map<Key, Value> const& items)
+    -> std::map<Key, decltype(fn(Value()))>
 {
     typedef decltype(fn(Value())) mapped_item_type;
     std::map<Key, mapped_item_type> result;
@@ -827,6 +827,16 @@ ASTROID_DEFINE_VECTOR_NORMALIZATION_UUID(size_t)
                                              ",coro>"};                       \
     };                                                                        \
     namespace ns {
+
+#define ASTROID_DEFINE_OPTIONAL_NORMALIZATION_UUID(type)                      \
+    template<>                                                                \
+    struct cradle::normalization_uuid_str<std::optional<type>>                \
+    {                                                                         \
+        static const inline std::string func{"normalization<optional_" #type  \
+                                             ",func>"};                       \
+        static const inline std::string coro{"normalization<optional_" #type  \
+                                             ",coro>"};                       \
+    };
 
 // TODO: Why don't we pick up the msgpack implementation?
 namespace msgpack {
