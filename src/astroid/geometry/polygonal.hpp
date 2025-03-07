@@ -189,6 +189,10 @@ struct polyset
     polygon2_list holes;
 };
 
+using optional_polyset = optional<polyset>;
+
+ASTROID_DEFINE_NORMALIZATION_UUID(astroid, optional_polyset);
+
 static inline bool
 is_empty(polyset const& set)
 {
