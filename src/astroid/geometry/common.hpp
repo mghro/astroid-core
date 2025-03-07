@@ -501,14 +501,13 @@ compute_bounding_box(optional<box<N, T>>& box, astroid::box<N, T> const& b)
     {
         for (unsigned i = 0; i < N; ++i)
         {
-            if (b.corner[i] < box.get().corner[i])
+            if (b.corner[i] < box->corner[i])
             {
-                box.get().corner[i] = b.corner[i];
+                box->corner[i] = b.corner[i];
             }
-            if (get_high_corner(b)[i] > get_high_corner(box.get())[i])
+            if (get_high_corner(b)[i] > get_high_corner(*box)[i])
             {
-                box.get().size[i]
-                    = get_high_corner(b)[i] - box.get().corner[i];
+                box->size[i] = get_high_corner(b)[i] - box->corner[i];
             }
         }
     }

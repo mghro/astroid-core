@@ -157,10 +157,10 @@ compute_bounding_box(optional<box<N, T>>& box, regular_grid<N, T> const& grid)
     {
         for (unsigned i = 0; i < N; ++i)
         {
-            if (bb.corner[i] < box.get().corner[i])
-                box.get().corner[i] = bb.corner[i];
-            if (high_corner(bb)[i] > high_corner(box.get())[i])
-                box.get().size[i] = high_corner(bb)[i] - box.get().corner[i];
+            if (bb.corner[i] < box->corner[i])
+                box->corner[i] = bb.corner[i];
+            if (get_high_corner(bb)[i] > get_high_corner(*box)[i])
+                box->size[i] = get_high_corner(bb)[i] - box->corner[i];
         }
     }
     else
