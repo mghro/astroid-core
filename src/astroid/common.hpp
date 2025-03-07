@@ -828,15 +828,14 @@ ASTROID_DEFINE_VECTOR_NORMALIZATION_UUID(size_t)
     };                                                                        \
     namespace ns {
 
-#define ASTROID_DEFINE_OPTIONAL_NORMALIZATION_UUID(type)                      \
+#define ASTROID_DEFINE_CEREAL_SERIALIZATION_TAG(ns, type)                     \
+    }                                                                         \
     template<>                                                                \
-    struct cradle::normalization_uuid_str<std::optional<type>>                \
+    struct cradle::serializable_via_cereal<ns::type>                          \
     {                                                                         \
-        static const inline std::string func{"normalization<optional_" #type  \
-                                             ",func>"};                       \
-        static const inline std::string coro{"normalization<optional_" #type  \
-                                             ",coro>"};                       \
-    };
+        static constexpr bool value = true;                                   \
+    };                                                                        \
+    namespace ns {
 
 // TODO: Why don't we pick up the msgpack implementation?
 namespace msgpack {

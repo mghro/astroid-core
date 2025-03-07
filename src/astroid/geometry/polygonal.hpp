@@ -192,6 +192,7 @@ struct polyset
 using optional_polyset = optional<polyset>;
 
 ASTROID_DEFINE_NORMALIZATION_UUID(astroid, optional_polyset);
+ASTROID_DEFINE_CEREAL_SERIALIZATION_TAG(astroid, optional_polyset);
 
 static inline bool
 is_empty(polyset const& set)
