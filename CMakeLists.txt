@@ -161,7 +161,7 @@ list(APPEND headers ${generated_headers}
     "${CMAKE_CURRENT_BINARY_DIR}/generated/src/astroid/api_index.hpp")
 
 find_package(Boost REQUIRED
-    COMPONENTS date_time filesystem)
+    COMPONENTS date_time filesystem thread)
 find_package(msgpack CONFIG REQUIRED)
 find_package(Catch2 3 REQUIRED)
 find_package(cradle REQUIRED)
@@ -180,6 +180,7 @@ target_link_libraries(astroid PUBLIC
     Boost::boost
     Boost::filesystem
     Boost::date_time
+    Boost::thread
     ZLIB::ZLIB)
 
 # The rest of this is concerned with testing, which we don't want to do if
